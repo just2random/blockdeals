@@ -99,7 +99,7 @@ body:not(.about) .docs-layout .docs-layout-header.mdl-layout__header {
 
 .templates .docs-layout-header.mdl-layout__header {
     background-color: #e1e1e1;
-    background-image: url('../images/blockdeals_logo.png');
+
     background-size: auto 60px;
     position: relative;
     top: -20px;
