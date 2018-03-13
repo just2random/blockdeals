@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <form class="col s12">
+      <div class="row">
+        <div class="input-field col s6">
+          <input placeholder="Placeholder" id="first_name" type="text" class="validate ">
+          <label class="active" for="first_name">Title</label>
+        </div>
+        <div class="input-field col s6">
+          <input id="last_name" type="text" class="validate">
+          <label class="active" for="last_name">URL link</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <input id="password" type="password" class="validate">
+          <label class="active" for="password">Coupon code</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <input id="email" type="email" class="validate">
+          <label class="active" for="email">Start expiray</label>
+        </div>
+      </div>
+         <div class="row">
+        <div class="input-field col s12">
+          <input id="email" type="email" class="validate">
+          <label class="active" for="email">End expiray</label>
+        </div>
+      </div>
+
+         <div class="row">
+        <div class="input-field col s12">
+          <input id="email" type="email" class="validate">
+          <label class="active" for="email">Tags</label>
+        </div>
+      </div>
+
+         <div class="row">
+        <div class="input-field col s12">
+          <input id="email" type="email" class="validate">
+          <label  class="active" for="email">Description</label>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+{% endblock %}
