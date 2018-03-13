@@ -1662,16 +1662,16 @@ code[class*=language-], pre[class*=language-] {
 
 .sub_button:hover{
 
-    background-color: #ff6f00;
-    color: white;
+    background-color: #2b303b;
+    color: #ff6f00;
 
 }
 
 .sub_button {
 
     width: 210px;
-    background-color: #2b303b;
-    color: #ff6d00;
+    background-color: #ff6f00;
+    color: white;
     font-weight: bold;
     font-size: 18px;
 

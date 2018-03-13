@@ -13,7 +13,7 @@ returns the html page for users to submit a deal
 
 @user_blueprint.route('/submit')
 def submit_page():
-    return render_template("submit_deals.html")
+    return render_template("users/submit_deals.html")
 
 
 """
@@ -25,7 +25,7 @@ returns the html page for users to login to the website
 
 @user_blueprint.route('/login')
 def login():
-    return render_template("login.html")
+    return render_template("users/login.html")
 
 
 """
@@ -37,4 +37,4 @@ returns the html page for users to view current deals on the blockchain.
 
 @user_blueprint.route('/deals')
 def deals_page():
-    return render_template("deals_page.html")
+    return render_template("users/deals_page.html")
