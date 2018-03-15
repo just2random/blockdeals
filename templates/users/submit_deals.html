@@ -1,54 +1,122 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<div class="container">
-  <div class="row">
-    <form class="col s12">
-      <div class="row">
-        <div class="input-field col s6">
-          <input placeholder="Placeholder" id="first_name" type="text" class="validate ">
-          <label class="active" for="first_name">Title</label>
-        </div>
-        <div class="input-field col s6">
-          <input id="last_name" type="text" class="validate">
-          <label class="active" for="last_name">URL link</label>
-        </div>
-      </div>
-      <div class="row">
-        <div class="input-field col s12">
-          <input id="password" type="password" class="validate">
-          <label class="active" for="password">Coupon code</label>
-        </div>
-      </div>
-      <div class="row">
-        <div class="input-field col s12">
-          <input id="email" type="email" class="validate">
-          <label class="active" for="email">Start expiray</label>
-        </div>
-      </div>
-         <div class="row">
-        <div class="input-field col s12">
-          <input id="email" type="email" class="validate">
-          <label class="active" for="email">End expiray</label>
-        </div>
-      </div>
+    <div class="container">
+        <div class="row">
+            <form class="col s12">
+                <div class="row">
+                    <div class="input-field col s6">
+                        <input placeholder="Placeholder" id="first_name" type="text" class="validate ">
+                        <label class="active" for="first_name">Title</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <input id="last_name" type="text" class="validate">
+                        <label class="active" for="last_name">URL link</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <form class="col s12">
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <textarea id="textarea1" class="materialize-textarea"></textarea>
+                                <label for="textarea1">Coupon Code</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
 
-         <div class="row">
-        <div class="input-field col s12">
-          <input id="email" type="email" class="validate">
-          <label class="active" for="email">Tags</label>
-        </div>
-      </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input id="email" type="text" class="datepicker">
+                        <label class="active" for="email">Start expiray</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input id="email" type="text" class="datepicker">
+                        <label class="active" for="email">End expiray</label>
+                    </div>
+                </div>
 
-         <div class="row">
-        <div class="input-field col s12">
-          <input id="email" type="email" class="validate">
-          <label  class="active" for="email">Description</label>
-        </div>
-      </div>
+                <script>
 
-    </form>
-  </div>
-</div>
+                    $('.datepicker').pickadate({
+                        selectMonths: true, // Creates a dropdown to control month
+                        selectYears: 15, // Creates a dropdown of 15 years to control year,
+                        today: 'Today',
+                        clear: 'Clear',
+                        close: 'Ok',
+                        closeOnSelect: false // Close upon selecting a date,
+                    });
+
+
+                </script>
+
+                <div class="chips chips-initial" data-index="0" data-initialized="true">
+
+                    <div class="chip">Blockdeals<i class="material-icons close">close</i></div>
+                    <input id="b3f0cfb7-caa0-ba49-9511-88c095543430" class="input" placeholder=""></div>
+
+                <script>
+
+
+                    $('.chips').material_chip();
+                    $('.chips-initial').material_chip({
+                        data: [{
+                            tag: 'Blockdeals'
+                        }, {
+
+                        }]
+                    });
+                    $('.chips-placeholder').material_chip({
+                        placeholder: 'Enter a tag',
+                        secondaryPlaceholder: '+Tag',
+                    });
+                    $('.chips-autocomplete').material_chip({
+                        autocompleteOptions: {
+                            data: {
+                                'Blockdeals': null
+
+                            },
+                            limit: Infinity,
+                            minLength: 1
+                        }
+                    });
+
+
+                    $('.chips').on('chip.add', function (e, chip) {
+                        // you have the added chip here
+                    });
+
+                    $('.chips').on('chip.delete', function (e, chip) {
+                        // you have the deleted chip here
+                    });
+
+
+                </script>
+
+                <div class="row">
+                    <form class="col s12">
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <textarea id="textarea1" class="materialize-textarea"></textarea>
+                                <label for="textarea1">Description</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+
+            </form>
+        </div>
+
+        <button class="btn waves-effect waves-light submit_deals_btn" type="submit" name="action">Submit
+            <i class="material-icons right">send</i>
+        </button>
+    </div>
+
+
+
+
 
 {% endblock %}
