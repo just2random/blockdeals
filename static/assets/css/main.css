@@ -1716,3 +1716,28 @@ nav.nav-center ul li a {
     display: inline-block;
 }
 
+
+.submit_deals_btn{
+
+    background-color: #ff6f00;
+    float: right;
+
+
+}
+
+.sign_up_button{
+
+    background-color: #ff6f00;
+    color: white;
+
+
+}
+
+
+.login_button{
+
+    background-color: #ff6f00;
+    color: white;
+
+
+}

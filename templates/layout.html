@@ -44,7 +44,8 @@
     <link rel="stylesheet" href="/static/assets/css/main.css">
 
     <!-- Fonts -->
-    <link href='https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en'
+          rel='stylesheet' type='text/css'>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body class="templates">
@@ -88,22 +89,23 @@
         }
     };
 </script>
- <div class="image-preloader"></div>
+<div class="image-preloader"></div>
 
 
 <div class="docs-layout mdl-layout mdl-js-layout">
-  <header  class="docs-layout-header mdl-layout__header">
+    <header class="docs-layout-header mdl-layout__header">
         <div class="container">
             <div class="row">
                 <div class="col s2">
-                <a href="/"><img style="width:300px;" src="/static/assets/images/blockdeals_logo.png"></a>
-                    </div>
+                    <a href="/"><img style="width:300px;" src="/static/assets/images/blockdeals_logo.png"></a>
+                </div>
                 <div class="col s3 offset-s2">
-                    <a href="{{ url_for('user_blueprint.submit_page')}}"> <button class="btn waves-effect waves-light  sub_button" type="submit" name="action"><i
-                            style="color: white; font-size: 22px;">+</i> Submit Deals
+                    <a href="{{ url_for('user_blueprint.submit_page') }}">
+                        <button class="btn waves-effect waves-light  sub_button" type="submit" name="action"><i
+                                style="color: white; font-size: 22px;">+</i> Submit Deals
 
-                    </button>
-                        </a>
+                        </button>
+                    </a>
                 </div>
 
                 <div class="box col s4 ">
@@ -113,64 +115,112 @@
                     </div>
                 </div>
                 <div class="col s1 ">
-                <a style="color: darkgray; font-weight: bold" class="modal-trigger" href="#signup">Sign up</a>
+                    <a style="color: darkgray; font-weight: bold" class="modal-trigger" href="#signup">Sign up</a>
 
                     <!-- Modal Structure -->
                     <div id="signup" class="modal">
                         <div class="modal-content" style="color: black;">
-                            <h4>Modal Header</h4>
-                            <p>test</p>
+                            <h2>Sign Up</h2>
+                            <form class="col s12">
+                                <div class="row">
+                                    <div class="input-field col s12">
+                                        <input id="email" type="email" class="validate">
+                                        <label for="email" data-error="wrong" data-success="right">Email</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col s12">
+                                        <input id="password" type="password" class="validate">
+                                        <label for="password">New Password</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col s12">
+                                        <input id="password" type="password" class="validate">
+                                        <label for="password">Confirm Password</label>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                         <div class="modal-footer">
-                            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+                            <a href="#!">
+                                <button class="btn waves-effect waves-light sign_up_button modal-action modal-close"
+                                        type="submit"
+                                        name="action">Submit
+                                    <i class="material-icons right">send</i>
+                                </button>
+                            </a>
+
+
                         </div>
                     </div>
 
 
-            <hr style="width: 50px; color: darkgray">
-            <!-- Modal Trigger -->
-            <a style="color: darkgray; font-weight: bold" class="modal-trigger" href="#modal1">Login</a>
+                    <hr style="width: 50px; color: darkgray">
+                    <!-- Modal Trigger -->
+                    <a style="color: darkgray; font-weight: bold" class="modal-trigger" href="#modal1">Login</a>
 
-            <!-- Modal Structure -->
-            <div id="modal1" class="modal" >
-                <div class="modal-content" style="color: black;">
-                    <h4>Modal Header</h4>
-                    <p>A bunch of text</p>
-                </div>
-                <div class="modal-footer">
-                    <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
-                </div>
-            </div>
+                    <!-- Modal Structure -->
+                    <div id="modal1" class="modal">
+                        <div class="modal-content" style="color: black;">
+                            <h2>Login</h2>
+                            <div class="row">
+                                <form class="col s12">
+                                    <div class="row">
+                                        <div class="input-field col s12">
+                                            <input id="email" type="email" class="validate">
+                                            <label for="email" data-error="wrong" data-success="right">Email</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="input-field col s12">
+                                            <input id="password" type="password" class="validate">
+                                            <label for="password">Password</label>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="#!">
+                                <button class="btn waves-effect waves-light login_button modal-action modal-close "
+                                        type="submit"
+                                        name="action">Login
+                                    <i class="material-icons right">send</i>
+                                </button>
+                            </a>
+
+                        </div>
+                    </div>
 
 
+                    <script>
 
 
-            <script>
+                        $(document).ready(function () {
+                            // the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
+                            $('.modal').modal();
+                        });
 
-
-    $(document).ready(function () {
-        // the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
-        $('.modal').modal();
-    });
-
-</script>
+                    </script>
                 </div>
             </div>
         </div>
 
         <div class="mdl-layout__header-row">
-           <span class="docs-layout-title mdl-layout-title"></span>
+            <span class="docs-layout-title mdl-layout-title"></span>
         </div>
 
         <div class="docs-navigation__container">
-        <nav style=" background-color: #ff6f00;" class="nav-center" role="navigation">
-        <div class="nav-wrapper container">
-            <ul>
-                <li><a style="font-size: 20px; padding: 20px;" href="/">LATEST DEALS</a></li>
-                <li><a style="font-size: 20px; padding: 20px;"href="{{ url_for('user_blueprint.community')}}">COMMUNITY</a></li>
-            </ul>
-        </div>
-        </nav>
+            <nav style=" background-color: #ff6f00;" class="nav-center" role="navigation">
+                <div class="nav-wrapper container">
+                    <ul>
+                        <li><a style="font-size: 20px; padding: 20px;" href="/">LATEST DEALS</a></li>
+                        <li><a style="font-size: 20px; padding: 20px;" href="{{ url_for('user_blueprint.community') }}">COMMUNITY</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
         </div>
 
     </header>
@@ -178,15 +228,15 @@
         <div class="content mdl-grid mdl-grid--no-spacing" id="content">
 
 
-    {% block content %}
+            {% block content %}
 
 
 
 
-    {% endblock %}
+            {% endblock %}
         </div>
 
-            <footer class="docs-text-styling docs-footer mdl-mini-footer mdl-color--grey-900">
+        <footer class="docs-text-styling docs-footer mdl-mini-footer mdl-color--grey-900">
             <ul>
                 <li class="mdl-mini-footer--social-btn">
                     <a href="https://github.com/blockdeals/blockdeals" class="social-btn social-btn__github"
