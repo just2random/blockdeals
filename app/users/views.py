@@ -25,7 +25,7 @@ returns the html page for users to login to the website
 
 @user_blueprint.route('/login')
 def login():
-    return render_template("users/login.html")
+    return render_template("users/../../templates/login_modal.html")
 
 
 """

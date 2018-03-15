@@ -113,16 +113,49 @@
                     </div>
                 </div>
                 <div class="col s1 ">
-                 <a style="color: darkgray; font-weight: bold" href="#">Sign up</a>
-                    <hr style="width: 50px; color: darkgray">
-                 <a style="color: darkgray;  font-weight: bold;" href="#">Login</a>
+                <a style="color: darkgray; font-weight: bold" class="modal-trigger" href="#signup">Sign up</a>
+
+                    <!-- Modal Structure -->
+                    <div id="signup" class="modal">
+                        <div class="modal-content" style="color: black;">
+                            <h4>Modal Header</h4>
+                            <p>test</p>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+                        </div>
                     </div>
+
+
+            <hr style="width: 50px; color: darkgray">
+            <!-- Modal Trigger -->
+            <a style="color: darkgray; font-weight: bold" class="modal-trigger" href="#modal1">Login</a>
+
+            <!-- Modal Structure -->
+            <div id="modal1" class="modal" >
+                <div class="modal-content" style="color: black;">
+                    <h4>Modal Header</h4>
+                    <p>A bunch of text</p>
+                </div>
+                <div class="modal-footer">
+                    <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+                </div>
             </div>
 
 
 
 
+            <script>
 
+
+    $(document).ready(function () {
+        // the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
+        $('.modal').modal();
+    });
+
+</script>
+                </div>
+            </div>
         </div>
 
         <div class="mdl-layout__header-row">
@@ -156,16 +189,8 @@
             <footer class="docs-text-styling docs-footer mdl-mini-footer mdl-color--grey-900">
             <ul>
                 <li class="mdl-mini-footer--social-btn">
-                    <a href="https://twitter.com/googledesign" class="social-btn social-btn__twitter" role="button"
-                       title="Twitter"></a>
-                </li>
-                <li class="mdl-mini-footer--social-btn">
-                    <a href="https://github.com/google/material-design-lite" class="social-btn social-btn__github"
+                    <a href="https://github.com/blockdeals/blockdeals" class="social-btn social-btn__github"
                        role="button" title="GitHub"></a>
-                </li>
-                <li class="mdl-mini-footer--social-btn">
-                    <a href="https://plus.google.com/+googledesign" class="social-btn social-btn__gplus" role="button"
-                       title="Google+"></a>
                 </li>
             </ul>
 
