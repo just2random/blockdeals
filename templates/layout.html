@@ -5,8 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="A front-end template that helps you build fast, modern mobile web apps.">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+    <link rel="stylesheet" href="/static/assets/css/materialize.min.css">
+    <script src="/static/assets/js/jquery-3.3.1.min.js"></script>
+    <script src="/static/assets/js/materialize.min.js"></script>
 
 
     <title>Material Design Lite</title>
@@ -43,8 +44,7 @@
     <link rel="stylesheet" href="/static/assets/css/main.css">
 
     <!-- Fonts -->
-    <link href='https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en'
-          rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en' rel='stylesheet' type='text/css'>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body class="templates">
@@ -88,22 +88,25 @@
         }
     };
 </script>
-<div class="image-preloader"></div>
+ <div class="image-preloader"></div>
+
+
 <div class="docs-layout mdl-layout mdl-js-layout">
-    <header class="docs-layout-header mdl-layout__header">
+  <header  class="docs-layout-header mdl-layout__header">
         <div class="container">
             <div class="row">
                 <div class="col s2">
-                 <a href="/"><img style="width:300px;" src="/static/assets/images/blockdeals_logo.png"></a>
-                </div>
-                <div class="col s3 offset-s3">
-                    <button class="btn waves-effect waves-light  sub_button" type="submit" name="action"><i
+                <a href="/"><img style="width:300px;" src="/static/assets/images/blockdeals_logo.png"></a>
+                    </div>
+                <div class="col s3 offset-s2">
+                    <a href="{{ url_for('user_blueprint.submit_page')}}"> <button class="btn waves-effect waves-light  sub_button" type="submit" name="action"><i
                             style="color: white; font-size: 22px;">+</i> Submit Deals
 
                     </button>
+                        </a>
                 </div>
 
-                <div class="box col s3 ">
+                <div class="box col s2 ">
                     <div class="container-1">
 
                         <input type="search" id="search" placeholder="Search..."/>
@@ -123,8 +126,9 @@
         </div>
 
         <div class="mdl-layout__header-row">
-            <span class="docs-layout-title mdl-layout-title"></span>
+           <span class="docs-layout-title mdl-layout-title"></span>
         </div>
+
         <div class="docs-navigation__container">
         <nav style=" background-color: #ff6f00;" class="nav-center" role="navigation">
         <div class="nav-wrapper container">
@@ -138,7 +142,9 @@
         </div>
 
     </header>
-        </div>
+    <main class="docs-layout-content mdl-layout__content mdl-color-text--grey-600">
+        <div class="content mdl-grid mdl-grid--no-spacing" id="content">
+
 
     {% block content %}
 
@@ -146,8 +152,9 @@
 
 
     {% endblock %}
+        </div>
 
-        <footer class="docs-text-styling docs-footer mdl-mini-footer mdl-color--grey-900">
+            <footer class="docs-text-styling docs-footer mdl-mini-footer mdl-color--grey-900">
             <ul>
                 <li class="mdl-mini-footer--social-btn">
                     <a href="https://twitter.com/googledesign" class="social-btn social-btn__twitter" role="button"
@@ -164,7 +171,10 @@
             </ul>
 
         </footer>
-</body>
+
+    </main>
+
+</div>
 
 <!-- IE Compatibility shims -->
 <!--[if lt IE 9]>
@@ -193,3 +203,5 @@
 <script src="/static/assets/js/prism-bash.min.js"></script>
 <script src="/static/assets/js/main.js"></script>
 <!-- Built with love using Material Design Lite -->
+</body>
+</html>
