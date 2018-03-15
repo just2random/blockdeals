@@ -38,3 +38,15 @@ returns the html page for users to view current deals on the blockchain.
 @user_blueprint.route('/deals')
 def deals_page():
     return render_template("users/deals_page.html")
+
+
+"""
+community:
+
+returns the html page for users to view the community page which will be a forum type page.
+
+"""
+
+@user_blueprint.route('/community')
+def community():
+    return render_template("users/community.html")
