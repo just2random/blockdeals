@@ -1,17 +1,26 @@
 {% extends "layout.html" %}
 {% block content %}
 
+
+
+
+
     <div class="container">
+        <h2>Submit Deal</h2>
         <div class="row">
             <form class="col s12">
                 <div class="row">
-                    <div class="input-field col s6">
-                        <input placeholder="Placeholder" id="first_name" type="text" class="validate ">
-                        <label class="active" for="first_name">Title</label>
+                    <div class="input-field col s12">
+                        <textarea id="textarea1" class="materialize-textarea"></textarea>
+                        <label for="textarea1">Title</label>
                     </div>
                     <div class="input-field col s6">
-                        <input id="last_name" type="text" class="validate">
-                        <label class="active" for="last_name">URL link</label>
+                        <input id="url" type="text" class="validate">
+                        <label class="active" for="url">URL link</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <input id="brand" type="text" class="validate">
+                        <label class="active" for="brand">Brand</label>
                     </div>
                 </div>
                 <div class="row">
@@ -26,15 +35,14 @@
                 </div>
 
                 <div class="row">
-                    <div class="input-field col s12">
-                        <input id="email" type="text" class="datepicker">
-                        <label class="active" for="email">Start expiray</label>
+                    <div class="input-field col s6">
+                        <input id="start" type="text" class="datepicker">
+                        <label class="active" for="start">Start expiray</label>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="input-field col s12">
-                        <input id="email" type="text" class="datepicker">
-                        <label class="active" for="email">End expiray</label>
+
+                    <div class="input-field col s6">
+                        <input id="end" type="text" class="datepicker">
+                        <label class="active" for="end">End expiray</label>
                     </div>
                 </div>
 
@@ -52,48 +60,7 @@
 
                 </script>
 
-                <div class="chips chips-initial" data-index="0" data-initialized="true">
 
-                    <div class="chip">Blockdeals<i class="material-icons close">close</i></div>
-                    <input id="b3f0cfb7-caa0-ba49-9511-88c095543430" class="input" placeholder=""></div>
-
-                <script>
-
-
-                    $('.chips').material_chip();
-                    $('.chips-initial').material_chip({
-                        data: [{
-                            tag: 'Blockdeals'
-                        }, {
-
-                        }]
-                    });
-                    $('.chips-placeholder').material_chip({
-                        placeholder: 'Enter a tag',
-                        secondaryPlaceholder: '+Tag',
-                    });
-                    $('.chips-autocomplete').material_chip({
-                        autocompleteOptions: {
-                            data: {
-                                'Blockdeals': null
-
-                            },
-                            limit: Infinity,
-                            minLength: 1
-                        }
-                    });
-
-
-                    $('.chips').on('chip.add', function (e, chip) {
-                        // you have the added chip here
-                    });
-
-                    $('.chips').on('chip.delete', function (e, chip) {
-                        // you have the deleted chip here
-                    });
-
-
-                </script>
 
                 <div class="row">
                     <form class="col s12">
@@ -109,10 +76,17 @@
 
             </form>
         </div>
-
-        <button class="btn waves-effect waves-light submit_deals_btn" type="submit" name="action">Submit
+        <div class="row">
+         <button class="btn waves-effect waves-light submit_preview_btn col s2" type="submit" name="action">Preview
+          
+        </button>
+        </div>
+             <div class="row">
+        <button class="btn waves-effect waves-light submit_deals_btn col s2" type="submit" name="action">Submit
             <i class="material-icons right">send</i>
         </button>
+            </div>
+
     </div>
 
 

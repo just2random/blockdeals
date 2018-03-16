@@ -1717,13 +1717,19 @@ nav.nav-center ul li a {
 }
 
 
-.submit_deals_btn{
+.submit_deals_btn {
 
     background-color: #ff6f00;
-    float: right;
+
+}
+
+.submit_preview_btn{
+
+    background-color: darkgray;
 
 
 }
+
 
 .sign_up_button{
 
