@@ -1747,3 +1747,23 @@ nav.nav-center ul li a {
 
 
 }
+.tips_box{
+
+    border: solid darkgray;
+    padding: 20px;
+    width: 280px;
+
+
+}
+
+.deal_posting_header{
+
+    background-color: #ff6f00;
+    color: white;
+
+    text-align: center;
+
+
+
+
+}

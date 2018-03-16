@@ -7,8 +7,8 @@
 
     <div class="container">
         <h2>Submit Deal</h2>
-        <div class="row">
-            <form class="col s12">
+        <div class="row ">
+            <form class="col s10 ">
                 <div class="row">
                     <div class="input-field col s12">
                         <textarea id="textarea1" class="materialize-textarea"></textarea>
@@ -35,12 +35,12 @@
                 </div>
 
                 <div class="row">
-                    <div class="input-field col s6">
+                    <div class="input-field col s5">
                         <input id="start" type="text" class="datepicker">
                         <label class="active" for="start">Start expiray</label>
                     </div>
 
-                    <div class="input-field col s6">
+                    <div class="input-field col s5">
                         <input id="end" type="text" class="datepicker">
                         <label class="active" for="end">End expiray</label>
                     </div>
@@ -60,10 +60,13 @@
 
                 </script>
 
-
+                <p>
+                    <input type="checkbox" id="test5"/>
+                    <label  for="test5">freebie?</label>
+                </p>
 
                 <div class="row">
-                    <form class="col s12">
+                    <form class="col s10">
                         <div class="row">
                             <div class="input-field col s12">
                                 <textarea id="textarea1" class="materialize-textarea"></textarea>
@@ -75,22 +78,50 @@
 
 
             </form>
+
+
         </div>
         <div class="row">
-         <button class="btn waves-effect waves-light submit_preview_btn col s2" type="submit" name="action">Preview
-          
-        </button>
+            <button class="btn waves-effect waves-light submit_preview_btn col s2" type="submit" name="action">Preview
+
+            </button>
         </div>
-             <div class="row">
-        <button class="btn waves-effect waves-light submit_deals_btn col s2" type="submit" name="action">Submit
-            <i class="material-icons right">send</i>
-        </button>
-            </div>
+        <div class="row">
+            <button class="btn waves-effect waves-light submit_deals_btn col s2" type="submit" name="action">Submit
+                <i class="material-icons right">send</i>
+            </button>
+        </div>
+
 
     </div>
+    <div class="col s12 tips_box">
+        <nav class="deal_posting_header"><h5>Deal Posting Guidelines</h5></nav>
+
+        <h3>Tips</h3>
+
+
+        <p>Check to see if the deal has been posted by:</p>
+
+        Browsing through the store page. (e.g Gearbest)<br>
+        Searching for product by typing the make and model until the product shows up in the drop-down.<br>
+        Found a duplicate? Has the deal expired and been posted less than 30 days ago? Report the deal and we will update it.
 
 
 
+        <h3>FAQs</h3>
 
+        <ul class="collection">
+            <li class="collection-item">How do I remove my deal?</li>
+            <li class="collection-item">How do I remove my comment?</li>
+            <li class="collection-item">how do i edit my comment?</li>
+            <li class="collection-item">how do I remove my vote?</li>
+            <li class="collection-item">What deals are being removed?</li>
+            <li class="collection-item">How can I block posts from certain users or stores?</li>
+        </ul>
+
+        <br>
+        <h3>More info</h3>
+
+    </div>
 
 {% endblock %}
