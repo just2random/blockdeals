@@ -27,20 +27,35 @@ $ pip install -r requirements.txt
 
 ### Spin up a local mongodb instance
 
+#### Create the container and update hosts file
+
 ```
-$ docker run -p 127.0.0.1:27017:27017 $(pwd)/db:/data/db mvertes/alpine-mongo
+$ docker create -p 127.0.0.1:27017:27017 -v $(pwd)/db:/data/db --name mongo mvertes/alpine-mongo
 ```
-NOTE: make sure you have an entry in your `/etc/hosts` file mapping `mongodb` to
-`127.0.0.1`
+
+**NOTE:** make sure you have an entry in your `/etc/hosts` file mapping `mongodb` to
+`127.0.0.1`:
+
+```
+$ sudo -s
+# echo "127.0.0.1 mongodb" >> /etc/hosts
+```
+
+#### Start mongo
+
+```
+$ docker start mongo
+```
 
 You can now run the app in dev mode via: `python blockdeals.py`
 
-
 ## Production Deployment
 
-Simply `git push` your changes will trigger an upgrade of the
-production server. To spin up a test production server run:
+To spin up a test production server run:
 
 ```
 gunicorn -w 4 -b 0.0.0.0:8000 wsgi:app
 ```
+
+You should definitely run this and test your changes before committing or
+pushing your changes.  A `git push` will trigger an upgrade of the server.
