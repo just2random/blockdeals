@@ -30,6 +30,8 @@ $ pip install -r requirements.txt
 ```
 $ docker run -p 127.0.0.1:27017:27017 $(pwd)/db:/data/db mvertes/alpine-mongo
 ```
+NOTE: make sure you have an entry in your `/etc/hosts` file mapping `mongodb` to
+`127.0.0.1`
 
 You can now run the app in dev mode via: `python blockdeals.py`
 
