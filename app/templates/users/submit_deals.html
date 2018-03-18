@@ -1,127 +1,96 @@
 {% extends "layout.html" %}
 {% block content %}
 
+<div class="container">
+  <h2>Submit Deal</h2>
+  <div class="row">
+    <form action="/deal" method="POST">
+      <div class="input-field col s12">
+        <input id="textarea1" type="text" name="title">
+        <label for="textarea1">Title</label>
+      </div>
+
+      <div class="input-field col s6">
+        <input id="url" type="text" class="validate" name="url">
+        <label class="active" for="url">URL link</label>
+      </div>
+
+      <div class="input-field col s6">
+        <input id="brand" type="text" class="validate" name="brand">
+        <label class="active" for="brand">Brand</label>
+      </div>
+
+      <div class="input-field col s12">
+        <input id="textarea1" type="text" name="coupon_code"></textarea>
+        <label for="textarea1">Coupon Code</label>
+      </div>
+
+      <div class="input-field col s6">
+        <input id="start" type="text" class="datepicker" name="deal_start">
+        <label class="active" for="start">Date deal starts</label>
+      </div>
+
+      <div class="input-field col s6">
+        <input id="end" type="text" class="datepicker" name="deal_end">
+        <label class="active" for="end">Date deal ends</label>
+      </div>
+
+      <div class="col s12">
+        <input type="checkbox" id="test5" name="freebie">
+        <label for="test5">freebie</label>
+      </div>
+
+      <div class="input-field col s12">
+        <textarea id="textarea1" class="materialize-textarea" name="description"></textarea>
+        <label for="textarea1">Description</label>
+      </div>
+
+      <div class="col s12">
+        <button class="btn waves-effect waves-light submit_deals_btn" type="submit">Submit<i class="material-icons right">send</i></button>
+      </div>
+    </form>
+  </div>
+
+</div>
+<div class="col s12 tips_box">
+  <div class=""><h5>Deal Posting Guidelines</h5></div>
+
+  <h3>Tips</h3>
+
+
+  <p>Check to see if the deal has been posted by:</p>
+
+  Browsing through the store page. (e.g Gearbest)<br>
+  Searching for product by typing the make and model until the product shows up in the drop-down.<br>
+  Found a duplicate? Has the deal expired and been posted less than 30 days ago? Report the deal and we will update it.
 
 
 
+  <h3>FAQs</h3>
 
-    <div class="container">
-        <h2>Submit Deal</h2>
-        <div class="row ">
-            <form class="col s10 ">
-                <div class="row">
-                    <div class="input-field col s12">
-                        <textarea id="textarea1" class="materialize-textarea"></textarea>
-                        <label for="textarea1">Title</label>
-                    </div>
-                    <div class="input-field col s6">
-                        <input id="url" type="text" class="validate">
-                        <label class="active" for="url">URL link</label>
-                    </div>
-                    <div class="input-field col s6">
-                        <input id="brand" type="text" class="validate">
-                        <label class="active" for="brand">Brand</label>
-                    </div>
-                </div>
-                <div class="row">
-                    <form class="col s12">
-                        <div class="row">
-                            <div class="input-field col s12">
-                                <textarea id="textarea1" class="materialize-textarea"></textarea>
-                                <label for="textarea1">Coupon Code</label>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+  <ul class="collection">
+    <li class="collection-item">How do I remove my deal?</li>
+    <li class="collection-item">How do I remove my comment?</li>
+    <li class="collection-item">how do i edit my comment?</li>
+    <li class="collection-item">how do I remove my vote?</li>
+    <li class="collection-item">What deals are being removed?</li>
+    <li class="collection-item">How can I block posts from certain users or stores?</li>
+  </ul>
 
-                <div class="row">
-                    <div class="input-field col s5">
-                        <input id="start" type="text" class="datepicker">
-                        <label class="active" for="start">Start expiray</label>
-                    </div>
+  <br>
+  <h3>More info</h3>
 
-                    <div class="input-field col s5">
-                        <input id="end" type="text" class="datepicker">
-                        <label class="active" for="end">End expiray</label>
-                    </div>
-                </div>
+</div>
 
-                <script>
-
-                    $('.datepicker').pickadate({
-                        selectMonths: true, // Creates a dropdown to control month
-                        selectYears: 15, // Creates a dropdown of 15 years to control year,
-                        today: 'Today',
-                        clear: 'Clear',
-                        close: 'Ok',
-                        closeOnSelect: false // Close upon selecting a date,
-                    });
-
-
-                </script>
-
-                <p>
-                    <input type="checkbox" id="test5"/>
-                    <label  for="test5">freebie?</label>
-                </p>
-
-                <div class="row">
-                    <form class="col s10">
-                        <div class="row">
-                            <div class="input-field col s12">
-                                <textarea id="textarea1" class="materialize-textarea"></textarea>
-                                <label for="textarea1">Description</label>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-
-
-            </form>
-
-
-        </div>
-        <div class="row">
-            <button class="btn waves-effect waves-light submit_preview_btn col s2" type="submit" name="action">Preview
-
-            </button>
-        </div>
-        <div class="row">
-            <button class="btn waves-effect waves-light submit_deals_btn col s2" type="submit" name="action">Submit
-                <i class="material-icons right">send</i>
-            </button>
-        </div>
-
-
-    </div>
-    <div class="col s12 tips_box">
-        <div class=""><h5>Deal Posting Guidelines</h5></div>
-
-        <h3>Tips</h3>
-
-
-        <p>Check to see if the deal has been posted by:</p>
-
-        Browsing through the store page. (e.g Gearbest)<br>
-        Searching for product by typing the make and model until the product shows up in the drop-down.<br>
-        Found a duplicate? Has the deal expired and been posted less than 30 days ago? Report the deal and we will update it.
-
-
-
-        <h3>FAQs</h3>
-
-        <ul class="collection">
-            <li class="collection-item">How do I remove my deal?</li>
-            <li class="collection-item">How do I remove my comment?</li>
-            <li class="collection-item">how do i edit my comment?</li>
-            <li class="collection-item">how do I remove my vote?</li>
-            <li class="collection-item">What deals are being removed?</li>
-            <li class="collection-item">How can I block posts from certain users or stores?</li>
-        </ul>
-
-        <br>
-        <h3>More info</h3>
-
-    </div>
+<script>
+    $('.datepicker').pickadate({
+        selectMonths: true, // Creates a dropdown to control month
+        selectYears: 15, // Creates a dropdown of 15 years to control year,
+        today: 'Today',
+        clear: 'Clear',
+        close: 'Ok',
+        closeOnSelect: false // Close upon selecting a date,
+    });
+</script>
 
 {% endblock %}
