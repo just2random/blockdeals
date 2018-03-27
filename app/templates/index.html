@@ -2,15 +2,15 @@
 {% block content %}
 {% for deal in deals %}
   <div class="mdl-cell mdl-cell--2-col">
-    <a href="/deal/{{ deal['_id'] }}">
+    <a href="https://steemit.com/@{{ deal['steem_user'] }}/{{ deal['permlink'] }}">
       <img src="https://via.placeholder.com/128x128">
     </a>
   </div>
   <div class="mdl-cell mdl-cell--10-col">
-    <a href="/deal/{{ deal['_id'] }}">
+    <a href="https://steemit.com/@{{ deal['steem_user'] }}/{{ deal['permlink'] }}">
       <h2>{{ deal['title'] }}</h2>
     </a>
-    <p>{{ deal['description'] | truncate(160, True) }} <a href="/deal/{{ deal['_id'] }}">read me</a></p>
+    <p>{{ deal['description'] | truncate(160, True) }} [ <a href="https://steemit.com/@{{ deal['steem_user'] }}/{{ deal['permlink'] }}">Read more</a> ]</p>
   </div>
 {% endfor %}
 {% endblock %}
