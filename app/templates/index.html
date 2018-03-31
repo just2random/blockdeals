@@ -7,20 +7,25 @@
        <div class="col m12 s6">
         <img class="responsive-img" src="https://steemitimages.com/256x256/{% if deal.image_url is defined %}{{ deal['image_url'] }}{% else %}https://blockdeals.org/assets/images/logo_round.png{% endif %}">
        </div>
-       <div class="col m12 s6">
-          <p><b>Posted by:</b> <a href="https://steemit.com/@{{ deal['steem_user'] }}"><img src="https://steemitimages.com/u/{{ deal['steem_user'] }}/avatar" width="20" height="20" title="posted by @{{ deal['steem_user'] }}"></a><br/>
-          <b>Ends:</b> {{ deal['deal_expires']|datetimeformat('%a, %B %d') }}</p>
-       </div>
     </div>
   </div>
   <div class="col s12 m9">
-    <h4><a href="https://steemit.com/@{{ deal['steem_user'] }}/{{ deal['permlink'] }}">{{ deal['title'] }}</a></h4>
-    <p class="flow-text">{{ deal['description'] | truncate(250, True) }}</p>
-    <p class="right-align"><a class="waves-effect waves-light btn-large orange darken-2" href="https://steemit.com/@{{ deal['steem_user'] }}/{{ deal['permlink'] }}">More details</a></p>
+    <h5><a href="https://steemit.com/@{{ deal['steem_user'] }}/{{ deal['permlink'] }}">{{ deal['title'] }}</a></h5>
+    <p>{{ deal['description'] | truncate(250, True) }}</p>
+    <div class="row">
+      <div class="col s8">
+        <p class="grey-text lighten-3"><small><b>Posted by:</b> <a href="https://steemit.com/@{{ deal['steem_user'] }}">@{{ deal['steem_user'] }}</a> | <b>Ends:</b> {{ deal['deal_expires']|datetimeformat('%a, %B %d') }}</small></p>
+      </div>
+      <div class="col s4">
+        <p class="right-align"><a class="waves-effect waves-light btn orange darken-2" href="https://steemit.com/@{{ deal['steem_user'] }}/{{ deal['permlink'] }}">More details <i class="material-icons right">send</i></a></p>
+      </div>
+    </div>
   </div>
+  {% if not loop.last %}
   <div class="col s12">
     <hr>
   </div>
+  {% endif %}
 </div>
 {% endfor %}
 {% endblock %}
