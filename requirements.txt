@@ -2,4 +2,5 @@ Flask
 gunicorn
 pymongo
 requests
+dateutil
 -e git+git://github.com/blockdeals/steem-python.git#egg=steem
