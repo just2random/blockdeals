@@ -36,12 +36,12 @@
 			<div class="nav-wrapper container"><a id="logo-container" href="/" class="brand-logo"><img id="logo" class="responsive-img" src="/assets/images/blockdeals_logo.png"></a>
 				<ul class="right hide-on-med-and-down">
 					{% if session.logged_in and session.authorized %}
-					<li><a class="black-text" href="{{ url_for('user_blueprint.submit_page') }}">Submit Deal</a></li>
+					<li><a class="waves-effect waves-light btn-large orange darken-2" href="{{ url_for('user_blueprint.submit_page') }}">Submit Deal</a></li>
 					{% else %}
 					{% if not session.logged_in %}
-					<li><a class="loginbtn black-text" >Login</a></li>
+					<li><a class="waves-effect waves-light btn-large orange darken-2 loginbtn" >Login</a></li>
 					{% else %}
-					<li><a class="black-text" href="https://steemconnect.com/authorize/@blockdeals/?redirect_uri={{ config.SITE_URL }}/auth">Authorize</li>
+					<li><a class="waves-effect waves-light btn-large orange darken-2" href="https://steemconnect.com/authorize/@blockdeals/?redirect_uri={{ config.SITE_URL }}/auth">Authorize</li>
 					{% endif %}
 					{% endif %}
 				</ul>
@@ -87,6 +87,7 @@
           <div class="col l3 s12">
             <h5 class="white-text">Connect</h5>
             <ul>
+              <li><a class="white-text" href="https://steemit.com/@blockdeals">@blockdeals</a></li>
               <li><a class="white-text" href="https://github.com/blockdeals/blockdeals">Github</a></li>
             </ul>
           </div>
