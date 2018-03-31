@@ -8,13 +8,14 @@
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
-    <link type="text/css" rel="stylesheet" href="/assets/css/blockdeals.css?0"/>
+    <link type="text/css" rel="stylesheet" href="/assets/css/blockdeals.css?1"/>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
 
     <title>BlockDeals</title>
 
     <meta name="theme-color" content="#263238">
 
-    <link rel="shortcut icon" href="/assets/images/favicon.png">
+    <link rel="shortcut icon" href="/assets/images/favicon.png?0">
   </head>
 
 	<body>
@@ -61,7 +62,16 @@
         <div class="row">
           <div class="col l6 s12">
             <h5 class="white-text">BlockDeals</h5>
-            <p class="grey-text text-lighten-4">We are a team of Steem enthusiasts working on this project like it's our full time job. Any amount would help support and continue development on this project and is greatly appreciated.</p>
+            <p class="grey-text text-lighten-4">We are a team of Steem enthusiasts working on this project like it's our full time job. Any <a href="https://steemconnect.com/sign/delegate-vesting-shares?delegatee=blockdeals&vesting_shares=100%20SP">delegation to @blockdeals</a> would help support and continue development on this project and is greatly appreciated and will be used to vote up great deals!</p>
+            <h5>Delegate <i class="fas fa-heart"></i></h5>
+            <p>
+              {% for sp in [50, 100, 200, 500, 1000] %}
+              <a href="https://steemconnect.com/sign/delegate-vesting-shares?delegatee=blockdeals&vesting_shares={{ sp }}%20SP">{{ sp }}SP</a>
+                {% if not loop.last %}
+                  |
+                {% endif %}
+              {% endfor %}
+            </p>
           </div>
           <div class="col l3 s12">
             <h5 class="white-text">Team</h5>
@@ -75,8 +85,8 @@
           <div class="col l3 s12">
             <h5 class="white-text">Connect</h5>
             <ul>
-              <li><a class="white-text" href="https://steemit.com/@blockdeals">@blockdeals</a></li>
-              <li><a class="white-text" href="https://github.com/blockdeals/blockdeals">Github</a></li>
+              <li><i class="fas fa-rss-square"></i> <a class="white-text" href="https://steemit.com/@blockdeals">@blockdeals</a></li>
+              <li><i class="fab fa-github"></i> <a class="white-text" href="https://github.com/blockdeals/blockdeals">Github</a></li>
             </ul>
 
             <ul>
