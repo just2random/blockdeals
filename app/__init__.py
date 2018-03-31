@@ -1,7 +1,8 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for, session
 from pymongo import MongoClient
 from steem import Steem
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
+from dateutil import parser
 import sys, traceback, json, textwrap, requests, pprint
 
 app = Flask(__name__, static_folder='static', static_url_path='')
@@ -10,21 +11,41 @@ app.secret_key=app.config['SESSION_SECRET']
 
 db = MongoClient("mongodb://mongodb:27017").blockdeals
 
+@app.route("/fix/dates")
+def fix_dates():
+    deal_cursor=db.deal.find(modifiers={"$snapshot": True})
+    for deal in deal_cursor:
+        try:
+            deal['deal_start'] = parser.parse(deal['deal_start']).isoformat()
+        except ValueError:
+            deal['deal_start'] = date.today().isoformat()
+        try:
+            deal['deal_end'] = parser.parse(deal['deal_end']).isoformat()
+        except ValueError:
+            deal['deal_end'] = (date.today() + timedelta(days=45)).isoformat()
+        deal['deal_expires'] = deal['deal_end']
+        print(deal)
+        db.deal.save(deal)
+    return redirect(url_for('index'))
+
 @app.route("/fix/expires")
 def fix_expires():
     deal_cursor=db.deal.find(modifiers={"$snapshot": True})
     for deal in deal_cursor:
+        if not 'deal_start' in deal or deal['deal_start'] == "":
+            deal['deal_start'] = date.today()
+
         if 'deal_end' in deal:
             if deal['deal_end'] == "":
                 if deal['deal_start'] == "":
-                    deal['deal_expires'] = (date.today() + timedelta(days=45)).isoformat()
+                    deal['deal_expires'] = date.today() + timedelta(days=45)
                 else:
-                    deal['deal_expires'] = (deal['deal_start'] + timedelta(days=45)).isoformat()
+                    deal['deal_expires'] = parser.parse(deal['deal_start']) + timedelta(days=45)
             else:
-                deal['deal_expires'] = deal['deal_end']
+                deal['deal_expires'] = parser.parse(deal['deal_end'])
         else:
             deal['deal_end'] = ""
-            deal['deal_expires'] = (date.today() + timedelta(days=45)).isoformat()
+            deal['deal_expires'] = date.today() + timedelta(days=45)
         db.deal.save(deal)
         print(deal)
     return redirect(url_for('index'))
@@ -33,11 +54,7 @@ def fix_expires():
 def index():
     # TODO: only show non-expired deals... paginate?
     deals = []
-    deal_cursor=db.deal.find(
-        {
-            'deal_expires': { '$lte': date.today().isoformat() },
-        }
-    ).sort('deal_end', -1)
+    deal_cursor=db.deal.find({'deal_expires': { '$gte': date.today().isoformat()}}).sort([('_id', -1)])
     for deal in deal_cursor:
         deals.append(deal)
     if 'username' in session:
@@ -180,6 +197,15 @@ def deal():
         print(permlink)
         deal_form['permlink'] = permlink
         deal_form['steem_user'] = session['username']
+        try:
+            deal_form['deal_start'] = parser.parse(deal_form['deal_start']).isoformat()
+        except ValueError:
+            deal_form['deal_start'] = date.today().isoformat()
+        try:
+            deal_form['deal_end'] = parser.parse(deal_form['deal_end']).isoformat()
+        except ValueError:
+            deal_form['deal_end'] = (date.today() + timedelta(days=45)).isoformat()
+        deal_form['deal_expires'] = deal_form['deal_end']
         print(db['deal'].insert(deal_form))
     except Exception as e:
         print("***> SOMETHING FAILED")
