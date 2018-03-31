@@ -29,41 +29,43 @@ def update(permlink):
 
 @app.route("/fix/dates")
 def fix_dates():
-    deal_cursor=db.deal.find(modifiers={"$snapshot": True})
-    for deal in deal_cursor:
-        try:
-            deal['deal_start'] = parser.parse(deal['deal_start']).isoformat()
-        except ValueError:
-            deal['deal_start'] = date.today().isoformat()
-        try:
-            deal['deal_end'] = parser.parse(deal['deal_end']).isoformat()
-        except ValueError:
-            deal['deal_end'] = (date.today() + timedelta(days=45)).isoformat()
-        deal['deal_expires'] = deal['deal_end']
-        print(deal)
-        db.deal.save(deal)
+    if 'username' in session and session['username'] == "scottweston":
+        deal_cursor=db.deal.find(modifiers={"$snapshot": True})
+        for deal in deal_cursor:
+            try:
+                deal['deal_start'] = parser.parse(deal['deal_start']).isoformat()
+            except ValueError:
+                deal['deal_start'] = date.today().isoformat()
+            try:
+                deal['deal_end'] = parser.parse(deal['deal_end']).isoformat()
+            except ValueError:
+                deal['deal_end'] = (date.today() + timedelta(days=45)).isoformat()
+            deal['deal_expires'] = deal['deal_end']
+            print(deal)
+            db.deal.save(deal)
     return redirect(url_for('index'))
 
 @app.route("/fix/expires")
 def fix_expires():
-    deal_cursor=db.deal.find(modifiers={"$snapshot": True})
-    for deal in deal_cursor:
-        if not 'deal_start' in deal or deal['deal_start'] == "":
-            deal['deal_start'] = date.today()
+    if 'username' in session and session['username'] == "scottweston":
+        deal_cursor=db.deal.find(modifiers={"$snapshot": True})
+        for deal in deal_cursor:
+            if not 'deal_start' in deal or deal['deal_start'] == "":
+                deal['deal_start'] = date.today()
 
-        if 'deal_end' in deal:
-            if deal['deal_end'] == "":
-                if deal['deal_start'] == "":
-                    deal['deal_expires'] = date.today() + timedelta(days=45)
+            if 'deal_end' in deal:
+                if deal['deal_end'] == "":
+                    if deal['deal_start'] == "":
+                        deal['deal_expires'] = date.today() + timedelta(days=45)
+                    else:
+                        deal['deal_expires'] = parser.parse(deal['deal_start']) + timedelta(days=45)
                 else:
-                    deal['deal_expires'] = parser.parse(deal['deal_start']) + timedelta(days=45)
+                    deal['deal_expires'] = parser.parse(deal['deal_end'])
             else:
-                deal['deal_expires'] = parser.parse(deal['deal_end'])
-        else:
-            deal['deal_end'] = ""
-            deal['deal_expires'] = date.today() + timedelta(days=45)
-        db.deal.save(deal)
-        print(deal)
+                deal['deal_end'] = ""
+                deal['deal_expires'] = date.today() + timedelta(days=45)
+            db.deal.save(deal)
+            print(deal)
     return redirect(url_for('index'))
 
 @app.route("/")
@@ -135,7 +137,6 @@ def complete_sc():
     else:
         session['logged_in'] = False
         return render_template('login_failed.html'), 401
-
 
 @app.route('/deal', methods=['GET', 'POST'])
 def deal():
