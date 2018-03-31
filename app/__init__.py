@@ -44,7 +44,7 @@ def logout():
 
 @app.route('/auth', methods=['GET'])
 def authorized():
-    if not session['logged_in']:
+    if not 'logged_in' in session or not session['logged_in']:
         return render_template('login_failed.html'), 401
 
     r = requests.get('https://v2.steemconnect.com/api/me', headers={ 'Authorization': session['token'] })

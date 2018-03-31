@@ -88,6 +88,8 @@ Now enable `blockdeals` to have posting permissions on your account:
 >>> unlock pass
 >>> import_key 5H.... your_active_key ...E
 >>> list_my_accounts
->>> update_account_auth_key "youraccount" "posting" "blockdeals" 1 true
+>>> update_account_auth_account "youraccount" "posting" "blockdeals" 1 true
+>>> update_account_auth_account "youraccount" "posting" "blockdeals" 0 true
 ```
 
+The `update_account_auth_account` with `1` adds and the one with `0` removes
