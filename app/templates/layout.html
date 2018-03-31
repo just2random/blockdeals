@@ -42,7 +42,7 @@
           {% if not session.logged_in %}
           <li><a class="waves-effect waves-light btn orange darken-2 loginbtn" >Login <i class="material-icons right">person</i></a></li>
           {% else %}
-          <li><a class="waves-effect waves-light btn orange darken-2" href="https://steemconnect.com/authorize/@blockdeals/?redirect_uri={{ config.SITE_URL }}/auth">Authorize <i class="material-icons right">unlock</i></a></li>
+          <li><a class="waves-effect waves-light btn orange darken-2" href="https://steemconnect.com/authorize/@blockdeals/?redirect_uri={{ config.SITE_URL }}/auth">Authorize <i class="material-icons right">lock_open</i></a></li>
           {% endif %}
           {% endif %}
           </ul>
