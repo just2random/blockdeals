@@ -34,6 +34,33 @@ def index():
 def page_not_found(e):
     return render_template('404.html'), 404
 
+@app.route('/logout', methods=['GET'])
+def logout():
+    session.pop('username', None)
+    session.pop('token', None)
+    session.pop('authorized', None)
+    session['logged_in'] = False
+    return redirect(url_for('index'))
+
+@app.route('/auth', methods=['GET'])
+def authorized():
+    if not session['logged_in']:
+        return render_template('login_failed.html'), 401
+
+    r = requests.get('https://v2.steemconnect.com/api/me', headers={ 'Authorization': session['token'] })
+    if r.status_code == 200:
+        print('Auth of {} successful'.format(session['username']))
+        session['authorized'] = False
+        pprint.pprint(r.json()['account']['posting'])
+        if 'account_auths' in r.json()['account']['posting']:
+            for auth_account in r.json()['account']['posting']['account_auths']:
+                if auth_account[0] == "blockdeals":
+                    session['authorized'] = True
+        return redirect(url_for('index'))
+    else:
+        session['logged_in'] = False
+        return render_template('login_failed.html'), 401
+
 @app.route('/complete/sc/', methods=['GET'])
 def complete_sc():
     # TODO: verify token
