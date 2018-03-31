@@ -47,7 +47,20 @@ $ sudo -s
 $ docker start mongo
 ```
 
-You can now run the app in dev mode via: `python blockdeals.py`
+Create a config file:
+
+```
+$ cat blockdeals.org
+STEEM_USER="steem_account_to_post_as"
+POSTING_KEY="posting_key_of_blockdeals"
+ACTIVE_KEY="active_posting_key_of_blockdeals"
+```
+
+You can now run the app in dev mode via:
+
+```
+$ BLOCKDEALS_SETTINGS="$(pwd)/blockdeals.cfg" UNLOCK="blockdeals" python blockdeals.py
+```
 
 ## Production Deployment
 
@@ -59,3 +72,22 @@ gunicorn -w 4 -b 0.0.0.0:8000 wsgi:app
 
 You should definitely run this and test your changes before committing or
 pushing your changes.  A `git push` will trigger an upgrade of the server.
+
+## Setting your account up to allow blockdeals to post on your behalf
+
+Launch the `cli_wallet`:
+
+```
+$ docker run --rm -it steemit/steem /usr/local/steemd-default/bin/cli_wallet -s wss://rpc.buildteam.io
+```
+
+Now enable `blockdeals` to have posting permissions on your account:
+
+```
+>>> set_password pass
+>>> unlock pass
+>>> import_key 5H.... your_active_key ...E
+>>> list_my_accounts
+>>> update_account_auth_key "youraccount" "posting" "blockdeals" 1 true
+```
+

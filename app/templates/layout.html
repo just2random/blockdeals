@@ -8,6 +8,15 @@
     <link rel="stylesheet" href="/assets/css/materialize.min.css">
     <script src="/assets/js/jquery-3.3.1.min.js"></script>
     <script src="/assets/js/materialize.min.js"></script>
+    <script src="/assets/js/sc2.min.js"></script>
+
+    <script>
+      var api = sc2.init({
+          app: 'blockdeals.app',
+          callbackURL: '{{ config.SITE_URL }}/complete/sc/',
+          scope: ['login']
+      });
+    </script>
 
     <title>BlockDeals</title>
 
@@ -93,94 +102,23 @@
   <header class="docs-layout-header mdl-layout__header">
     <div class="container">
       <div class="row">
-        <div class="col m6 s12">
+        <div class="col s6">
           <a href="/"><img style="width:300px;" src="/assets/images/blockdeals_logo.png"></a>
         </div>
-        <div class="col m4 s6">
+        <div class="col s6 right-align">
+          {% if session.logged_in and session.authorized %}
           <a href="{{ url_for('user_blueprint.submit_page') }}">
             <button class="btn waves-effect waves-light sub_button" type="submit" name="action"> <i class="material-icons">add_box</i> Submit Deal</button>
           </a>
-        </div>
-
-        <div class="col m2 s6">
-          <a style="color: darkgray; font-weight: bold" class="modal-trigger" href="#signup">Sign up</a>
-
-          <!-- Modal Structure -->
-          <div id="signup" class="modal">
-            <div class="modal-content" style="color: black; height: 400px;">
-              <h4>Sign Up</h4>
-              <hr>
-              <form class="col s12">
-                <div class="row">
-                  <div class="input-field col s8">
-                    <input id="email" type="email" class="validate">
-                    <label for="email" data-error="wrong" data-success="right">Email</label>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="input-field col s8">
-                    <input id="password" type="password" class="validate">
-                    <label for="password">New Password</label>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="input-field col s8">
-                    <input id="password" type="password" class="validate">
-                    <label for="password">Confirm Password</label>
-                  </div>
-                </div>
-              </form>
-            </div>
-            <div class="modal-footer">
-              <a href="#!">
-                <button class="btn waves-effect waves-light sign_up_button modal-action modal-close" type="submit" name="action">Submit <i class="material-icons right">send</i>
-                </button>
+          {% else %}
+            {% if not session.logged_in %}
+              <button class="btn waves-effect waves-light sub_button" id="loginbtn"> <i class="material-icons">face</i> Login</button>
+            {% else %}
+            <a href="https://steemconnect.com/authorize/@blockdeals/?redirect_uri={{ config.SITE_URL }}/auth">
+                <button class="btn waves-effect waves-light sub_button"> <i class="material-icons">lock_open</i> Authorize</button>
               </a>
-            </div>
-          </div>
-
-          <hr style="width: 50px; color: darkgray">
-          <!-- Modal Trigger -->
-          <a style="color: darkgray; font-weight: bold" class="modal-trigger" href="#modal1">Login</a>
-
-          <!-- Modal Structure -->
-          <div id="modal1" class="modal">
-
-            <div class="modal-content" style="color: black;">
-              <h4>Login</h4>
-              <hr>
-              <div class="row">
-                <form class="col s12">
-                  <div class="row">
-                    <div class="input-field col s8">
-                      <input id="email" type="email" class="validate">
-                      <label for="email" data-error="wrong" data-success="right">Email</label>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="input-field col s8">
-                      <input id="password" type="password" class="validate">
-                      <label for="password">Password</label>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <a href="#!">
-                <button class="btn waves-effect waves-light login_button modal-action modal-close" type="submit" name="action">Login <i class="material-icons right">send</i>
-                </button>
-              </a>
-
-            </div>
-          </div>
-
-          <script>
-            $(document).ready(function () {
-              // the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
-              $('.modal').modal();
-            });
-          </script>
+            {% endif %}
+          {% endif %}
         </div>
       </div>
     </div>
@@ -244,6 +182,7 @@
 <script src="/assets/js/prism-css.min.js"></script>
 <script src="/assets/js/prism-bash.min.js"></script>
 <script src="/assets/js/main.js"></script>
+<script src="/assets/js/blockdeals.js"></script>
 <!-- Built with love using Material Design Lite -->
 </body>
 </html>

@@ -1,4 +1,5 @@
 Flask
-steem
 gunicorn
 pymongo
+requests
+-e git+git://github.com/blockdeals/steem-python.git#egg=steem
