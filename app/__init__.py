@@ -11,6 +11,15 @@ app.secret_key=app.config['SESSION_SECRET']
 
 db = MongoClient("mongodb://mongodb:27017").blockdeals
 
+@app.route("/update/<permlink>", methods=['POST'])
+def update(permlink):
+    print("updating {}".format(permlink))
+    if 'image_url' in request.values:
+        image_url = request.values['image_url']
+        deal_cursor=db.deal.find_and_modify(query={'permlink':permlink}, update={"$set": {'image_url': image_url}}, upsert=False)
+
+    return redirect(url_for('index'))
+
 @app.route("/fix/dates")
 def fix_dates():
     deal_cursor=db.deal.find(modifiers={"$snapshot": True})
@@ -153,6 +162,8 @@ def deal():
         freebie = "&#10060;"
 
     try:
+        if deal_form['image_url'] == "":
+            deal_form['image_url'] = 'https://blockdeals.org/assets/images/logo_round.png'
 
         # s = Steem(nodes=['https://api.steemit.com'], gtg.steem.house:8090
         s = Steem(nodes=['https://steemd.steemitstage.com/'],
@@ -181,7 +192,7 @@ def deal():
 """.
                           format(deal_form['title'],
                                  deal_form['description'],
-                                 "https://via.placeholder.com/128x128",
+                                 deal_form['image_url'],
                                  deal_form['coupon_code'],
                                  deal_form['deal_start'],
                                  deal_form['deal_end'],

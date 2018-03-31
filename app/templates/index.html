@@ -3,7 +3,7 @@
 {% for deal in deals %}
   <div class="mdl-cell mdl-cell--2-col">
     <a href="https://steemit.com/@{{ deal['steem_user'] }}/{{ deal['permlink'] }}">
-      <img src="https://via.placeholder.com/128x128">
+      <img src="https://steemitimages.com/128x128/{% if deal.image_url is defined %}{{ deal['image_url'] }}{% else %}https://blockdeals.org/assets/images/logo_round.png{% endif %}">
     </a>
   </div>
   <div class="mdl-cell mdl-cell--10-col">
