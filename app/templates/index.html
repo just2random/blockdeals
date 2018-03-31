@@ -2,14 +2,14 @@
 {% block content %}
 {% for deal in deals %}
 <div class="row">
-  <div class="col s12 m3">
+  <div class="col s12 m2">
     <div class="row">
        <div class="col m12 s6">
-        <img class="responsive-img" src="https://steemitimages.com/256x256/{% if deal.image_url is defined %}{{ deal['image_url'] }}{% else %}https://blockdeals.org/assets/images/logo_round.png{% endif %}">
+        <img class="responsive-img" src="https://steemitimages.com/150x150/{% if deal.image_url is defined %}{{ deal['image_url'] }}{% else %}https://blockdeals.org/assets/images/logo_round.png{% endif %}">
        </div>
     </div>
   </div>
-  <div class="col s12 m9">
+  <div class="col s12 m10">
     <h5><a href="https://steemit.com/@{{ deal['steem_user'] }}/{{ deal['permlink'] }}">{{ deal['title'] }}</a></h5>
     <p>{{ deal['description'] | truncate(250, True) }}</p>
     <div class="row">
