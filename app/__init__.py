@@ -10,13 +10,32 @@ app.secret_key=app.config['SESSION_SECRET']
 
 db = MongoClient("mongodb://mongodb:27017").blockdeals
 
+@app.route("/fix/expires")
+def fix_expires():
+    deal_cursor=db.deal.find(modifiers={"$snapshot": True})
+    for deal in deal_cursor:
+        if 'deal_end' in deal:
+            if deal['deal_end'] == "":
+                if deal['deal_start'] == "":
+                    deal['deal_expires'] = (date.today() + timedelta(days=45)).isoformat()
+                else:
+                    deal['deal_expires'] = (deal['deal_start'] + timedelta(days=45)).isoformat()
+            else:
+                deal['deal_expires'] = deal['deal_end']
+        else:
+            deal['deal_end'] = ""
+            deal['deal_expires'] = (date.today() + timedelta(days=45)).isoformat()
+        db.deal.save(deal)
+        print(deal)
+    return redirect(url_for('index'))
+
 @app.route("/")
 def index():
     # TODO: only show non-expired deals... paginate?
     deals = []
     deal_cursor=db.deal.find(
         {
-            'deal_end': { '$lte': date.today().isoformat() },
+            'deal_expires': { '$lte': date.today().isoformat() },
         }
     ).sort('deal_end', -1)
     for deal in deal_cursor:
