@@ -6,8 +6,8 @@
   <div class="row">
     <form action="/deal" method="POST">
       <div class="input-field col s12">
-        <input id="textarea1" type="text" name="title">
-        <label for="textarea1">Title</label>
+        <input id="title" type="text" name="title">
+        <label for="title">Title</label>
       </div>
 
       <div class="input-field col s12">
@@ -21,8 +21,8 @@
       </div>
 
       <div class="input-field col s6">
-        <input id="textarea1" type="text" name="coupon_code"></textarea>
-        <label for="textarea1">Coupon Code</label>
+        <input id="coupon_code" type="text" name="coupon_code"></textarea>
+        <label for="coupon_code">Coupon Code</label>
       </div>
 
       <div class="input-field col s6">
@@ -40,14 +40,18 @@
         <label class="active" for="end">Date deal ends</label>
       </div>
 
-      <div class="col s12">
-        <input type="checkbox" id="test5" name="freebie">
-        <label for="test5">freebie</label>
+      <div class="input-field col s12">
+        <textarea id="description" class="materialize-textarea" name="description"></textarea>
+        <label for="description">Description</label>
       </div>
 
-      <div class="input-field col s12">
-        <textarea id="textarea1" class="materialize-textarea" name="description"></textarea>
-        <label for="textarea1">Description</label>
+      <div class="col s12">
+        <p>
+        <label>
+          <input type="checkbox" id="freebie" name="freebie">
+          <span>freebie</span>
+        </label
+        </p>
       </div>
 
       <div class="col s12">

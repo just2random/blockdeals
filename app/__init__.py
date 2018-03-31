@@ -11,6 +11,13 @@ app.secret_key=app.config['SESSION_SECRET']
 
 db = MongoClient("mongodb://mongodb:27017").blockdeals
 
+@app.template_filter('datetimeformat')
+def _jinja2_filter_datetime(date, fmt=None):
+    date = parser.parse(date)
+    native = date.replace(tzinfo=None)
+    format='%b %d, %Y'
+    return native.strftime(format)
+
 @app.route("/update/<permlink>", methods=['POST'])
 def update(permlink):
     print("updating {}".format(permlink))

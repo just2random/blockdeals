@@ -1,16 +1,26 @@
 {% extends'layout.html' %}
 {% block content %}
 {% for deal in deals %}
-  <div class="mdl-cell mdl-cell--2-col">
-    <a href="https://steemit.com/@{{ deal['steem_user'] }}/{{ deal['permlink'] }}">
-      <img src="https://steemitimages.com/128x128/{% if deal.image_url is defined %}{{ deal['image_url'] }}{% else %}https://blockdeals.org/assets/images/logo_round.png{% endif %}">
-    </a>
+<div class="row">
+  <div class="col s12 m3">
+    <div class="row">
+       <div class="col m12 s6">
+        <img src="https://steemitimages.com/128x128/{% if deal.image_url is defined %}{{ deal['image_url'] }}{% else %}https://blockdeals.org/assets/images/logo_round.png{% endif %}">
+       </div>
+       <div class="col m12 s6">
+          <p><b>Posted by:</b> <a href="https://steemit.com/@{{ deal['steem_user'] }}"><img src="https://steemitimages.com/u/{{ deal['steem_user'] }}/avatar" width="20" height="20" title="posted by @{{ deal['steem_user'] }}"></a><br/>
+          <b>Ends:</b> {{ deal['deal_expires']|datetimeformat('%a, %B %d') }}</p>
+       </div>
+    </div>
   </div>
-  <div class="mdl-cell mdl-cell--10-col">
-    <a href="https://steemit.com/@{{ deal['steem_user'] }}/{{ deal['permlink'] }}">
-      <h2>{{ deal['title'] }}</h2>
-    </a>
-    <p>{{ deal['description'] | truncate(160, True) }} [ <a href="https://steemit.com/@{{ deal['steem_user'] }}/{{ deal['permlink'] }}">Read more</a> ]</p>
+  <div class="col s12 m9">
+    <h4><a href="https://steemit.com/@{{ deal['steem_user'] }}/{{ deal['permlink'] }}">{{ deal['title'] }}</a></h4>
+    <p class="flow-text">{{ deal['description'] | truncate(250, True) }}</p>
+    <p class="right-align"><a class="waves-effect waves-light btn-large orange darken-2" href="https://steemit.com/@{{ deal['steem_user'] }}/{{ deal['permlink'] }}">More details</a></p>
   </div>
+  <div class="col s12">
+    <hr>
+  </div>
+</div>
 {% endfor %}
 {% endblock %}
