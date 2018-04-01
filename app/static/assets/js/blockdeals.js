@@ -8,4 +8,9 @@ $(document).ready(function() {
   $('.sidenav').sidenav();
   $('.datepicker').datepicker();
   $('.tooltipped').tooltip();
+  $('.collapsible').collapsible();
+  $("#country").countrySelect({
+    defaultCountry: "",
+    preferredCountries: ['au', 'ca', 'gb', 'us']
+  });
 });

@@ -6,17 +6,17 @@
   <div class="row">
     <form action="/deal" method="POST">
       <div class="input-field col s12">
-        <input id="title" type="text" name="title">
+        <input id="title" type="text" name="title"/>
         <label for="title">Title</label>
       </div>
 
       <div class="input-field col s12">
-        <input id="url" type="url" class="validate" name="url">
+        <input id="url" type="url" class="validate" name="url"/>
         <label class="active" for="url">Direct URL to deal (please no affliate links!)</label>
       </div>
 
       <div class="input-field col s12">
-        <input id="image_url" type="url" class="validate" name="image_url">
+        <input id="image_url" type="url" class="validate" name="image_url"/>
         <label class="active" for="url">Image URL</label>
       </div>
 
@@ -26,17 +26,17 @@
       </div>
 
       <div class="input-field col s6">
-        <input id="brand" type="text" name="brand">
+        <input id="brand" type="text" name="brand"/>
         <label class="active" for="brand">Brand</label>
       </div>
 
       <div class="input-field col s6">
-        <input id="start" type="text" class="datepicker" name="deal_start">
+        <input id="start" type="text" class="datepicker" name="deal_start"/>
         <label class="active" for="start">Date deal starts</label>
       </div>
 
       <div class="input-field col s6">
-        <input id="end" type="text" class="datepicker" name="deal_end">
+        <input id="end" type="text" class="datepicker" name="deal_end"/>
         <label class="active" for="end">Date deal ends</label>
       </div>
 
@@ -45,12 +45,17 @@
         <label for="description">Description</label>
       </div>
 
+      <div class="input-field col s12">
+        <input id="country" type="text" name="country"/>
+        <input type="hidden" id="country_code" name="country_code"/>
+      </div>
+
       <div class="col s12">
         <p>
-        <label>
-          <input type="checkbox" id="freebie" name="freebie">
-          <span>freebie</span>
-        </label
+          <label>
+            <input type="checkbox" id="freebie" name="freebie"/>
+            <span>Freebie?</span>
+          </label
         </p>
       </div>
 
@@ -60,46 +65,46 @@
     </form>
   </div>
 
+  <div class="col s12 tips_box">
+    <h3>Deal Posting Guidelines</h3>
+
+    <h5>Tips</h5>
+
+    <p>Check to see if the deal has been posted by:</p>
+
+    Browsing through the store page. (e.g Gearbest)<br>
+    Searching for product by typing the make and model until the product shows up in the drop-down.<br>
+    Found a duplicate? Has the deal expired and been posted less than 30 days ago? Report the deal and we will update it.
+
+    <h5>FAQs</h5>
+
+    <ul class="collapsible">
+      <li>
+        <div class="collapsible-header"><i class="material-icons">add_box</i>How do I remove my deal?</div>
+        <div class="collapsible-body">Coming soon...</div>
+      </li>
+      <li>
+        <div class="collapsible-header"><i class="material-icons">add_box</i>How do I remove my comment?</div>
+        <div class="collapsible-body">Coming soon...</div>
+      </li>
+      <li>
+        <div class="collapsible-header"><i class="material-icons">add_box</i>How do i edit my comment?</div>
+        <div class="collapsible-body">Coming soon...</div>
+      </li>
+      <li>
+        <div class="collapsible-header"><i class="material-icons">add_box</i>How do I remove my vote?</div>
+        <div class="collapsible-body">Coming soon...</div>
+      </li>
+      <li>
+        <div class="collapsible-header"><i class="material-icons">add_box</i>What deals are being removed?</div>
+        <div class="collapsible-body">Coming soon...</div>
+      </li>
+      <li>
+        <div class="collapsible-header"><i class="material-icons">add_box</i>How can I block posts from certain users or stores?</div>
+        <div class="collapsible-body">Coming soon...</div>
+      </li>
+    </ul>
+  </div>
 </div>
-<div class="col s12 tips_box">
-  <div class=""><h5>Deal Posting Guidelines</h5></div>
-
-  <h3>Tips</h3>
-
-
-  <p>Check to see if the deal has been posted by:</p>
-
-  Browsing through the store page. (e.g Gearbest)<br>
-  Searching for product by typing the make and model until the product shows up in the drop-down.<br>
-  Found a duplicate? Has the deal expired and been posted less than 30 days ago? Report the deal and we will update it.
-
-
-
-  <h3>FAQs</h3>
-
-  <ul class="collection">
-    <li class="collection-item">How do I remove my deal?</li>
-    <li class="collection-item">How do I remove my comment?</li>
-    <li class="collection-item">how do i edit my comment?</li>
-    <li class="collection-item">how do I remove my vote?</li>
-    <li class="collection-item">What deals are being removed?</li>
-    <li class="collection-item">How can I block posts from certain users or stores?</li>
-  </ul>
-
-  <br>
-  <h3>More info</h3>
-
-</div>
-
-<script>
-    $('.datepicker').pickadate({
-        selectMonths: true, // Creates a dropdown to control month
-        selectYears: 15, // Creates a dropdown of 15 years to control year,
-        today: 'Today',
-        clear: 'Clear',
-        close: 'Ok',
-        closeOnSelect: false // Close upon selecting a date,
-    });
-</script>
 
 {% endblock %}
