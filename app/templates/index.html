@@ -17,7 +17,7 @@
         <p class="grey-text lighten-3"><small><b>Posted by:</b> <a href="https://steemit.com/@{{ deal['steem_user'] }}">@{{ deal['steem_user'] }}</a> | <b>Ends:</b> {{ deal['deal_expires']|datetimeformat('%a, %B %d') }}</small></p>
       </div>
       <div class="col s4">
-        <p class="right-align"><a class="waves-effect waves-light btn orange darken-2" href="https://steemit.com/@{{ deal['steem_user'] }}/{{ deal['permlink'] }}">More details <i class="material-icons right">send</i></a></p>
+        <p class="right-align"><a class="waves-effect waves-light btn orange darken-2 tooltipped" data-position="top" data-tooltip="<i class='fas fa-thumbs-up'></i> Upvote it if it's a good deal!<br><br>Flag it if it's spam <i class='fas fa-thumbs-down'></i>" href="https://steemit.com/@{{ deal['steem_user'] }}/{{ deal['permlink'] }}">More details <i class="material-icons right">send</i></a></p>
       </div>
     </div>
   </div>
