@@ -11,6 +11,26 @@ app.secret_key=app.config['SESSION_SECRET']
 
 db = MongoClient("mongodb://mongodb:27017").blockdeals
 
+@app.template_filter('expires_class')
+def _jinja2_filter_expires_class(date, fmt=None):
+    date = parser.parse(date)
+    native = date.replace(tzinfo=None)
+    days = (native-date.today()).days
+    if days <= 2:
+        return "red pulse"
+    else:
+        return ""
+
+@app.template_filter('expires_time')
+def _jinja2_filter_expires_time(date, fmt=None):
+    date = parser.parse(date)
+    native = date.replace(tzinfo=None)
+    days = (native-date.today()).days
+    if days <= 2:
+        return "soon"
+    else:
+        return "in {} day{}".format(days, '' if days == 1 else 's')
+
 @app.template_filter('datetimeformat')
 def _jinja2_filter_datetime(date, fmt=None):
     date = parser.parse(date)
