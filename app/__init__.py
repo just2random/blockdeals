@@ -181,6 +181,9 @@ def deal():
         'tags': [ 'blockdeals' ]
     }
 
+    if 'country_code' in deal_form:
+        json_metadata['tags'].append('blockdeals-'+deal_form['country_code'])
+
     permlink = ""
 
     try:

@@ -11,6 +11,7 @@
   </div>
   <div class="col s12 m10">
     {% if deal['deal_end'] %}<span class="new badge {{ deal.deal_end | expires_class }}" data-badge-caption="{{ deal.deal_end | expires_time }}">expires</span>{% endif %}
+    {% if deal['country_code'] %}<span class="badge"><div class="country-select"><div class="flag {{ deal['country_code'] }}"></div></div></span>{% endif %}
     <h5>
       <a href="https://steemit.com/@{{ deal['steem_user'] }}/{{ deal['permlink'] }}">{{ deal['title'] }}</a>
     </h5>
