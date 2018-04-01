@@ -208,6 +208,7 @@ def deal():
 | Details | |
 | - | - |
 | &#127991; **Coupon Code** | {3} |
+| &#127758; **Country** | {9} ![{10}](https://steemitimages.com/22x22/https://github.com/hjnilsson/country-flags/raw/master/png100px/{10}.png) |
 | &#128198; **Starts** | {4} |
 | &#128198; **Ends** | {5} |
 | &#128176; **Freebie?** | {6} |
@@ -229,7 +230,9 @@ def deal():
                                  deal_form['deal_end'],
                                  freebie,
                                  deal_form['url'],
-                                 textwrap.shorten(deal_form['title'], width=40, placeholder="...")),
+                                 textwrap.shorten(deal_form['title'], width=40, placeholder="..."),
+                                 deal_form['country'],
+                                 deal_form['country_code']),
                           author=session['username'],
                           json_metadata=json_metadata,
                           comment_options=comment_options,
