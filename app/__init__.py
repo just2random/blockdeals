@@ -11,6 +11,25 @@ app.secret_key=app.config['SESSION_SECRET']
 
 db = MongoClient("mongodb://mongodb:27017").blockdeals
 
+def confirm_user():
+    if not 'token' in session or not 'username' in session:
+        return False
+
+    r = requests.get('https://v2.steemconnect.com/api/me', headers={ 'Authorization': session['token'] })
+    if r.status_code == 200:
+        session['authorized'] = False
+        if r.json()['_id'] != session['username']:
+            return False
+        if 'account_auths' in r.json()['account']['posting']:
+            for auth_account in r.json()['account']['posting']['account_auths']:
+                if auth_account[0] == "blockdeals":
+                    session['authorized'] = True
+                    print('Confirmed token and auth of {} successful'.format(session['username']))
+                    return True
+    else:
+        session['logged_in'] = False
+    return False
+
 @app.template_filter('expires_class')
 def _jinja2_filter_expires_class(date, fmt=None):
     date = parser.parse(date)
@@ -44,7 +63,6 @@ def update(permlink):
     if 'image_url' in request.values:
         image_url = request.values['image_url']
         deal_cursor=db.deal.find_and_modify(query={'permlink':permlink}, update={"$set": {'image_url': image_url}}, upsert=False)
-
     return redirect(url_for('index'))
 
 @app.route("/fix/dates")
@@ -125,7 +143,9 @@ def authorized():
     if r.status_code == 200:
         print('Auth of {} successful'.format(session['username']))
         session['authorized'] = False
-        pprint.pprint(r.json()['account']['posting'])
+        if r.json()['_id'] != session['username']:
+            session['logged_in'] = False
+            return render_template('login_failed.html'), 401
         if 'account_auths' in r.json()['account']['posting']:
             for auth_account in r.json()['account']['posting']['account_auths']:
                 if auth_account[0] == "blockdeals":
@@ -146,7 +166,6 @@ def complete_sc():
         print('Login of {} successful'.format(username))
         session['authorized'] = False
         session['logged_in'] = username == r.json()['_id']
-        pprint.pprint(r.json()['account']['posting'])
         if 'account_auths' in r.json()['account']['posting']:
             for auth_account in r.json()['account']['posting']['account_auths']:
                 if auth_account[0] == "blockdeals":
@@ -160,6 +179,9 @@ def complete_sc():
 
 @app.route('/deal', methods=['GET', 'POST'])
 def deal():
+    if not confirm_user():
+        return render_template('login_failed.html'), 401
+
     deal_form=request.form.to_dict()
     # Test posting
     comment_options = {
@@ -196,8 +218,9 @@ def deal():
         if deal_form['image_url'] == "":
             deal_form['image_url'] = 'https://blockdeals.org/assets/images/logo_round.png'
 
-        # s = Steem(nodes=['https://api.steemit.com'], gtg.steem.house:8090
-        s = Steem(nodes=['https://steemd.steemitstage.com/'],
+        # https://api.steemit.com, gtg.steem.house:8090,
+        # https://steemd.steemitstage.com
+        s = Steem(nodes=['https://rpc.buildteam.io'],
                   keys=[app.config['POSTING_KEY'], app.config['ACTIVE_KEY']])
         p = s.commit.post(title=deal_form['title'],
                           body="""
@@ -260,3 +283,9 @@ def deal():
 
     # TODO: make a pretty template but for now go to the post
     return redirect("https://steemit.com/@{}/{}".format(session['username'], permlink), code=302)
+
+@app.route('/submit')
+def submit_page():
+    if 'logged_in' in session and session['logged_in'] and 'authorized' in session and session['authorized']:
+        return render_template("submit_deals.html")
+    return redirect(url_for('index'))
