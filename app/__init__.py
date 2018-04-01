@@ -19,7 +19,7 @@ def _jinja2_filter_expires_class(date, fmt=None):
     if days <= 2:
         return "red pulse"
     else:
-        return ""
+        return "grey lighten-1"
 
 @app.template_filter('expires_time')
 def _jinja2_filter_expires_time(date, fmt=None):
