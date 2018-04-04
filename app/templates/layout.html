@@ -21,6 +21,9 @@
 
 	<body>
     <div class="navbar-fixed">
+      <ul id="country_dropdown" class="dropdown-content">
+        <li><a href="/">All</a></li>
+      </ul>
       {% if brands %}
         <ul id="brand_dropdown" class="dropdown-content">
           <li><a href="/">All</a></li>
@@ -35,6 +38,7 @@
         <div class="nav-wrapper container"><a id="logo-container" href="/" class="brand-logo"><img id="logo" class="responsive-img" src="/assets/images/blockdeals_logo.png"></a>
           <ul class="right hide-on-med-and-down">
           {% if brands %}
+          <li><a class="dropdown-trigger" href="#!" data-target="country_dropdown">Country <i class="material-icons right">arrow_drop_down</i></a></li>
           <li><a class="dropdown-trigger" href="#!" data-target="brand_dropdown">{{ show_brand }} <i class="material-icons right">arrow_drop_down</i></a></li>
           {% endif %}
           {% if session.logged_in and session.authorized %}
@@ -130,8 +134,9 @@
     <script src="/assets/js/jquery-3.3.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
     <script src="/assets/js/sc2.min.js"></script>
-    <script src="/assets/js/blockdeals.js?3"></script>
     <script src="/assets/js/countrySelect.min.js"></script>
+    <script src="/assets/js/countrycode.js"></script>
+    <script src="/assets/js/blockdeals.js?4"></script>
     <script>
 var api = sc2.init({
   app: 'blockdeals.app',
