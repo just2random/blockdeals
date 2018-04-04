@@ -3,7 +3,7 @@ from pymongo import MongoClient
 from steem import Steem
 from datetime import date, timedelta, datetime
 from dateutil import parser
-import sys, traceback, json, textwrap, requests, pprint
+import sys, traceback, json, textwrap, requests, pprint, time
 
 app = Flask(__name__, static_folder='static', static_url_path='')
 app.config.from_envvar('BLOCKDEALS_SETTINGS')
@@ -246,19 +246,23 @@ def deal():
 
             permlink = p['operations'][0][1]['permlink']
             app.logger.info("Posted to STEEM with id={}".format(permlink))
+        else:
+            permlink = "testing-{}".format(int(time.time()))
+            app.logger.info("Posted to MONGO only with id={}".format(permlink))
 
-            deal_form['permlink'] = permlink
-            deal_form['steem_user'] = session['username']
-            try:
-                deal_form['deal_start'] = parser.parse(deal_form['deal_start']).isoformat()
-            except ValueError:
-                deal_form['deal_start'] = date.today().isoformat()
-            try:
-                deal_form['deal_end'] = parser.parse(deal_form['deal_end']).isoformat()
-            except ValueError:
-                deal_form['deal_end'] = (date.today() + timedelta(days=45)).isoformat()
-                deal_form['deal_expires'] = deal_form['deal_end']
-            app.logger.info("saved to mongodb: {}".format(db['deal'].insert(deal_form)))
+        deal_form['permlink'] = permlink
+        deal_form['steem_user'] = session['username']
+        try:
+            deal_form['deal_start'] = parser.parse(deal_form['deal_start']).isoformat()
+        except ValueError:
+            deal_form['deal_start'] = date.today().isoformat()
+        try:
+            deal_form['deal_end'] = parser.parse(deal_form['deal_end']).isoformat()
+        except ValueError:
+            deal_form['deal_end'] = (date.today() + timedelta(days=45)).isoformat()
+            deal_form['deal_expires'] = deal_form['deal_end']
+        mongo_id = db['deal'].insert(deal_form)
+        app.logger.info("saved to mongodb: {}".format(mongo_id))
     except Exception as e:
         app.logger.info("***> SOMETHING FAILED")
         app.logger.info(e)
