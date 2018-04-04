@@ -1,7 +1,5 @@
 {% extends "layout.html" %}
 {% block content %}
-
-<div class="container">
   <h2>Submit Deal</h2>
   <div class="row">
     <form action="/deal" method="POST">
@@ -60,7 +58,7 @@
       </div>
 
       <div class="col s12">
-        <button class="btn waves-effect waves-light submit_deals_btn" type="submit">Submit<i class="material-icons right">send</i></button>
+        <button class="btn-large waves-effect waves-light submit_deals_btn" type="submit">Submit<i class="material-icons right">send</i></button>
       </div>
     </form>
   </div>
@@ -105,6 +103,5 @@
       </li>
     </ul>
   </div>
-</div>
 
 {% endblock %}

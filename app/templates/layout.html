@@ -37,8 +37,8 @@
       <nav class="grey lighten-2" role="navigation">
         <div class="nav-wrapper container"><a id="logo-container" href="/" class="brand-logo"><img id="logo" class="responsive-img" src="/assets/images/blockdeals_logo.png"></a>
           <ul class="right hide-on-med-and-down">
-          {% if brands %}
           <li><a class="dropdown-trigger" href="#!" data-target="country_dropdown">Country <i class="material-icons right">arrow_drop_down</i></a></li>
+          {% if brands %}
           <li><a class="dropdown-trigger" href="#!" data-target="brand_dropdown">{{ show_brand }} <i class="material-icons right">arrow_drop_down</i></a></li>
           {% endif %}
           {% if session.logged_in and session.authorized %}
@@ -81,6 +81,22 @@
 
 		<div class="container">
 			<div class="section">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="row">
+          <div class="col s12">
+            <div class="card red darken-1">
+              <div class="card-content white-text">
+                <span class="card-title">Error</span>
+                {% for category, message in messages %}
+                <p class="{{ category }}">{{ message }}</p>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+        {% endwith %}
         {% block content %}
         {% endblock %}
       </div>

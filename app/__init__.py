@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, redirect, url_for, session
+from flask import Flask, render_template, request, jsonify, redirect, url_for, session, flash
 from pymongo import MongoClient
 from steem import Steem
 from datetime import date, timedelta, datetime
@@ -24,7 +24,7 @@ def confirm_user():
             for auth_account in r.json()['account']['posting']['account_auths']:
                 if auth_account[0] == "blockdeals":
                     session['authorized'] = True
-                    print('Confirmed token and auth of {} successful'.format(session['username']))
+                    app.logger.info('Confirmed token and auth of {} successful'.format(session['username']))
                     return True
     else:
         session['logged_in'] = False
@@ -59,7 +59,7 @@ def _jinja2_filter_datetime(date, fmt=None):
 
 @app.route("/update/<permlink>", methods=['POST'])
 def update(permlink):
-    print("updating {}".format(permlink))
+    app.logger.info("updating {}".format(permlink))
     if 'image_url' in request.values:
         image_url = request.values['image_url']
         deal_cursor=db.deal.find_and_modify(query={'permlink':permlink}, update={"$set": {'image_url': image_url}}, upsert=False)
@@ -75,11 +75,11 @@ def index():
     brands = db.deal.find({'deal_expires': { '$gte': date.today().isoformat()}}).distinct('brand')
     if 'username' in session:
         if 'logged_in' in session:
-            print("{} logged_in: {}, authorized: {}".format(session['username'], session['logged_in'], session['authorized']))
+            app.logger.info("{} logged_in: {}, authorized: {}".format(session['username'], session['logged_in'], session['authorized']))
         else:
-            print("{} logged_in: {}".format(session['username'], False))
+            app.logger.info("{} logged_in: {}".format(session['username'], False))
     else:
-        print("anonymous user")
+        app.logger.info("anonymous user")
     return render_template('index.html', deals=deals, brands=brands, show_brand="Brands")
 
 @app.route("/countries")
@@ -94,13 +94,6 @@ def countries(country):
     deal_cursor=db.deal.find({'deal_expires': { '$gte': date.today().isoformat()}, 'country_code': country}).sort([('_id', -1)])
     for deal in deal_cursor:
         deals.append(deal)
-    if 'username' in session:
-        if 'logged_in' in session:
-            print("{} logged_in: {}, authorized: {}".format(session['username'], session['logged_in'], session['authorized']))
-        else:
-            print("{} logged_in: {}".format(session['username'], False))
-    else:
-        print("anonymous user")
     return render_template('index.html', deals=deals)
 
 @app.route("/brand/<brand>")
@@ -111,13 +104,6 @@ def brands(brand):
     for deal in deal_cursor:
         deals.append(deal)
     brands = db.deal.find({'deal_expires': { '$gte': date.today().isoformat()}}).distinct('brand')
-    if 'username' in session:
-        if 'logged_in' in session:
-            print("{} logged_in: {}, authorized: {}".format(session['username'], session['logged_in'], session['authorized']))
-        else:
-            print("{} logged_in: {}".format(session['username'], False))
-    else:
-        print("anonymous user")
     return render_template('index.html', deals=deals, brands=brands, show_brand=brand)
 
 @app.errorhandler(404)
@@ -139,7 +125,7 @@ def authorized():
 
     r = requests.get('https://v2.steemconnect.com/api/me', headers={ 'Authorization': session['token'] })
     if r.status_code == 200:
-        print('Auth of {} successful'.format(session['username']))
+        app.logger.info('Auth of {} successful'.format(session['username']))
         session['authorized'] = False
         if r.json()['_id'] != session['username']:
             session['logged_in'] = False
@@ -161,7 +147,7 @@ def complete_sc():
     username = request.args.get('username')
     r = requests.get('https://v2.steemconnect.com/api/me', headers={ 'Authorization': token })
     if r.status_code == 200:
-        print('Login of {} successful'.format(username))
+        app.logger.info('Login of {} successful'.format(username))
         session['authorized'] = False
         session['logged_in'] = username == r.json()['_id']
         if 'account_auths' in r.json()['account']['posting']:
@@ -181,17 +167,17 @@ def deal():
         return render_template('login_failed.html'), 401
 
     deal_form=request.form.to_dict()
-    # Test posting
+
     comment_options = {
-            'max_accepted_payout': '1000000.000 SBD',
-            'percent_steem_dollars': 10000,
-            'allow_votes': True,
-            'allow_curation_rewards': True,
-            'extensions': [[0, {
-                'beneficiaries': [
-                    {'account': 'blockdeals', 'weight': 1000}
-                ]}
-            ]]
+        'max_accepted_payout': '1000000.000 SBD',
+        'percent_steem_dollars': 10000,
+        'allow_votes': True,
+        'allow_curation_rewards': True,
+        'extensions': [[0, {
+            'beneficiaries': [
+                {'account': 'blockdeals', 'weight': 1000}
+            ]}
+        ]]
     }
 
     json_metadata = {
@@ -216,12 +202,11 @@ def deal():
         if deal_form['image_url'] == "":
             deal_form['image_url'] = 'https://blockdeals.org/assets/images/logo_round.png'
 
-        # https://api.steemit.com, gtg.steem.house:8090,
-        # https://steemd.steemitstage.com
-        s = Steem(nodes=['https://rpc.buildteam.io'],
-                  keys=[app.config['POSTING_KEY'], app.config['ACTIVE_KEY']])
-        p = s.commit.post(title=deal_form['title'],
-                          body="""
+        if 'POST_TO_STEEM' in app.config and app.config['POST_TO_STEEM'] == "1":
+            s = Steem(nodes=['https://rpc.buildteam.io', 'https://api.steemit.com', 'https://steemd.steemitstage.com'],
+                      keys=[app.config['POSTING_KEY'], app.config['ACTIVE_KEY']])
+            p = s.commit.post(title=deal_form['title'],
+                              body="""
 # {0}
 
 ![{0}]({2})
@@ -243,41 +228,43 @@ def deal():
 ### Find more deals or earn Steem for posting deals on [BlockDeals](https://blockdeals.org) today!
 [![](https://blockdeals.org/assets/images/blockdeals_logo.png)](https://blockdeals.org)
 """.
-                          format(deal_form['title'],
-                                 deal_form['description'],
-                                 deal_form['image_url'],
-                                 deal_form['coupon_code'],
-                                 deal_form['deal_start'],
-                                 deal_form['deal_end'],
-                                 freebie,
-                                 deal_form['url'],
-                                 textwrap.shorten(deal_form['title'], width=40, placeholder="..."),
-                                 deal_form['country'],
-                                 deal_form['country_code']),
-                          author=session['username'],
-                          json_metadata=json_metadata,
-                          comment_options=comment_options,
-                          self_vote=True)
+                              format(deal_form['title'],
+                                     deal_form['description'],
+                                     deal_form['image_url'],
+                                     deal_form['coupon_code'],
+                                     deal_form['deal_start'],
+                                     deal_form['deal_end'],
+                                     freebie,
+                                     deal_form['url'],
+                                     textwrap.shorten(deal_form['title'], width=40, placeholder="..."),
+                                     deal_form['country'],
+                                     deal_form['country_code']),
+                              author=session['username'],
+                              json_metadata=json_metadata,
+                              comment_options=comment_options,
+                              self_vote=True)
 
-        permlink = p['operations'][0][1]['permlink']
-        print(permlink)
-        deal_form['permlink'] = permlink
-        deal_form['steem_user'] = session['username']
-        try:
-            deal_form['deal_start'] = parser.parse(deal_form['deal_start']).isoformat()
-        except ValueError:
-            deal_form['deal_start'] = date.today().isoformat()
-        try:
-            deal_form['deal_end'] = parser.parse(deal_form['deal_end']).isoformat()
-        except ValueError:
-            deal_form['deal_end'] = (date.today() + timedelta(days=45)).isoformat()
-        deal_form['deal_expires'] = deal_form['deal_end']
-        print(db['deal'].insert(deal_form))
+            permlink = p['operations'][0][1]['permlink']
+            app.logger.info("Posted to STEEM with id={}".format(permlink))
+
+            deal_form['permlink'] = permlink
+            deal_form['steem_user'] = session['username']
+            try:
+                deal_form['deal_start'] = parser.parse(deal_form['deal_start']).isoformat()
+            except ValueError:
+                deal_form['deal_start'] = date.today().isoformat()
+            try:
+                deal_form['deal_end'] = parser.parse(deal_form['deal_end']).isoformat()
+            except ValueError:
+                deal_form['deal_end'] = (date.today() + timedelta(days=45)).isoformat()
+                deal_form['deal_expires'] = deal_form['deal_end']
+            app.logger.info("saved to mongodb: {}".format(db['deal'].insert(deal_form)))
     except Exception as e:
-        print("***> SOMETHING FAILED")
-        print(e)
+        app.logger.info("***> SOMETHING FAILED")
+        app.logger.info(e)
         traceback.print_exc(file=sys.stdout)
-        pass
+        flash(u'Sorry but there was an error trying to post your deal: ' + str(e), 'error')
+        return redirect(url_for("submit_page"))
 
     # TODO: make a pretty template but for now go to the post
     return redirect("https://steemit.com/@{}/{}".format(session['username'], permlink), code=302)
