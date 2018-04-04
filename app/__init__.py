@@ -65,47 +65,6 @@ def update(permlink):
         deal_cursor=db.deal.find_and_modify(query={'permlink':permlink}, update={"$set": {'image_url': image_url}}, upsert=False)
     return redirect(url_for('index'))
 
-@app.route("/fix/dates")
-def fix_dates():
-    if 'username' in session and session['username'] == "scottweston":
-        deal_cursor=db.deal.find(modifiers={"$snapshot": True})
-        for deal in deal_cursor:
-            try:
-                deal['deal_start'] = parser.parse(deal['deal_start']).isoformat()
-            except ValueError:
-                deal['deal_start'] = date.today().isoformat()
-            try:
-                deal['deal_end'] = parser.parse(deal['deal_end']).isoformat()
-            except ValueError:
-                deal['deal_end'] = (date.today() + timedelta(days=45)).isoformat()
-            deal['deal_expires'] = deal['deal_end']
-            print(deal)
-            db.deal.save(deal)
-    return redirect(url_for('index'))
-
-@app.route("/fix/expires")
-def fix_expires():
-    if 'username' in session and session['username'] == "scottweston":
-        deal_cursor=db.deal.find(modifiers={"$snapshot": True})
-        for deal in deal_cursor:
-            if not 'deal_start' in deal or deal['deal_start'] == "":
-                deal['deal_start'] = date.today()
-
-            if 'deal_end' in deal:
-                if deal['deal_end'] == "":
-                    if deal['deal_start'] == "":
-                        deal['deal_expires'] = date.today() + timedelta(days=45)
-                    else:
-                        deal['deal_expires'] = parser.parse(deal['deal_start']) + timedelta(days=45)
-                else:
-                    deal['deal_expires'] = parser.parse(deal['deal_end'])
-            else:
-                deal['deal_end'] = ""
-                deal['deal_expires'] = date.today() + timedelta(days=45)
-            db.deal.save(deal)
-            print(deal)
-    return redirect(url_for('index'))
-
 @app.route("/")
 def index():
     # TODO: only show non-expired deals... paginate?
@@ -122,6 +81,27 @@ def index():
     else:
         print("anonymous user")
     return render_template('index.html', deals=deals, brands=brands, show_brand="Brands")
+
+@app.route("/countries")
+def countries_json():
+    countries = db.deal.find({ 'country_code': { '$ne': '' }}).distinct('country_code')
+    return jsonify(countries)
+
+@app.route("/country/<country>")
+def countries(country):
+    # TODO: only show non-expired deals... paginate?
+    deals = []
+    deal_cursor=db.deal.find({'deal_expires': { '$gte': date.today().isoformat()}, 'country_code': country}).sort([('_id', -1)])
+    for deal in deal_cursor:
+        deals.append(deal)
+    if 'username' in session:
+        if 'logged_in' in session:
+            print("{} logged_in: {}, authorized: {}".format(session['username'], session['logged_in'], session['authorized']))
+        else:
+            print("{} logged_in: {}".format(session['username'], False))
+    else:
+        print("anonymous user")
+    return render_template('index.html', deals=deals)
 
 @app.route("/brand/<brand>")
 def brands(brand):
