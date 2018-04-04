@@ -248,7 +248,6 @@ def deal():
             app.logger.info("Posted to STEEM with id={}".format(permlink))
         else:
             permlink = "testing-{}".format(int(time.time()))
-            app.logger.info("Posted to MONGO only with id={}".format(permlink))
 
         deal_form['permlink'] = permlink
         deal_form['steem_user'] = session['username']
@@ -260,9 +259,9 @@ def deal():
             deal_form['deal_end'] = parser.parse(deal_form['deal_end']).isoformat()
         except ValueError:
             deal_form['deal_end'] = (date.today() + timedelta(days=45)).isoformat()
-            deal_form['deal_expires'] = deal_form['deal_end']
+        deal_form['deal_expires'] = deal_form['deal_end']
         mongo_id = db['deal'].insert(deal_form)
-        app.logger.info("saved to mongodb: {}".format(mongo_id))
+        app.logger.info("saved to mongodb: {}\n{}".format(mongo_id, deal_form))
     except Exception as e:
         app.logger.info("***> SOMETHING FAILED")
         app.logger.info(e)
