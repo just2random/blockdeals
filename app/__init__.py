@@ -110,9 +110,10 @@ def fix_expires():
 def index():
     # TODO: only show non-expired deals... paginate?
     deals = []
-    deal_cursor=db.deal.find({'deal_expires': { '$gte': date.today().isoformat()}}).sort([('_id', -1)])
+    deal_cursor = db.deal.find({'deal_expires': { '$gte': date.today().isoformat()}}).sort([('_id', -1)])
     for deal in deal_cursor:
         deals.append(deal)
+    brands = db.deal.find({'deal_expires': { '$gte': date.today().isoformat()}}).distinct('brand')
     if 'username' in session:
         if 'logged_in' in session:
             print("{} logged_in: {}, authorized: {}".format(session['username'], session['logged_in'], session['authorized']))
@@ -120,7 +121,24 @@ def index():
             print("{} logged_in: {}".format(session['username'], False))
     else:
         print("anonymous user")
-    return render_template('index.html', deals=deals)
+    return render_template('index.html', deals=deals, brands=brands, show_brand="Brands")
+
+@app.route("/brand/<brand>")
+def brands(brand):
+    # TODO: only show non-expired deals... paginate?
+    deals = []
+    deal_cursor=db.deal.find({'deal_expires': { '$gte': date.today().isoformat()}, 'brand': brand}).sort([('_id', -1)])
+    for deal in deal_cursor:
+        deals.append(deal)
+    brands = db.deal.find({'deal_expires': { '$gte': date.today().isoformat()}}).distinct('brand')
+    if 'username' in session:
+        if 'logged_in' in session:
+            print("{} logged_in: {}, authorized: {}".format(session['username'], session['logged_in'], session['authorized']))
+        else:
+            print("{} logged_in: {}".format(session['username'], False))
+    else:
+        print("anonymous user")
+    return render_template('index.html', deals=deals, brands=brands, show_brand=brand)
 
 @app.errorhandler(404)
 def page_not_found(e):

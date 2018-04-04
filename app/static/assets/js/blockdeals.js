@@ -13,4 +13,5 @@ $(document).ready(function() {
     defaultCountry: "",
     preferredCountries: ['au', 'ca', 'gb', 'us']
   });
+  $(".dropdown-trigger").dropdown();
 });
