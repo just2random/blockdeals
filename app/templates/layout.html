@@ -24,7 +24,7 @@
       {% if brands %}
         <ul id="brand_dropdown" class="dropdown-content">
           <li><a href="/">All</a></li>
-          {% for brand in brands %}
+          {% for brand in brands|sort %}
           {% if brand != "" %}
           <li><a href="/brand/{{ brand }}">{{ brand }}</a></li>
           {% endif %}
@@ -62,7 +62,7 @@
             <li>Brands:</li>
             <ul>
             <li><a href="/">All</a></li>
-            {% for brand in brands %}
+            {% for brand in brands|sort %}
               {% if brand != "" %}
                 <li><a href="/brand/{{ brand }}">{{ brand }}</a></li>
               {% endif %}
