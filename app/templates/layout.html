@@ -26,7 +26,7 @@
           <li><a href="/">All</a></li>
           {% for brand in brands|sort %}
           {% if brand != "" %}
-          <li><a href="/brand/{{ brand }}">{{ brand }}</a></li>
+          <li class="{{ 'active' if brand == show_brand else '' }}"><a class="truncate" href="/brand/{{ brand }}">{{ brand }}</a></li>
           {% endif %}
           {% endfor %}
         </ul>
@@ -59,12 +59,12 @@
           {% endif %}
           {% endif %}
           {% if brands %}
-            <li>Brands:</li>
+            <li class="center-align"><b>Brand</b></li>
             <ul>
             <li><a href="/">All</a></li>
             {% for brand in brands|sort %}
               {% if brand != "" %}
-                <li><a href="/brand/{{ brand }}">{{ brand }}</a></li>
+                <li class="{{ 'active' if brand == show_brand else '' }}"><a class="truncate" href="/brand/{{ brand }}">{{ brand }}</a></li>
               {% endif %}
             {% endfor %}
             </ul>
