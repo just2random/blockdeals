@@ -37,7 +37,7 @@
       <nav class="grey lighten-2" role="navigation">
         <div class="nav-wrapper container"><a id="logo-container" href="/" class="brand-logo"><img id="logo" class="responsive-img" src="/assets/images/blockdeals_logo.png"></a>
           <ul class="right hide-on-med-and-down">
-          <li><a class="waves-effect waves-light" href="/freebies">Freebies</a></li>
+          <li class="{{ 'active' if request.path == "/freebies" }}"><a class="waves-effect waves-light" href="/freebies">Freebies</a></li>
           <li><a class="dropdown-trigger" href="#!" data-target="country_dropdown">Country <i class="material-icons right">arrow_drop_down</i></a></li>
           {% if brands %}
           <li><a class="dropdown-trigger" href="#!" data-target="brand_dropdown">{{ show_brand }} <i class="material-icons right">arrow_drop_down</i></a></li>
@@ -63,7 +63,7 @@
           <li><a class="btn" href="https://steemconnect.com/authorize/@blockdeals/?redirect_uri={{ config.SITE_URL }}/auth">Authorize</a></li>
           {% endif %}
           {% endif %}
-          <li id="mobile_freebies"><a class="waves-effect waves-light" href="/freebies">Freebies</a></li>
+          <li id="mobile_freebies" class="{{ 'active' if request.path == "/freebies" }}"><a class="waves-effect waves-light" href="/freebies">Freebies</a></li>
           {% if brands %}
             <li class="center-align"><b>Brand</b></li>
             <ul>
@@ -154,7 +154,7 @@
     <script src="/assets/js/sc2.min.js"></script>
     <script src="/assets/js/countrySelect.min.js"></script>
     <script src="/assets/js/countrycode.js"></script>
-    <script src="/assets/js/blockdeals.js?4"></script>
+    <script src="/assets/js/blockdeals.js?5"></script>
     <script>
 var api = sc2.init({
   app: 'blockdeals.app',
