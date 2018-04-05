@@ -89,16 +89,22 @@ def countries_json():
 
 @app.route("/country/<country>")
 def countries(country):
-    # TODO: only show non-expired deals... paginate?
     deals = []
     deal_cursor=db.deal.find({'deal_expires': { '$gte': date.today().isoformat()}, 'country_code': country}).sort([('_id', -1)])
     for deal in deal_cursor:
         deals.append(deal)
     return render_template('index.html', deals=deals)
 
+@app.route("/freebies")
+def freebies():
+    deals = []
+    deal_cursor=db.deal.find({'deal_expires': { '$gte': date.today().isoformat()}, 'freebie': 'on'}).sort([('_id', -1)])
+    for deal in deal_cursor:
+        deals.append(deal)
+    return render_template('index.html', deals=deals)
+
 @app.route("/brand/<brand>")
 def brands(brand):
-    # TODO: only show non-expired deals... paginate?
     deals = []
     deal_cursor=db.deal.find({'deal_expires': { '$gte': date.today().isoformat()}, 'brand': brand}).sort([('_id', -1)])
     for deal in deal_cursor:
