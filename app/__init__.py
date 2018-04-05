@@ -3,6 +3,7 @@ from pymongo import MongoClient
 from steem import Steem
 from datetime import date, timedelta, datetime
 from dateutil import parser
+from slugify import slugify
 import sys, traceback, json, textwrap, requests, pprint, time
 
 app = Flask(__name__, static_folder='static', static_url_path='')
@@ -57,6 +58,16 @@ def _jinja2_filter_datetime(date, fmt=None):
     format='%b %d, %Y'
     return native.strftime(format)
 
+@app.route("/fix/brands")
+def fix_brands():
+    deal_cursor=db.deal.find(modifiers={"$snapshot": True})
+    for deal in deal_cursor:
+        if 'permlink' in deal:
+            deal['brand_code'] = slugify(deal['brand'])
+            app.logger.info("added brand_code to {} with: {}".format(deal['permlink'], deal['brand_code']))
+            db.deal.save(deal)
+    return redirect(url_for("index"))
+
 @app.route("/update/<permlink>", methods=['POST'])
 def update(permlink):
     app.logger.info("updating {}".format(permlink))
@@ -72,7 +83,7 @@ def index():
     deal_cursor = db.deal.find({'deal_expires': { '$gte': date.today().isoformat()}}).sort([('_id', -1)])
     for deal in deal_cursor:
         deals.append(deal)
-    brands = db.deal.find({'deal_expires': { '$gte': date.today().isoformat()}}).distinct('brand')
+    brands = db.deal.find({'deal_expires': { '$gte': date.today().isoformat()}}).distinct('brand_code')
     if 'username' in session:
         if 'logged_in' in session:
             app.logger.info("{} logged_in: {}, authorized: {}".format(session['username'], session['logged_in'], session['authorized']))
@@ -106,10 +117,10 @@ def freebies():
 @app.route("/brand/<brand>")
 def brands(brand):
     deals = []
-    deal_cursor=db.deal.find({'deal_expires': { '$gte': date.today().isoformat()}, 'brand': brand}).sort([('_id', -1)])
+    deal_cursor=db.deal.find({'deal_expires': { '$gte': date.today().isoformat()}, 'brand_code': brand}).sort([('_id', -1)])
     for deal in deal_cursor:
         deals.append(deal)
-    brands = db.deal.find({'deal_expires': { '$gte': date.today().isoformat()}}).distinct('brand')
+    brands = db.deal.find({'deal_expires': { '$gte': date.today().isoformat()}}).distinct('brand_code')
     return render_template('index.html', deals=deals, brands=brands, show_brand=brand)
 
 @app.errorhandler(404)
@@ -167,7 +178,7 @@ def complete_sc():
         session['logged_in'] = False
         return render_template('login_failed.html'), 401
 
-@app.route('/deal', methods=['GET', 'POST'])
+@app.route('/deal', methods=['POST'])
 def deal():
     if not confirm_user():
         return render_template('login_failed.html'), 401
@@ -266,6 +277,7 @@ def deal():
         except ValueError:
             deal_form['deal_end'] = (date.today() + timedelta(days=45)).isoformat()
         deal_form['deal_expires'] = deal_form['deal_end']
+        deal_form['brand_code'] = slugify(deal_form['brand'])
         mongo_id = db['deal'].insert(deal_form)
         app.logger.info("saved to mongodb: {}\n{}".format(mongo_id, deal_form))
     except Exception as e:
@@ -276,7 +288,10 @@ def deal():
         return redirect(url_for("submit_page"))
 
     # TODO: make a pretty template but for now go to the post
-    return redirect("https://steemit.com/@{}/{}".format(session['username'], permlink), code=302)
+    if 'POST_TO_STEEM' in app.config and app.config['POST_TO_STEEM'] == "1":
+        return redirect("https://steemit.com/@{}/{}".format(session['username'], permlink), code=302)
+    else:
+        return redirect(url_for("index"))
 
 @app.route('/submit')
 def submit_page():

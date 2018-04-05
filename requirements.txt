@@ -3,4 +3,5 @@ gunicorn
 pymongo
 requests
 python-dateutil
+python-slugify
 -e git+git://github.com/blockdeals/steem-python.git#egg=steem
