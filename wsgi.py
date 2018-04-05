@@ -1,4 +1,6 @@
+import logging
 from blockdeals import app
 
-if __name__ == '__main__':
-    app.run()
+gunicorn_logger = logging.getLogger("gunicorn.error")
+app.logger.handlers = gunicorn_logger.handlers
+app.logger.setLevel(logging.INFO)

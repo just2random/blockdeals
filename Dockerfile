@@ -10,7 +10,7 @@ ADD . /blockdeals
 WORKDIR /blockdeals
 
 ENTRYPOINT ["gunicorn"]
-CMD ["-w", "1", "-b", "0.0.0.0:8000", "wsgi:app"]
+CMD ["-w", "1", "-b", "0.0.0.0:8000", "--log-level=info", "wsgi:app"]
 
 RUN set -x \
   && pip install -r requirements.txt
