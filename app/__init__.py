@@ -222,6 +222,13 @@ def deal():
         else:
             country_text = "{0} ![{0}](https://steemitimages.com/22x22/https://github.com/hjnilsson/country-flags/raw/master/png100px/{1}.png)".format(deal_form['country'], deal_form['country_code'])
 
+        if not 'coupon_code' in deal_form or deal_form['coupon_code'].strip() == "":
+            coupon_code = "&#10060;"
+        else:
+            coupon_code = deal_form['coupon_code'].strip()
+
+        app.logger.info("Sanitised: country_text={}, coupon_code={}".format(country_text, coupon_code))
+
         if 'POST_TO_STEEM' in app.config and app.config['POST_TO_STEEM'] == "1":
             s = Steem(nodes=['https://rpc.buildteam.io', 'https://api.steemit.com', 'https://steemd.steemitstage.com'],
                       keys=[app.config['POSTING_KEY'], app.config['ACTIVE_KEY']])
@@ -251,7 +258,7 @@ def deal():
                               format(deal_form['title'],
                                      deal_form['description'],
                                      deal_form['image_url'],
-                                     deal_form['coupon_code'],
+                                     coupon_code,
                                      deal_form['deal_start'],
                                      deal_form['deal_end'],
                                      freebie,
