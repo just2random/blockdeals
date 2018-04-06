@@ -281,10 +281,9 @@ def deal():
         mongo_id = db['deal'].insert(deal_form)
         app.logger.info("saved to mongodb: {}\n{}".format(mongo_id, deal_form))
     except Exception as e:
-        app.logger.info("***> SOMETHING FAILED")
         app.logger.info(e)
         traceback.print_exc(file=sys.stdout)
-        flash(u'Sorry but there was an error trying to post your deal: ' + str(e), 'error')
+        flash(u'Sorry but there was an error trying to post your deal: ' + textwrap.shorten(str(e), width=80, placeholder="..."), 'error')
         return redirect(url_for("submit_page"))
 
     # TODO: make a pretty template but for now go to the post
