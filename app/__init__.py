@@ -217,6 +217,11 @@ def deal():
         if deal_form['image_url'] == "":
             deal_form['image_url'] = 'https://blockdeals.org/assets/images/logo_round.png'
 
+        if 'global' in deal_form and deal_form['global'] == 'on':
+            country_text = "multiple ([check details]({}))".format(deal_form['url'])
+        else:
+            country_text = "{0} ![{0}](https://steemitimages.com/22x22/https://github.com/hjnilsson/country-flags/raw/master/png100px/{1}.png)".format(deal_form['country'], deal_form['country_code'])
+
         if 'POST_TO_STEEM' in app.config and app.config['POST_TO_STEEM'] == "1":
             s = Steem(nodes=['https://rpc.buildteam.io', 'https://api.steemit.com', 'https://steemd.steemitstage.com'],
                       keys=[app.config['POSTING_KEY'], app.config['ACTIVE_KEY']])
@@ -229,7 +234,7 @@ def deal():
 | Details | |
 | - | - |
 | &#127991; **Coupon Code** | {3} |
-| &#127758; **Country** | {9} ![{10}](https://steemitimages.com/22x22/https://github.com/hjnilsson/country-flags/raw/master/png100px/{10}.png) |
+| &#127758; **Country** | {9} |
 | &#128198; **Starts** | {4} |
 | &#128198; **Ends** | {5} |
 | &#128176; **Freebie?** | {6} |
@@ -252,8 +257,7 @@ def deal():
                                      freebie,
                                      deal_form['url'],
                                      textwrap.shorten(deal_form['title'], width=40, placeholder="..."),
-                                     deal_form['country'],
-                                     deal_form['country_code']),
+                                     country_text),
                               author=session['username'],
                               json_metadata=json_metadata,
                               comment_options=comment_options,
