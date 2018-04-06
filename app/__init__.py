@@ -83,7 +83,6 @@ def index():
     deal_cursor = db.deal.find({'deal_expires': { '$gte': date.today().isoformat()}}).sort([('_id', -1)])
     for deal in deal_cursor:
         deals.append(deal)
-    brands = db.deal.find({'deal_expires': { '$gte': date.today().isoformat()}}).distinct('brand_code')
     if 'username' in session:
         if 'logged_in' in session:
             app.logger.info("{} logged_in: {}, authorized: {}".format(session['username'], session['logged_in'], session['authorized']))
@@ -91,7 +90,7 @@ def index():
             app.logger.info("{} logged_in: {}".format(session['username'], False))
     else:
         app.logger.info("anonymous user")
-    return render_template('index.html', deals=deals, brands=brands, show_brand="Brands")
+    return render_template('index.html', deals=deals)
 
 @app.route("/countries")
 def countries_json():
@@ -104,7 +103,7 @@ def countries(country):
     deal_cursor=db.deal.find({'deal_expires': { '$gte': date.today().isoformat()}, 'country_code': country}).sort([('_id', -1)])
     for deal in deal_cursor:
         deals.append(deal)
-    return render_template('index.html', deals=deals)
+    return render_template('index.html', deals=deals, country=country)
 
 @app.route("/freebies")
 def freebies():
@@ -120,8 +119,7 @@ def brands(brand):
     deal_cursor=db.deal.find({'deal_expires': { '$gte': date.today().isoformat()}, 'brand_code': brand}).sort([('_id', -1)])
     for deal in deal_cursor:
         deals.append(deal)
-    brands = db.deal.find({'deal_expires': { '$gte': date.today().isoformat()}}).distinct('brand_code')
-    return render_template('index.html', deals=deals, brands=brands, show_brand=brand)
+    return render_template('index.html', deals=deals)
 
 @app.errorhandler(404)
 def page_not_found(e):

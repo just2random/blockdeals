@@ -35,12 +35,13 @@
       </ul>
       {% endif %}
       <nav class="grey lighten-2" role="navigation">
-        <div class="nav-wrapper"><a id="logo-container" href="/" class="brand-logo"><img id="logo" class="responsive-img" src="/assets/images/blockdeals_logo.png"></a>
+        <div class="nav-wrapper container"><a id="logo-container" href="/" class="brand-logo"><img id="logo" class="responsive-img" src="/assets/images/blockdeals_logo.png"></a>
           <ul class="right hide-on-med-and-down">
-          <li class="{{ 'active' if request.path == "/freebies" }}"><a class="waves-effect waves-light" href="/freebies">Freebies</a></li>
-          <li><a class="dropdown-trigger" href="#!" data-target="country_dropdown">Country <i class="material-icons right">arrow_drop_down</i></a></li>
-          {% if brands %}
-          <li><a class="dropdown-trigger" href="#!" data-target="brand_dropdown">{{ show_brand }} <i class="material-icons right">arrow_drop_down</i></a></li>
+          <li class="{{ 'active' if request.path == "/freebies" }}"><a class="waves-effect waves-light" href="/freebies" title="Freebies!"><img class="valign-wrapper" src="/assets/images/freebies.png"></a></li>
+          {% if not country %}
+          <li><a class="dropdown-trigger" href="#!" data-target="country_dropdown">Country<i class="material-icons right">arrow_drop_down</i></a></li>
+          {% else %}
+          <li><a class="dropdown-trigger" href="#!" data-target="country_dropdown"><div class="country-select"><div class="flag {{ country }}"></div></div><i class="material-icons right">arrow_drop_down</i></a></li>
           {% endif %}
           {% if session.logged_in and session.authorized %}
           <li><a class="waves-effect waves-light btn orange darken-2" href="{{ url_for('submit_page') }}">Submit Deal <i class="material-icons right">add_box</i></a></li>
@@ -63,18 +64,7 @@
           <li><a class="btn" href="https://steemconnect.com/authorize/@blockdeals/?redirect_uri={{ config.SITE_URL }}/auth">Authorize</a></li>
           {% endif %}
           {% endif %}
-          <li id="mobile_freebies" class="{{ 'active' if request.path == "/freebies" }}"><a class="waves-effect waves-light" href="/freebies">Freebies</a></li>
-          {% if brands %}
-            <li class="center-align"><b>Brand</b></li>
-            <ul>
-            <li><a href="/">All</a></li>
-            {% for brand in brands|sort %}
-              {% if brand != "" %}
-                <li class="{{ 'active' if brand == show_brand else '' }}"><a class="truncate" href="/brand/{{ brand }}">{{ brand }}</a></li>
-              {% endif %}
-            {% endfor %}
-            </ul>
-          {% endif %}
+          <li id="mobile_freebies" class="{{ 'active' if request.path == "/freebies" }}"><a class="waves-effect waves-light" href="/freebies" title="Freebies"><img src="/assets/images/freebies.png" height="16" style="vertical-align: text-bottom"> Freebies</a></li>
           </ul>
           <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
         </div>
