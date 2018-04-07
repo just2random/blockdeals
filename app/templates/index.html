@@ -13,7 +13,7 @@
     {% if deal['deal_end'] %}<span class="new badge {{ deal.deal_end | expires_class }}" data-badge-caption="{{ deal.deal_end | expires_time }}"><i class="fa fa-clock"></i> Expires</span>{% endif %}
     {% if deal['freebie'] %}<a href="/freebies"><span class="new badge green" data-badge-caption="FREEBIE"><i class="fa fa-certificate"></i></span></a>{% endif %}
     {% if deal['country_code'] and not deal['global'] %}<a href="/country/{{ deal['country_code'] }}"><span class="new badge grey lighten-3" title="{{ deal['country'] }}" data-badge-caption=""><div class="country-select"><div class="flag {{ deal['country_code'] }}"></div></div></span></a>{% endif %}
-    <h5 class="{{ 'unavailable' if not deal['available'] else '' }}">
+    <h5 class="{{ 'unavailable' if deal['available'] == false else '' }}">
       <a href="https://steemit.com/@{{ deal['steem_user'] }}/{{ deal['permlink'] }}">{{ deal['title'] }}</a>
     </h5>
     {% if deal['warning'] %}
