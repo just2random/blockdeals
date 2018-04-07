@@ -58,23 +58,17 @@ def _jinja2_filter_datetime(date, fmt=None):
     format='%b %d, %Y'
     return native.strftime(format)
 
-@app.route("/fix/brands")
-def fix_brands():
-    deal_cursor=db.deal.find(modifiers={"$snapshot": True})
-    for deal in deal_cursor:
-        if 'permlink' in deal:
-            deal['brand_code'] = slugify(deal['brand'])
-            app.logger.info("added brand_code to {} with: {}".format(deal['permlink'], deal['brand_code']))
-            db.deal.save(deal)
-    return redirect(url_for("index"))
-
 @app.route("/update/<permlink>", methods=['POST'])
 def update(permlink):
-    app.logger.info("updating {}".format(permlink))
-    if 'image_url' in request.values:
-        image_url = request.values['image_url']
-        deal_cursor=db.deal.find_and_modify(query={'permlink':permlink}, update={"$set": {'image_url': image_url}}, upsert=False)
-    return redirect(url_for('index'))
+    if 'logged_in' in session and session['logged_in'] and 'username' in session and session['username'] in app.config['ADMINS'].split(','):
+        app.logger.info("updating {}".format(permlink))
+        if 'image_url' in request.values:
+            image_url = request.values['image_url']
+            deal_cursor=db.deal.find_and_modify(query={'permlink':permlink}, update={"$set": {'image_url': image_url}}, upsert=False)
+        return redirect(url_for('index'))
+    else:
+        app.logger.info("non-admin update attempt ({})".format('username' in session and session['username']))
+        return render_template('login_failed.html'), 401
 
 @app.route("/")
 def index():
