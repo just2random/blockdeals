@@ -19,3 +19,6 @@ nav ul a {
 #nav-mobile {
   color: #333;
 }
+.unavailable {
+  text-decoration: line-through;
+}
