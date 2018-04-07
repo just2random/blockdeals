@@ -47,6 +47,7 @@
           <li><a class="waves-effect waves-light btn orange darken-2" href="{{ url_for('submit_page') }}">Submit Deal <i class="material-icons right">add_box</i></a></li>
           {% else %}
           {% if not session.logged_in %}
+          <li><a class="waves-effect waves-light btn blue darken-2 tooltipped" data-position="bottom" data-tooltip="Your voice is valuable, join Steem." href="https://signup.steemit.com/?ref=blockdeals">Sign up <i class="material-icons right">mood</i></a></li>
           <li><a class="waves-effect waves-light btn orange darken-2 loginbtn tooltipped" data-position="bottom" data-tooltip="We use SteemConnect so your Steem<br>account is safe!">Login <i class="material-icons right">person</i></a></li>
           {% else %}
           <li><a class="waves-effect waves-light btn orange darken-2 tooltipped" data-position="bottom" data-tooltip="Authorising is required to allow us to post your deals<br>to Steem on your behalf. All done safetly via SteemConnect!" href="https://steemconnect.com/authorize/@blockdeals/?redirect_uri={{ config.SITE_URL }}/auth">Authorize <i class="material-icons right">lock_open</i></a></li>
