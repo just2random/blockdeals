@@ -19,6 +19,9 @@
     {% if deal['warning'] %}
     <span class="btn red">{{ deal['warning'] }}</span>
     {% endif %}
+    {% if deal['hint'] %}
+    <span class="btn blue-grey">{{ deal['hint'] }}</span>
+    {% endif %}
     <p>{{ deal['description'] | truncate(250, True) }}</p>
     <div class="row">
       <div class="col s8">
