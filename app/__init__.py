@@ -64,6 +64,8 @@ def update(permlink):
     if 'logged_in' in session and session['logged_in'] and 'username' in session and session['username'] in app.config['ADMINS'].split(','):
         if request.method == 'POST':
             deal_update=request.form.to_dict()
+
+            # fix some values
             if deal_update['warning'].strip() != "":
                 deal_update['available'] = False
             else:
@@ -72,6 +74,17 @@ def update(permlink):
                 deal_update['freebie'] = ''
             if not 'global' in deal_update:
                 deal_update['global'] = ''
+            try:
+                deal_update['deal_start'] = parser.parse(deal_update['deal_start']).isoformat()
+            except ValueError:
+                deal_update['deal_start'] = date.today().isoformat()
+            try:
+                deal_update['deal_end'] = parser.parse(deal_update['deal_end']).isoformat()
+            except ValueError:
+                deal_update['deal_end'] = (date.today() + timedelta(days=45)).isoformat()
+            deal_update['deal_expires'] = deal_update['deal_end']
+            deal_update['brand_code'] = slugify(deal_update['brand'])
+
             app.logger.info("updating {}: {}".format(permlink, deal_update))
             try:
                 db.deal.update_one({ 'permlink': permlink },
