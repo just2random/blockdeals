@@ -25,17 +25,36 @@ $(document).ready(function() {
   });
 
   $('.votes').each(function(i, e) {
-    steem.database.getDiscussions('active', {select_authors: [$(e).data("author")], start_author: $(e).data("author"), start_permlink: $(e).data("permlink"), limit: 1}).then(function(d) {
-      if (d[0].author == $(e).data("author") && d[0].permlink == $(e).data("permlink")) {
-        $(e).html("<i class='fas fa-thumbs-up fa-fw'></i> " + d[0]['active_votes'].length);
+    steem.database.getState("/blockdeals/@" + $(e).data("author") + "/" + $(e).data("permlink")).then(function(d) {
+      try {
+        post = d['content'][$(e).data("author") + "/" + $(e).data("permlink")];
+        if (post.author == $(e).data("author") && post.permlink == $(e).data("permlink")) {
+          var up = 0;
+          var dn = 0;
+          var len = post['active_votes'].length;
+          for (var i = 0; i < len; i++) {
+            if (post['active_votes'] > 0) {
+              up++;
+            }
+            else if (post['active_votes'] < 0) {
+              dn++
+            }
+          }
+          $(e).html("<i class='fas fa-thumbs-up fa-fw'></i> " + up +
+              " / " + dn + " <i class='fas fa-thumbs-down fa-fw'></i>");
+        }
+        else {
+          console.log("failed to find post: ", $(e).data("author"), $(e).data("permlink"));
+          $(e).html("<i class='fas fa-fw fa-exclamation-circle text-red'></i>");
+        }
       }
-      else {
-        console.log("failed to find post: ", $(e).data("author"), $(e).data("permlink"));
-        $(e).html("");
+      catch(err) {
+        console.log(err);
+        $(e).html("<i class='fas fa-fw fa-exclamation-circle text-red'></i>");
       }
     }).catch(function(err) {
       console.log("failed to find post: ", $(e).data("author"), $(e).data("permlink"));
-      $(e).html("");
+      $(e).html("<i class='fas fa-fw fa-exclamation-circle text-red'></i>");
     });
   });
 });
