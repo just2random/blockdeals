@@ -1,0 +1,93 @@
+{% extends "layout.html" %}
+{% block content %}
+  <h2>Update Deal</h2>
+  <div class="card blue-grey darken-2">
+    <div class="card-content white-text">
+    <span class="card-title">Note:</span>
+    <p>This only updates the entry on the <a href="https://blockdeals.org">Block Deals</a>
+      website and not the post on Steem. To update the post on Steem please use the
+      <i>edit</i> button found on <a href="https://steemit.com/@{{ deal['steem_user'] }}/{{ deal['permlink'] }}">steemit</a></p>
+    </div>
+  </div>
+  <div class="row">
+    <form action="/update/{{ deal['permlink'] }}" method="POST">
+      <div class="input-field col s12">
+        <input id="title" type="text" name="title" value="{{ deal['title'] }}"/>
+        <label for="title">Title</label>
+      </div>
+
+      <div class="input-field col s12">
+        <input id="hint" type="text" name="hint" value="{{ deal['hint'] }}"/>
+        <label for="hint">Hint, e.g. <i>"discount automatically applied at checkout"</i></label>
+      </div>
+
+      <div class="input-field col s12">
+        <input id="warning" type="text" name="warning" value="{{ deal['warning'] }}"/>
+        <label for="warning">Warning, e.g. <i>"Out of Stock"</i> or <i>"All codes given out"</i>. <b>Setting this also marks the deal as no-longer available!</b></label>
+      </div>
+
+      <div class="input-field col s12">
+        <input id="url" type="url" class="validate" name="url" value="{{ deal['url'] }}"/>
+        <label class="active" for="url">Direct URL to deal (please no affliate links!)</label>
+      </div>
+
+      <div class="input-field col s12">
+        <input id="image_url" type="url" class="validate" name="image_url" value="{{ deal['image_url'] }}"/>
+        <label class="active" for="url">Image URL</label>
+      </div>
+
+      <div class="input-field col s6">
+        <input id="coupon_code" type="text" name="coupon_code" value="{{ deal['coupon_code'] }}"/>
+        <label for="coupon_code">Coupon Code</label>
+      </div>
+
+      <div class="input-field col s6">
+        <input id="brand" type="text" name="brand" value="{{ deal['brand'] }}"/>
+        <label class="active" for="brand">Brand</label>
+      </div>
+
+      <div class="input-field col s6">
+        <input id="start" type="text" class="datepicker" name="deal_start" value="{{ deal['deal_start'] }}"/>
+        <label class="active" for="start">Date deal starts</label>
+      </div>
+
+      <div class="input-field col s6">
+        <input id="end" type="text" class="datepicker" name="deal_end" value="{{ deal['deal_end'] }}"/>
+        <label class="active" for="end">Date deal ends</label>
+      </div>
+
+      <div class="input-field col s12">
+        <textarea id="description" class="materialize-textarea" name="description">{{ deal['description'] }}</textarea>
+        <label for="description">Description</label>
+      </div>
+
+      <div class="input-field col s12">
+        <input id="country" type="text" name="country" value="{{ deal['country'] }}"/>
+        <input type="hidden" id="country_code" name="country_code"/>
+      </div>
+
+      <div class="col s12">
+        <p>
+          <label>
+            <input type="checkbox" id="global" name="global" {{ 'checked' if deal['global'] == 'on' }}/>
+            <span>Available globally or in multiple countries?</span>
+          </label>
+        </p>
+      </div>
+
+      <div class="col s12">
+        <p>
+          <label>
+            <input type="checkbox" id="freebie" name="freebie" {{ 'checked' if deal['freebie'] == 'on' }}/>
+            <span>Freebie?</span>
+          </label
+        </p>
+      </div>
+
+      <div class="col s12">
+        <button class="btn-large waves-effect waves-light submit_deals_btn" type="submit">Submit<i class="material-icons right">send</i></button>
+      </div>
+    </form>
+  </div>
+
+{% endblock %}

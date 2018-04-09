@@ -9,6 +9,7 @@ import sys, traceback, json, textwrap, requests, pprint, time
 app = Flask(__name__, static_folder='static', static_url_path='')
 app.config.from_envvar('BLOCKDEALS_SETTINGS')
 app.secret_key=app.config['SESSION_SECRET']
+admins = app.config['ADMINS'].split(',')
 
 db = MongoClient("mongodb://mongodb:27017").blockdeals
 
@@ -58,16 +59,32 @@ def _jinja2_filter_datetime(date, fmt=None):
     format='%b %d, %Y'
     return native.strftime(format)
 
-@app.route("/update/<permlink>", methods=['POST'])
+@app.route("/update/<permlink>", methods=['GET', 'POST'])
 def update(permlink):
     if 'logged_in' in session and session['logged_in'] and 'username' in session and session['username'] in app.config['ADMINS'].split(','):
-        app.logger.info("updating {}".format(permlink))
-        if 'image_url' in request.values:
-            image_url = request.values['image_url']
-            deal_cursor=db.deal.find_and_modify(query={'permlink':permlink}, update={"$set": {'image_url': image_url}}, upsert=False)
-        return redirect(url_for('index'))
+        if request.method == 'POST':
+            deal_update=request.form.to_dict()
+            if deal_update['warning'].strip() != "":
+                deal_update['available'] = False
+            else:
+                deal_update['available'] = True
+            if not 'freebie' in deal_update:
+                deal_update['freebie'] = ''
+            if not 'global' in deal_update:
+                deal_update['global'] = ''
+            app.logger.info("updating {}: {}".format(permlink, deal_update))
+            try:
+                db.deal.update_one({ 'permlink': permlink },
+                                   { '$set': deal_update }, upsert=False)
+            except Exception as e:
+                flash(u'Sorry but there was an error trying to update your deal: ' + textwrap.shorten(str(e), width=80, placeholder="..."), 'error')
+            return redirect(url_for('index'))
+        else:
+            deal = db.deal.find_one({'permlink':  permlink })
+            app.logger.info("requested update of: {}".format(deal))
+            return render_template('update.html', deal=deal)
     else:
-        app.logger.info("non-admin update attempt ({})".format('username' in session and session['username']))
+        app.logger.info("non-authorised update attempt ({}, {})".format(permlink, session['username'] if 'username' in session else 'anon'))
         return render_template('login_failed.html'), 401
 
 @app.route("/")
@@ -84,7 +101,7 @@ def index():
             app.logger.info("{} logged_in: {}".format(session['username'], False))
     else:
         app.logger.info("anonymous user")
-    return render_template('index.html', deals=deals)
+    return render_template('index.html', deals=deals, session=session, admins=admins)
 
 @app.route("/countries")
 def countries_json():
@@ -97,7 +114,7 @@ def countries(country):
     deal_cursor=db.deal.find({'deal_expires': { '$gte': date.today().isoformat()}, 'country_code': country}).sort([('_id', -1)])
     for deal in deal_cursor:
         deals.append(deal)
-    return render_template('index.html', deals=deals, country=country)
+    return render_template('index.html', deals=deals, country=country, session=session, admins=admins)
 
 @app.route("/freebies")
 def freebies():
@@ -105,7 +122,7 @@ def freebies():
     deal_cursor=db.deal.find({'deal_expires': { '$gte': date.today().isoformat()}, 'freebie': 'on'}).sort([('_id', -1)])
     for deal in deal_cursor:
         deals.append(deal)
-    return render_template('index.html', deals=deals)
+    return render_template('index.html', deals=deals, session=session, admins=admins)
 
 @app.route("/brand/<brand>")
 def brands(brand):
@@ -113,7 +130,7 @@ def brands(brand):
     deal_cursor=db.deal.find({'deal_expires': { '$gte': date.today().isoformat()}, 'brand_code': brand}).sort([('_id', -1)])
     for deal in deal_cursor:
         deals.append(deal)
-    return render_template('index.html', deals=deals)
+    return render_template('index.html', deals=deals, session=session, admins=admins)
 
 @app.errorhandler(404)
 def page_not_found(e):
