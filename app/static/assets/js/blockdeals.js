@@ -33,10 +33,10 @@ $(document).ready(function() {
           var dn = 0;
           var len = post['active_votes'].length;
           for (var i = 0; i < len; i++) {
-            if (post['active_votes'] > 0) {
+            if (post['active_votes'][i].percent > 0) {
               up++;
             }
-            else if (post['active_votes'] < 0) {
+            else if (post['active_votes'][i].percent < 0) {
               dn++
             }
           }
