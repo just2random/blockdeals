@@ -27,5 +27,5 @@ h2 {
   margin:0 0 1.2rem 0;
 }
 #image_preview {
-  height: 4rem;
+  max-height: 8rem;
 }
