@@ -5,17 +5,23 @@
     <form action="/deal" method="POST">
       <div class="input-field col s12">
         <input id="title" type="text" name="title"/>
-        <label for="title">Title and also include the price in either the local currency of the deal or one of USD, GBP, EUR or AUD</label>
+        <label for="title">Title</label>
+        <span class="helper-text">Also include the price in either the local currency of the deal or one of USD, GBP, EUR or AUD</span>
       </div>
 
       <div class="input-field col s12">
         <input id="url" type="url" class="validate" name="url"/>
-        <label class="active" for="url">Direct URL to deal (please no affliate links, you are going to be paid for sharing in steem!)</label>
+        <label class="active" for="url">Direct URL to deal</label>
+        <span class="helper-text">Please no affliate links, you are going to be paid for sharing in steem!</span>
       </div>
 
-      <div class="input-field col s12">
+      <div class="input-field col s10">
         <input id="image_url" type="url" class="validate" name="image_url"/>
         <label class="active" for="url">Image URL</label>
+        <span class="helper-text" data-wrong="invalid image url" data-right="looks great!">Please choose an image at least 300x300, ones with white backgrounds look best</span>
+      </div>
+      <div class="col s2">
+        <img id="image_preview" class="img-responsive" src="/assets/images/logo_round.png"/>
       </div>
 
       <div class="input-field col s6">
@@ -66,7 +72,7 @@
         </p>
       </div>
 
-      <div class="col s12">
+      <div class="col s12 right-align">
         <button class="btn-large waves-effect waves-light submit_deals_btn" type="submit">Submit<i class="material-icons right">send</i></button>
       </div>
     </form>

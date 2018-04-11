@@ -57,4 +57,15 @@ $(document).ready(function() {
       $(e).html("<i class='fas fa-fw fa-exclamation-circle text-red'></i>");
     });
   });
+
+  $('#image_preview').on("error", function() {
+    console.log('image_url appears invalid');
+    $('#image_url').addClass("invalid");
+  });
+
+  $('#image_url').focusout(function() {
+    console.log('image preview loading:', $(this).val());
+    var img_url = $(this).val();
+    $('#image_preview').attr('src', img_url);
+  });
 });
