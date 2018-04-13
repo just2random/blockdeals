@@ -74,6 +74,10 @@ def update(permlink):
                 deal_update['freebie'] = ''
             if not 'global' in deal_update:
                 deal_update['global'] = ''
+            if not 'hide' in deal_update:
+                deal_update['hide'] = False;
+            else:
+                deal_update['hide'] = True;
             try:
                 deal_update['deal_start'] = parser.parse(deal_update['deal_start']).isoformat()
             except ValueError:
@@ -104,7 +108,7 @@ def update(permlink):
 def index():
     # TODO: only show non-expired deals... paginate?
     deals = []
-    deal_cursor = db.deal.find({'deal_expires': { '$gte': date.today().isoformat()}}).sort([('_id', -1)])
+    deal_cursor = db.deal.find({'deal_expires': { '$gte': date.today().isoformat()}, 'hide': { '$ne': True}}).sort([('_id', -1)])
     for deal in deal_cursor:
         deals.append(deal)
     if 'username' in session:
