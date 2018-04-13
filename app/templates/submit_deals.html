@@ -4,13 +4,13 @@
   <div class="row">
     <form action="/deal" method="POST">
       <div class="input-field col s12">
-        <input id="title" type="text" name="title"/>
+        <input id="title" type="text" name="title" required/>
         <label for="title">Title</label>
         <span class="helper-text">Also include the price in either the local currency of the deal or one of USD, GBP, EUR or AUD</span>
       </div>
 
       <div class="input-field col s12">
-        <input id="url" type="url" class="validate" name="url"/>
+        <input id="url" type="url" class="validate" name="url" required/>
         <label class="active" for="url">Direct URL to deal</label>
         <span class="helper-text">Please no affliate links, you are going to be paid for sharing in steem!</span>
       </div>
@@ -18,7 +18,7 @@
       <div class="input-field col s10">
         <input id="image_url" type="url" class="validate" name="image_url"/>
         <label class="active" for="url">Image URL</label>
-        <span class="helper-text" data-wrong="invalid image url" data-right="looks great!">Please choose an image at least 300x300, ones with white backgrounds look best</span>
+        <span class="helper-text" data-wrong="invalid image url" data-right="looks great!">Please choose an image at least 300x300, ones with white backgrounds look best, a preview of the image will show on the right.</span>
       </div>
       <div class="col s2">
         <img id="image_preview" class="responsive-img" src="/assets/images/logo_round.png"/>
