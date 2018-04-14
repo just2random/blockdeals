@@ -76,6 +76,8 @@ def vote(author, permlink, kind):
         except Exception as e:
             app.logger.info(e)
             return jsonify({ 'status': False })
+    else:
+        return jsonify({ 'status': False })
 
 @app.route("/whoami")
 def whoami():
