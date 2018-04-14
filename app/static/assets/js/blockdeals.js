@@ -49,7 +49,7 @@ $(document).ready(function() {
                 }
               }
               $(e).html("<i class='fas fa-thumbs-up fa-fw " +
-                  ( me >= 0 ? 'green-text' : '') + "'></i> " + up +
+                  ( me > 0 ? 'green-text' : '') + "'></i> " + up +
                   " / " + dn + " <i class='fas fa-thumbs-down fa-fw" +
                   ( me < 0 ? 'red-text' : '') + "'></i>");
             }
