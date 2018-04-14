@@ -61,7 +61,7 @@ def _jinja2_filter_datetime(date, fmt=None):
 
 @app.route("/vote/<author>/<permlink>/<kind>")
 def vote(author, permlink, kind):
-    if 'logged_in' in session and session['logged_in'] and 'username' in session:
+    if 'logged_in' in session and session['logged_in'] and 'authorized' in session and session['authorized'] and 'username' in session:
         try:
             weight=100
             if kind == "flag":
@@ -77,7 +77,7 @@ def vote(author, permlink, kind):
             app.logger.info(e)
             return jsonify({ 'status': False, 'msg': 'unknown exception' })
     else:
-        return jsonify({ 'status': False, 'msg': 'please login first' })
+        return jsonify({ 'status': False, 'msg': 'please login and authorize first' })
 
 @app.route("/whoami")
 def whoami():
