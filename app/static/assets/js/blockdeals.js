@@ -1,4 +1,5 @@
 const steem = new dsteem.Client('https://api.steemit.com');
+username = "";
 
 $(document).ready(function() {
   $('.loginbtn').click(function() {
@@ -24,40 +25,49 @@ $(document).ready(function() {
     });
   });
 
-  $(".lazy").Lazy({
-    votes: function(e) {
-      steem.database.getState("/blockdeals/@" + $(e).data("author") + "/" + $(e).data("permlink")).then(function(d) {
-        try {
-          post = d['content'][$(e).data("author") + "/" + $(e).data("permlink")];
-          if (post.author == $(e).data("author") && post.permlink == $(e).data("permlink")) {
-            var up = 0;
-            var dn = 0;
-            var len = post['active_votes'].length;
-            for (var i = 0; i < len; i++) {
-              if (post['active_votes'][i].percent > 0) {
-                up++;
+  $.get("/whoami", function(data) {
+    username = data['username'];
+    $(".lazy").Lazy({
+      votes: function(e) {
+        steem.database.getState("/blockdeals/@" + $(e).data("author") + "/" + $(e).data("permlink")).then(function(d) {
+          try {
+            post = d['content'][$(e).data("author") + "/" + $(e).data("permlink")];
+            if (post.author == $(e).data("author") && post.permlink == $(e).data("permlink")) {
+              var up = 0;
+              var dn = 0;
+              var me = 0;
+              var len = post['active_votes'].length;
+              for (var i = 0; i < len; i++) {
+                if (post['active_votes'][i].voter == username) {
+                  me = post['active_votes'][i].percent;
+                }
+                if (post['active_votes'][i].percent > 0) {
+                  up++;
+                }
+                else if (post['active_votes'][i].percent < 0) {
+                  dn++
+                }
               }
-              else if (post['active_votes'][i].percent < 0) {
-                dn++
-              }
+              $(e).html("<i class='fas fa-thumbs-up fa-fw " +
+                  ( me >= 0 ? 'green-text' : '') + "'></i> " + up +
+                  " / " + dn + " <i class='fas fa-thumbs-down fa-fw" +
+                  ( me < 0 ? 'red-text' : '') + "'></i>");
             }
-            $(e).html("<i class='fas fa-thumbs-up fa-fw'></i> " + up +
-                " / " + dn + " <i class='fas fa-thumbs-down fa-fw'></i>");
+            else {
+              console.log("failed to find post: ", $(e).data("author"), $(e).data("permlink"));
+              $(e).html("<i class='fas fa-fw fa-exclamation-circle text-red'></i>");
+            }
           }
-          else {
-            console.log("failed to find post: ", $(e).data("author"), $(e).data("permlink"));
+          catch(err) {
+            console.log(err);
             $(e).html("<i class='fas fa-fw fa-exclamation-circle text-red'></i>");
           }
-        }
-        catch(err) {
-          console.log(err);
+        }).catch(function(err) {
+          console.log("failed to find post: ", $(e).data("author"), $(e).data("permlink"));
           $(e).html("<i class='fas fa-fw fa-exclamation-circle text-red'></i>");
-        }
-      }).catch(function(err) {
-        console.log("failed to find post: ", $(e).data("author"), $(e).data("permlink"));
-        $(e).html("<i class='fas fa-fw fa-exclamation-circle text-red'></i>");
-      });
-    }
+        });
+      }
+    });
   });
 
   $('#image_preview').on("error", function() {

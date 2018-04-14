@@ -59,6 +59,13 @@ def _jinja2_filter_datetime(date, fmt=None):
     format='%b %d, %Y'
     return native.strftime(format)
 
+@app.route("/whoami")
+def whoami():
+    if 'username' in session:
+        return jsonify({ 'username': session['username']})
+    else:
+        return jsonify({ 'username': "" });
+
 @app.route("/update/<permlink>", methods=['GET', 'POST'])
 def update(permlink):
     if 'logged_in' in session and session['logged_in'] and 'username' in session and session['username'] in app.config['ADMINS'].split(','):

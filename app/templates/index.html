@@ -31,8 +31,8 @@
             {% if session['username'] in admins %}| <a href="/update/{{ deal['permlink'] }}">Edit <i class="fa fa-edit"></i></a>{% endif %}
             <br>
             <span class="lazy" data-loader="votes"
-                               data-permlink="{{ deal['permlink'] }}"
-                               data-author="{{ deal['steem_user'] }}">
+                              data-permlink="{{ deal['permlink'] }}"
+                              data-author="{{ deal['steem_user'] }}">
               <i class="fas fa-spinner fa-spin fa-fw"></i>
             </span>
           </small>
