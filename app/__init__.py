@@ -155,7 +155,7 @@ def countries_json():
 @app.route("/country/<country>")
 def countries(country):
     deals = []
-    deal_cursor=db.deal.find({'deal_expires': { '$gte': date.today().isoformat()}, 'country_code': country}).sort([('_id', -1)])
+    deal_cursor=db.deal.find({'deal_expires': { '$gte': date.today().isoformat()}, 'country_code': country, 'hide': { '$ne': True}}).sort([('_id', -1)])
     for deal in deal_cursor:
         deals.append(deal)
     return render_template('index.html', deals=deals, country=country, session=session, admins=admins)
@@ -163,7 +163,7 @@ def countries(country):
 @app.route("/freebies")
 def freebies():
     deals = []
-    deal_cursor=db.deal.find({'deal_expires': { '$gte': date.today().isoformat()}, 'freebie': 'on'}).sort([('_id', -1)])
+    deal_cursor=db.deal.find({'deal_expires': { '$gte': date.today().isoformat()}, 'freebie': 'on', 'hide': { '$ne': True}}).sort([('_id', -1)])
     for deal in deal_cursor:
         deals.append(deal)
     return render_template('index.html', deals=deals, session=session, admins=admins)
@@ -171,7 +171,7 @@ def freebies():
 @app.route("/brand/<brand>")
 def brands(brand):
     deals = []
-    deal_cursor=db.deal.find({'deal_expires': { '$gte': date.today().isoformat()}, 'brand_code': brand}).sort([('_id', -1)])
+    deal_cursor=db.deal.find({'deal_expires': { '$gte': date.today().isoformat()}, 'brand_code': brand, 'hide': { '$ne': True}}).sort([('_id', -1)])
     for deal in deal_cursor:
         deals.append(deal)
     return render_template('index.html', deals=deals, session=session, admins=admins)
