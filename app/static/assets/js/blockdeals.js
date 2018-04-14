@@ -1,6 +1,24 @@
 const steem = new dsteem.Client('https://api.steemit.com');
 username = "";
 
+function voteup(e) {
+  var a = $(e.parentNode).data("author")
+  var p = $(e.parentNode).data("permlink")
+  $.get("/vote/" + a + "/" + p + "/up", function(data) {
+    if (data['status']) { M.toast({html: 'Vote accepted'}) }
+    else { M.toast({html: 'Vote failed'}) }
+  });
+}
+
+function flag(e) {
+  var a = $(e.parentNode).data("author")
+  var p = $(e.parentNode).data("permlink")
+  $.get("/vote/" + a + "/" + p + "/flag", function(data) {
+    if (data['status']) { M.toast({html: 'Flagged'}) }
+    else { M.toast({html: 'Flag failed'}) }
+  });
+}
+
 $(document).ready(function() {
   $('.loginbtn').click(function() {
     window.location.replace(sc2.getLoginURL());
@@ -48,10 +66,7 @@ $(document).ready(function() {
                   dn++
                 }
               }
-              $(e).html("<i class='fas fa-thumbs-up fa-fw " +
-                  ( me > 0 ? 'green-text' : '') + "'></i> " + up +
-                  " / " + dn + " <i class='fas fa-thumbs-down fa-fw" +
-                  ( me < 0 ? 'red-text' : '') + "'></i>");
+              $(e).html("<i onclick='voteup(this)' class='vote fas fa-thumbs-up fa-fw " + ( me > 0 ? 'green-text' : '') + "'></i> " + up + " / " + dn + " <i onclick='flag(this)' class='vote fas fa-thumbs-down fa-fw " + ( me < 0 ? 'red-text' : '') + "'></i>");
             }
             else {
               console.log("failed to find post: ", $(e).data("author"), $(e).data("permlink"));

@@ -59,6 +59,24 @@ def _jinja2_filter_datetime(date, fmt=None):
     format='%b %d, %Y'
     return native.strftime(format)
 
+@app.route("/vote/<author>/<permlink>/<kind>")
+def vote(author, permlink, kind):
+    if 'logged_in' in session and session['logged_in'] and 'username' in session:
+        try:
+            weight=100
+            if kind == "flag":
+                weight=-100
+            identifier = "@" + author + "/" + permlink
+            if 'POST_TO_STEEM' in app.config and app.config['POST_TO_STEEM'] == "1":
+                s = Steem(nodes=['https://rpc.buildteam.io', 'https://api.steemit.com', 'https://steemd.steemitstage.com'],
+                        keys=[app.config['POSTING_KEY'], app.config['ACTIVE_KEY']])
+                p = s.commit.vote(identifier, weight, account=session['username'])
+                app.logger.info(p)
+            return jsonify({ 'status': True })
+        except Exception as e:
+            app.logger.info(e)
+            return jsonify({ 'status': False })
+
 @app.route("/whoami")
 def whoami():
     if 'username' in session:

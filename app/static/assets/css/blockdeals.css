@@ -29,3 +29,6 @@ h2 {
 #image_preview {
   max-height: 8rem;
 }
+.vote:hover {
+  color: blue;
+}
