@@ -75,9 +75,9 @@ def vote(author, permlink, kind):
             return jsonify({ 'status': True })
         except Exception as e:
             app.logger.info(e)
-            return jsonify({ 'status': False })
+            return jsonify({ 'status': False, 'msg': 'unknown exception' })
     else:
-        return jsonify({ 'status': False })
+        return jsonify({ 'status': False, 'msg': 'please login first' })
 
 @app.route("/whoami")
 def whoami():

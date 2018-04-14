@@ -6,7 +6,7 @@ function voteup(e) {
   var p = $(e.parentNode).data("permlink")
   $.get("/vote/" + a + "/" + p + "/up", function(data) {
     if (data['status']) { M.toast({html: 'Vote accepted'}) }
-    else { M.toast({html: 'Vote failed'}) }
+    else { M.toast({html: 'Vote failed: ' + data['msg']}) }
   });
 }
 
@@ -15,7 +15,7 @@ function flag(e) {
   var p = $(e.parentNode).data("permlink")
   $.get("/vote/" + a + "/" + p + "/flag", function(data) {
     if (data['status']) { M.toast({html: 'Flagged'}) }
-    else { M.toast({html: 'Flag failed'}) }
+    else { M.toast({html: 'Flag failed: ' + data['msg']}) }
   });
 }
 
