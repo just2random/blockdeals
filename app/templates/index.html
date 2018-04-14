@@ -30,8 +30,9 @@
             <b>Posted by:</b> <a href="https://steemit.com/@{{ deal['steem_user'] }}">@{{ deal['steem_user'] }}</a> | <b>Ends:</b> {{ deal['deal_expires']|datetimeformat('%a, %B %d') }}
             {% if session['username'] in admins %}| <a href="/update/{{ deal['permlink'] }}">Edit <i class="fa fa-edit"></i></a>{% endif %}
             <br>
-            <span class="votes" data-permlink="{{ deal['permlink'] }}"
-                                data-author="{{ deal['steem_user'] }}">
+            <span class="lazy" data-loader="votes"
+                               data-permlink="{{ deal['permlink'] }}"
+                               data-author="{{ deal['steem_user'] }}">
               <i class="fas fa-spinner fa-spin fa-fw"></i>
             </span>
           </small>
