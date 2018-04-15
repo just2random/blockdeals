@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for, session, flash
+from flaskext.markdown import Markdown
 from pymongo import MongoClient
 from steem import Steem
 from datetime import date, timedelta, datetime
@@ -250,76 +251,67 @@ def deal():
         ]]
     }
 
+    permlink = ""
+    deal_post_data = {}
+
+    # populate sanitised deal data
+    deal_post_data['title'] = deal_form['title'].strip()
+    deal_post_data['url'] = deal_form['url']
+    deal_post_data['brand_code'] = slugify(deal_form['brand'])
+    deal_post_data['description'] = deal_form['description']
+
+    try:
+        deal_post_data['freebie'] = True if deal_form['freebie'] == 'on' else False
+    except KeyError:
+        deal_post_data['freebie'] = False
+
+    if 'image_url' not in deal_form or deal_form['image_url'] == "":
+        deal_post_data['image_url'] = 'https://blockdeals.org/assets/images/logo_round.png'
+    else:
+        deal_post_data['image_url'] = deal_form['image_url']
+
+    if 'global' in deal_form and deal_form['global'] == 'on':
+        deal_post_data['global'] = True
+    else:
+        deal_post_data['global'] = False
+        deal_post_data['country_code'] = deal_form['country_code']
+
+    if not 'coupon_code' in deal_form or deal_form['coupon_code'].strip() == "":
+        deal_post_data['coupon_code'] = False
+    else:
+        deal_post_data['coupon_code'] = deal_form['coupon_code'].strip()
+
+    try:
+        deal_post_data['date_start'] = parser.parse(deal_form['deal_start']).isoformat()
+    except ValueError:
+        deal_post_data['date_start'] = date.today().isoformat()
+    try:
+        deal_post_data['date_end'] = parser.parse(deal_form['deal_end']).isoformat()
+    except ValueError:
+        deal_post_data['date_end'] = (parser.parse(deal_post_data['date_start']) + timedelta(days=45)).isoformat()
+
     json_metadata = {
         'community': 'blockdeals',
         'app': 'blockdeals/1.0.0',
         'format': 'markdown',
-        'tags': [ 'blockdeals' ]
+        'tags': [ 'blockdeals' ],
+        'deal': deal_post_data
     }
 
-    if 'country_code' in deal_form:
+    if 'country_code' in deal_post_data and not deal_post_data['global']:
         json_metadata['tags'].append('blockdeals-'+deal_form['country_code'])
+    else:
+        json_metadata['tags'].append('blockdeals-global')
 
-    permlink = ""
-
-    try:
-        # Work out our freebie emoji
-        freebie = "&#128077;" if deal_form['freebie'] else "&#10060;"
-    except KeyError:
-        freebie = "&#10060;"
+    app.logger.info("deal_post_data: {}".format(deal_post_data))
+    body = render_template("deal_post.md", deal=deal_post_data)
 
     try:
-        if deal_form['image_url'] == "":
-            deal_form['image_url'] = 'https://blockdeals.org/assets/images/logo_round.png'
-
-        if 'global' in deal_form and deal_form['global'] == 'on':
-            country_text = "multiple ([check details]({}))".format(deal_form['url'])
-        else:
-            country_text = "{0} ![{0}](https://steemitimages.com/22x22/https://github.com/hjnilsson/country-flags/raw/master/png100px/{1}.png)".format(deal_form['country'], deal_form['country_code'])
-
-        if not 'coupon_code' in deal_form or deal_form['coupon_code'].strip() == "":
-            coupon_code = "&#10060;"
-        else:
-            coupon_code = deal_form['coupon_code'].strip()
-
-        app.logger.info("Sanitised: country_text={}, coupon_code={}".format(country_text, coupon_code))
-
         if 'POST_TO_STEEM' in app.config and app.config['POST_TO_STEEM'] == "1":
             s = Steem(nodes=['https://rpc.buildteam.io', 'https://api.steemit.com', 'https://steemd.steemitstage.com'],
                       keys=[app.config['POSTING_KEY'], app.config['ACTIVE_KEY']])
             p = s.commit.post(title=deal_form['title'],
-                              body="""
-# {0}
-
-![{0}]({2})
-
-| Details | |
-| - | - |
-| &#127991; **Coupon Code** | {3} |
-| &#127758; **Country** | {9} |
-| &#128198; **Starts** | {4} |
-| &#128198; **Ends** | {5} |
-| &#128176; **Freebie?** | {6} |
-| &#128176; **Deal Link** | [{8}]({7}) |
-
-## Description
-
-{1}
-
----
-### Find more deals or earn Steem for posting deals on [BlockDeals](https://blockdeals.org) today!
-[![](https://blockdeals.org/assets/images/blockdeals_logo.png)](https://blockdeals.org)
-""".
-                              format(deal_form['title'],
-                                     deal_form['description'],
-                                     deal_form['image_url'],
-                                     coupon_code,
-                                     deal_form['deal_start'],
-                                     deal_form['deal_end'],
-                                     freebie,
-                                     deal_form['url'],
-                                     textwrap.shorten(deal_form['title'], width=40, placeholder="..."),
-                                     country_text),
+                              body=body,
                               author=session['username'],
                               json_metadata=json_metadata,
                               comment_options=comment_options,
@@ -328,6 +320,7 @@ def deal():
             permlink = p['operations'][0][1]['permlink']
             app.logger.info("Posted to STEEM with id={}".format(permlink))
         else:
+            app.logger.info("Skipped posting to steem:\n\n{}".format(body))
             permlink = "testing-{}".format(int(time.time()))
 
         deal_form['permlink'] = permlink
