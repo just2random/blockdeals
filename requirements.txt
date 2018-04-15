@@ -1,5 +1,7 @@
 Flask
+gevent
 gunicorn
+gunicorn[gevent]
 pymongo
 requests
 python-dateutil
