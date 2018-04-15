@@ -5,7 +5,7 @@
   <div class="col s12 m2">
     <div class="row">
        <div class="col m12 s6 offset-s3">
-          <img class="deal-image responsive-img" src="https://steemitimages.com/250x250/{% if deal.image_url is defined %}{{ deal['image_url'] }}{% else %}https://blockdeals.org/assets/images/logo_round.png{% endif %}" onerror="this.src='/assets/images/logo_round.png';" />
+          <img class="lazy deal-image responsive-img" data-src="https://steemitimages.com/250x250/{% if deal.image_url is defined %}{{ deal['image_url'] }}{% else %}https://blockdeals.org/assets/images/logo_round.png{% endif %}" onerror="this.src='/assets/images/logo_round.png';" />
        </div>
     </div>
     <div class="lazy row grey-text lighten-2" data-loader="votes" data-permlink="{{ deal['permlink'] }}" data-author="{{ deal['steem_user'] }}">
