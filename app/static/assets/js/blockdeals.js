@@ -2,32 +2,36 @@ const steem = new dsteem.Client('https://api.steemit.com');
 username = "";
 
 function voteup(e) {
-  var parent_el = e.parentNode; // for closure
-  var a = $(e.parentNode).data("author");
-  var p = $(e.parentNode).data("permlink");
-  $(e).addClass("fa-spin");
+  var parent_el = e.parentNode.parentNode; // for closure
+  var a = $(parent_el).data("author");
+  var p = $(parent_el).data("permlink");
+  $(parent_el).find(".upVoteThumb").addClass("fa-spin");
   $.get("/vote/" + a + "/" + p + "/up", function(data) {
     if (data['status']) { M.toast({html: 'Vote accepted'}) }
     else { M.toast({html: 'Vote failed: ' + data['msg']}) }
     update_votes(parent_el);
+    $(parent_el).find(".upVoteThumb").removeClass("fa-spin");
   }).fail(function() {
     M.toast({html: 'Vote failed'});
     update_votes(parent_el);
+    $(parent_el).find(".upVoteThumb").removeClass("fa-spin");
   });
 }
 
 function flag(e) {
-  var parent_el = e.parentNode; // for closure
-  var a = $(e.parentNode).data("author");
-  var p = $(e.parentNode).data("permlink");
-  $(e).addClass("fa-spin");
+  var parent_el = e.parentNode.parentNode; // for closure
+  var a = $(parent_el).data("author");
+  var p = $(parent_el).data("permlink");
+  $(parent_el).find(".dnVoteThumb").addClass("fa-spin");
   $.get("/vote/" + a + "/" + p + "/flag", function(data) {
     if (data['status']) { M.toast({html: 'Flagged'}) }
     else { M.toast({html: 'Flag failed: ' + data['msg']}) }
     update_votes(parent_el);
+    $(parent_el).find(".dnVoteThumb").removeClass("fa-spin");
   }).fail(function() {
     M.toast({html: 'Vote failed'});
     update_votes(parent_el);
+    $(parent_el).find(".dnVoteThumb").removeClass("fa-spin");
   });
 }
 
@@ -51,11 +55,17 @@ function update_votes(e) {
             dn++
           }
         }
-        $(e).html("<i onclick='voteup(this)' class='vote fas fa-thumbs-up fa-fw " + ( me > 0 ? 'green-text' : '') + "'></i> " + up + " / " + dn + " <i onclick='flag(this)' class='vote fas fa-thumbs-down fa-fw " + ( me < 0 ? 'red-text' : '') + "'></i>");
+        $(e).find(".upVote").text(up);
+        $(e).find(".dnVote").text(dn);
+        if (me > 0) {
+          $(e).find(".upVoteThumb").addClass('green-text');
+        } else if (me < 0) {
+          $(e).find(".dnVoteThumb").addClass('red-text');
+        }
       }
       else {
         console.log("failed to find post: ", $(e).data("author"), $(e).data("permlink"));
-        $(e).html("<i class='fas fa-fw fa-exclamation-circle text-red'></i>");
+        $(e).html("<div class='col s12 center-align'><i class='fas fa-fw fa-exclamation-circle red-text' title='Error reading votes'></i></div>");
       }
     }
     catch(err) {

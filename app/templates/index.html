@@ -4,8 +4,18 @@
 <div class="row">
   <div class="col s12 m2">
     <div class="row">
-       <div class="col m12 s6">
-        <img class="deal-image responsive-img" src="https://steemitimages.com/150x150/{% if deal.image_url is defined %}{{ deal['image_url'] }}{% else %}https://blockdeals.org/assets/images/logo_round.png{% endif %}" onerror="this.src='/assets/images/logo_round.png';" />
+       <div class="col m12 s6 offset-s4">
+          <img class="deal-image responsive-img" src="https://steemitimages.com/150x150/{% if deal.image_url is defined %}{{ deal['image_url'] }}{% else %}https://blockdeals.org/assets/images/logo_round.png{% endif %}" onerror="this.src='/assets/images/logo_round.png';" />
+       </div>
+    </div>
+    <div class="lazy row grey-text lighten-2" data-loader="votes" data-permlink="{{ deal['permlink'] }}" data-author="{{ deal['steem_user'] }}">
+       <div class="col s6 right-align">
+         <span class="upVote"><i class="fas fa-spinner fa-spin"></i></span>
+         <i onclick="voteup(this)" class="upVoteThumb vote fas fa-thumbs-up"></i>
+       </div>
+       <div class="col s6 left-align">
+         <i onclick="flag(this)" class="dnVoteThumb vote fas fa-thumbs-down"></i>
+         <span class="dnVote"><i class="fas fa-spinner fa-spin"></i></span>
        </div>
     </div>
   </div>
@@ -29,12 +39,6 @@
           <small>
             <b>Posted by:</b> <a href="https://steemit.com/@{{ deal['steem_user'] }}">@{{ deal['steem_user'] }}</a> | <b>Ends:</b> {{ deal['deal_expires']|datetimeformat('%a, %B %d') }}
             {% if session['username'] in admins %}| <a href="/update/{{ deal['permlink'] }}">Edit <i class="fa fa-edit"></i></a>{% endif %}
-            <br>
-            <span class="lazy" data-loader="votes"
-                              data-permlink="{{ deal['permlink'] }}"
-                              data-author="{{ deal['steem_user'] }}">
-              <i class="fas fa-spinner fa-spin fa-fw"></i>
-            </span>
           </small>
         </p>
       </div>
