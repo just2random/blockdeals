@@ -32,3 +32,6 @@ h2 {
 .vote:hover {
   color: blue;
 }
+.supporter {
+  display: none;
+}

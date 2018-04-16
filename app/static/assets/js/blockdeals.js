@@ -59,6 +59,7 @@ function update_votes(e) {
         $(e).find(".dnVote").text(dn);
         if (me > 0) {
           $(e).find(".upVoteThumb").addClass('green-text');
+          $(e).find('.supporter').fadeIn();
         } else if (me < 0) {
           $(e).find(".dnVoteThumb").addClass('red-text');
         }

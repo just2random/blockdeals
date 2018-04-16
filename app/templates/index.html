@@ -3,7 +3,7 @@
 {% for deal in deals %}
 <div class="row">
   <div class="col s12 m2">
-    <div class="row">
+    <div class="row" style="margin-bottom:3px;">
        <div class="col m12 s6 offset-s3">
           <img class="lazy deal-image responsive-img" data-src="https://steemitimages.com/250x250/{% if deal.image_url is defined and deal.image_url != "" %}{{ deal['image_url'] }}{% else %}https://blockdeals.org/assets/images/logo_round.png{% endif %}" onerror="this.src='/assets/images/logo_round.png';" />
        </div>
@@ -16,6 +16,9 @@
        <div class="col s6 left-align">
          <i onclick="flag(this)" class="dnVoteThumb vote fas fa-thumbs-down"></i>
          <span class="dnVote"><i class="fas fa-spinner fa-spin"></i></span>
+       </div>
+       <div id="visit" class="col s12 center-align supporter">
+         <a id="dealdirect" href="{{ deal['url'] }}" class="waves-effect waves-light btn-small blue tooltipped" data-tooltip="Thanks for supporting this deal! Here is your direct link &#128571;" style="margin-top: 6px;">go to deal</a>
        </div>
     </div>
   </div>
