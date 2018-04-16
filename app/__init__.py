@@ -295,6 +295,7 @@ def deal():
         'app': 'blockdeals/1.0.0',
         'format': 'markdown',
         'tags': [ 'blockdeals' ],
+        'image': [ "https://steemitimages.com/0x0/" + deal_post_data['image_url'] ],
         'deal': deal_post_data
     }
 
