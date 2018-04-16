@@ -51,9 +51,12 @@ Create a config file:
 
 ```
 $ cat blockdeals.org
-STEEM_USER="steem_account_to_post_as"
 POSTING_KEY="posting_key_of_blockdeals"
 ACTIVE_KEY="active_posting_key_of_blockdeals"
+SESSION_SECRET="super_secret_session_encryption_key1"
+SITE_URL="http://localhost:8000"
+POST_TO_STEEM="0"
+ADMINS="your_steem_username,blockdeals,etc"
 ```
 
 You can now run the app in dev mode via:
