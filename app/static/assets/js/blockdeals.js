@@ -122,4 +122,6 @@ $(document).ready(function() {
     var img_url = $(this).val();
     $('#image_preview').attr('src', img_url);
   });
+
+  $('.fixed-action-btn').floatingActionButton();
 });

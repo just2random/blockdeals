@@ -45,7 +45,7 @@
           <li><a class="dropdown-trigger" href="#!" data-target="country_dropdown"><div class="country-select"><div class="flag {{ country }}"></div></div><i class="material-icons right">arrow_drop_down</i></a></li>
           {% endif %}
           {% if session.logged_in and session.authorized %}
-          <li><img class="circle responsive-img" style="max-height:36px;vertical-align:middle;" src="https://steemitimages.com/u/{{ session.username }}/avatar" title="{{ session.username }}"/><a class="waves-effect waves-light btn orange darken-2" href="{{ url_for('submit_page') }}">Submit Deal<i class="material-icons right">add_box</i></a></li>
+          <li><a class="waves-effect waves-light btn orange darken-2" href="{{ url_for('submit_page') }}">Submit Deal<i class="material-icons right">add_box</i></a></li>
           {% else %}
           {% if not session.logged_in %}
           <li><a class="waves-effect waves-light btn orange darken-2 loginbtn tooltipped" data-position="bottom" data-tooltip="We use SteemConnect so your Steem<br>account is safe!">Login <i class="material-icons right">person</i></a></li>
@@ -111,6 +111,27 @@
       </div>
 		</div>
 
+		<div class="fixed-action-btn">
+			<a class="btn-floating btn-large grey lighten-2">
+        {% if session.username %}
+        <img class="circle responsive-img" src="https://steemitimages.com/u/{{ session.username }}/avatar" title="{{ session.username }}"/>
+        {% else %}
+        <i class="large material-icons black-text">arrow_upward</i>
+        {% endif %}
+			</a>
+			<ul>
+        {% if session.logged_in %}
+        <li title="Logout"><a class="btn-floating red" href="{{ url_for('logout') }}"><i class="material-icons">exit_to_app</i></a></li>
+        <li title="Submit Deal"><a class="btn-floating green" href="{{ url_for('submit_page') }}"><i class="material-icons">add_box</i></a></li>
+        {% else %}
+        <li title="Login"><a class="btn-floating blue loginbtn"><i class="material-icons">people</i></a></li>
+        {% endif %}
+        {% if session.logged_in and not session.authorized %}
+        <li title="Authorize"><a class="btn-floating yellow" href="https://steemconnect.com/authorize/@blockdeals/?redirect_uri={{ config.SITE_URL }}/auth"><i class="material-icons">security</a></li>
+        {% endif %}
+			</ul>
+		</div>
+
     <footer class="page-footer orange darken-2">
       <div class="container">
         <div class="row">
@@ -164,7 +185,7 @@
     <script src="/assets/js/sc2.min.js"></script>
     <script src="/assets/js/countrySelect.min.js"></script>
     <script src="/assets/js/countrycode.js"></script>
-    <script src="/assets/js/blockdeals.js?0011"></script>
+    <script src="/assets/js/blockdeals.js?0012"></script>
     <script>
 var api = sc2.init({
   app: 'blockdeals.app',
