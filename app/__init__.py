@@ -23,7 +23,9 @@ def confirm_user():
         session['authorized'] = False
         if r.json()['_id'] != session['username']:
             return False
-        if 'account_auths' in r.json()['account']['posting']:
+        if session['username'] == "blockdeals":
+            session['authorized'] = True
+        elif 'account_auths' in r.json()['account']['posting']:
             for auth_account in r.json()['account']['posting']['account_auths']:
                 if auth_account[0] == "blockdeals":
                     session['authorized'] = True
@@ -201,6 +203,8 @@ def authorized():
         if r.json()['_id'] != session['username']:
             session['logged_in'] = False
             return render_template('login_failed.html'), 401
+        if session['username'] == "blockdeals":
+            session['authorized'] = True
         if 'account_auths' in r.json()['account']['posting']:
             for auth_account in r.json()['account']['posting']['account_auths']:
                 if auth_account[0] == "blockdeals":
@@ -221,7 +225,9 @@ def complete_sc():
         app.logger.info('Login of {} successful'.format(username))
         session['authorized'] = False
         session['logged_in'] = username == r.json()['_id']
-        if 'account_auths' in r.json()['account']['posting']:
+        if username == "blockdeals":
+            session['authorized'] = True
+        elif 'account_auths' in r.json()['account']['posting']:
             for auth_account in r.json()['account']['posting']['account_auths']:
                 if auth_account[0] == "blockdeals":
                     session['authorized'] = True

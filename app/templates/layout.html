@@ -127,7 +127,7 @@
         <li title="Login"><a class="btn-floating blue loginbtn"><i class="material-icons">people</i></a></li>
         {% endif %}
         {% if session.logged_in and not session.authorized %}
-        <li title="Authorize"><a class="btn-floating yellow" href="https://steemconnect.com/authorize/@blockdeals/?redirect_uri={{ config.SITE_URL }}/auth"><i class="material-icons">security</a></li>
+        <li title="Authorize"><a class="btn-floating yellow" href="https://steemconnect.com/authorize/@blockdeals/?redirect_uri={{ config.SITE_URL }}/auth"><i class="material-icons">security</i></a></li>
         {% endif %}
 			</ul>
 		</div>
