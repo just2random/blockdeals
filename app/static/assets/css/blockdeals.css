@@ -35,3 +35,6 @@ h2 {
 .supporter {
   display: none;
 }
+.deal-image {
+  max-height: 12em;
+}
