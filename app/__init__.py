@@ -11,6 +11,7 @@ app = Flask(__name__, static_folder='static', static_url_path='')
 app.config.from_envvar('BLOCKDEALS_SETTINGS')
 app.secret_key=app.config['SESSION_SECRET']
 admins = app.config['ADMINS'].split(',')
+Markdown(app)
 
 db = MongoClient("mongodb://mongodb:27017").blockdeals
 
@@ -50,7 +51,9 @@ def _jinja2_filter_expires_time(date, fmt=None):
     date = parser.parse(date)
     native = date.replace(tzinfo=None)
     days = (native-date.today()).days
-    if days <= 2:
+    if days < 0:
+        return "{} day{} ago".format(abs(days), '' if abs(days) == 1 else 's')
+    elif days <= 2:
         return "soon"
     else:
         return "in {} day{}".format(days, '' if days == 1 else 's')
@@ -61,6 +64,24 @@ def _jinja2_filter_datetime(date, fmt=None):
     native = date.replace(tzinfo=None)
     format='%b %d, %Y'
     return native.strftime(format)
+
+@app.route("/blockdeals/@<author>/<permlink>")
+def read_deal(author, permlink):
+    try:
+        r = requests.get(
+            'https://api.steemjs.com/getState?path=/blockdeals/@{}/{}'.format(author, permlink))
+        if r.status_code == 200:
+            content = r.json()['content']['{}/{}'.format(author, permlink)]
+            json_metadata = json.loads(content['json_metadata'])
+            deal_metadata = json_metadata['deal']
+            app.logger.info(content)
+            app.logger.info(deal_metadata)
+            return render_template('details.html', author=author, permlink=permlink, json_metadata=json_metadata, deal=deal_metadata)
+        else:
+            return render_template('404.html'), 404
+    except Exception as e:
+        app.logger.info(e)
+        return redirect('https://steemit.com/blockdeals/@{}/{}'.format(author, permlink))
 
 @app.route("/vote/<author>/<permlink>/<kind>")
 def vote(author, permlink, kind):
