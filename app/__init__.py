@@ -5,7 +5,7 @@ from steem import Steem
 from datetime import date, timedelta, datetime
 from dateutil import parser
 from slugify import slugify
-import sys, traceback, json, textwrap, requests, pprint, time
+import sys, traceback, json, textwrap, requests, pprint, time, math
 
 app = Flask(__name__, static_folder='static', static_url_path='')
 app.config.from_envvar('BLOCKDEALS_SETTINGS')
@@ -35,6 +35,14 @@ def confirm_user():
     else:
         session['logged_in'] = False
     return False
+
+@app.template_filter('reputation')
+def _jinja2_filter_reputation(rep):
+    rep = int(rep)
+    calc = (math.log10(abs(rep) - 10) - 9)
+    if rep < 0:
+        calc = -calc
+    return int(calc * 9 + 25)
 
 @app.template_filter('expires_class')
 def _jinja2_filter_expires_class(date, fmt=None):

@@ -50,9 +50,13 @@
   {% set node = author + "/" + permlink %}
   {%- for comment in content[node].replies recursive %}
   <li class="collection-item avatar">
-    <img src="https://steemitimages.com/u/{{ content[comment].author }}/avatar" alt="" class="circle">
+    <img src="https://steemitimages.com/u/{{ content[comment].author }}/avatar" title="{{ content[comment].author }} ({{ content[comment].author_reputation|reputation }})" class="circle">
     <span class="title">{{ content[comment].title }}</span>
+    {% if content[comment].author_reputation|reputation >= 20 %}
     {{ content[comment].body | markdown }}
+    {% else %}
+    <i>Likely spam/scam detected. Comment hidden.</i>
+    {% endif %}
   </li>
   {%- if content[comment].replies|length > 0 -%}
     {{ loop(content[comment].replies) }}
