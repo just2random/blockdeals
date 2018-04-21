@@ -71,12 +71,11 @@ def read_deal(author, permlink):
         r = requests.get(
             'https://api.steemjs.com/getState?path=/blockdeals/@{}/{}'.format(author, permlink))
         if r.status_code == 200:
-            content = r.json()['content']['{}/{}'.format(author, permlink)]
+            all_content = r.json()['content']
+            content = all_content['{}/{}'.format(author, permlink)]
             json_metadata = json.loads(content['json_metadata'])
             deal_metadata = json_metadata['deal']
-            app.logger.info(content)
-            app.logger.info(deal_metadata)
-            return render_template('details.html', author=author, permlink=permlink, json_metadata=json_metadata, deal=deal_metadata)
+            return render_template('details.html', author=author, permlink=permlink, json_metadata=json_metadata, deal=deal_metadata, content=all_content)
         else:
             return render_template('404.html'), 404
     except Exception as e:
