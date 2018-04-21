@@ -1,84 +1,86 @@
 {% extends "layout.html" %}
 {% block content %}
-<span class="new badge {{ deal.date_end | expires_class }}" data-badge-caption="{{ deal.date_end | expires_time }}"><i class="fa fa-clock"></i> Expires</span>
-{% if deal.freebie %}<a href="/freebies"><span class="new badge green" data-badge-caption="FREEBIE"><i class="fa fa-certificate"></i></span></a>{% endif %}
-{% if deal.country_code and not deal.global %}<a href="/country/{{ deal.country_code }}"><span class="new badge grey lighten-3" title="{{ deal.country_code }}" data-badge-caption=""><div class="country-select"><div class="flag {{ deal.country_code }}"></div></div></span></a>{% endif %}
-<h2>
-  {{ deal.title }}
-</h2>
-<div class="valign-wrapper">
-  <img src="https://steemitimages.com/u/{{ author }}/avatar" class="circle" width=42 height=42/ style="margin-right:.5em"> <b><a href="https://steemit.com/@{{ author }}">{{ author }}</a></b> ({{ content[ author + "/" + permlink].author_reputation|reputation }}) &bull; {{ content[ author + "/" + permlink].created|datetimeformat('%a, %B %d') }}
-</div>
-<p class="center-align"><a href="{{ deal.url }}"><img style="max-height: 22em" class="responsive-img" src="{{ deal.image_url }}"/></a></p>
-<table class="striped">
-  <tbody>
-    <tr>
-      <th>&#127991; Coupon Code</th>
-      <td>{{ deal.coupon_code if deal.coupon_code else '&#10060;' | safe }}</td>
-    </tr>
-    <tr>
-      <th>&#127758; Country</th>
-      <td>{% if deal.global %}multiple (<a href="{{ deal.url }}">check details</a>){% else %}<img src="https://steemitimages.com/22x22/https://github.com/hjnilsson/country-flags/raw/master/png100px/{{ deal.country_code }}.png" title="{{ deal.country_code }}">{% endif %}</td>
-    </tr>
-    <tr>
-      <th>&#128198; Starts</th>
-      <td>
-        <b>{{ deal.date_start | expires_time }}</b>
-        ({{ deal.date_start | datetimeformat('%a, %B %d') }})
-      </td>
-    </tr>
-    <tr>
-      <th>&#128198; Ends</th>
-      <td>
-        <b>{{ deal.date_end | expires_time }}</b>
-        ({{ deal.date_end | datetimeformat('%a, %B %d') }})
-      </td>
-    </tr>
-    <tr>
-      <th>&#128176; Freebie?</th>
-      <td>{{ '&#128077;' | safe if deal.freebie else '&#10060;' | safe }}</td>
-    </tr>
-    <tr>
-      <th>&#128279; Deal Link</th>
-      <td><a href="{{ deal.url }}">{{ deal.title | truncate(40, True) }}</a></td>
-    </tr>
-  </tbody>
-</table>
+<div class="row">
+  <div class="col s12">
+    <span class="new badge {{ deal.date_end | expires_class }}" data-badge-caption="{{ deal.date_end | expires_time }}"><i class="fa fa-clock"></i> Expires</span>
+    {% if deal.freebie %}<a href="/freebies"><span class="new badge green" data-badge-caption="FREEBIE"><i class="fa fa-certificate"></i></span></a>{% endif %}
+    {% if deal.country_code and not deal.global %}<a href="/country/{{ deal.country_code }}"><span class="new badge grey lighten-3" title="{{ deal.country_code }}" data-badge-caption=""><div class="country-select"><div class="flag {{ deal.country_code }}"></div></div></span></a>{% endif %}
+    <h2>{{ deal.title }}</h2>
+    <div class="valign-wrapper">
+      <img src="https://steemitimages.com/u/{{ author }}/avatar" class="circle" width=42 height=42/ style="margin-right:.5em"> <b><a href="https://steemit.com/@{{ author }}">{{ author }}</a></b> ({{ content[ author + "/" + permlink].author_reputation|reputation }}) &bull; {{ content[ author + "/" + permlink].created|datetimeformat('%a, %B %d') }}
+    </div>
+    <p class="center-align"><a href="{{ deal.url }}"><img style="max-height: 22em" class="responsive-img" src="{{ deal.image_url }}"/></a></p>
+    <table class="striped">
+      <tbody>
+        <tr>
+          <th>&#127991; Coupon Code</th>
+          <td>{{ deal.coupon_code if deal.coupon_code else '&#10060;' | safe }}</td>
+        </tr>
+        <tr>
+          <th>&#127758; Country</th>
+          <td>{% if deal.global %}multiple (<a href="{{ deal.url }}">check details</a>){% else %}<img src="https://steemitimages.com/22x22/https://github.com/hjnilsson/country-flags/raw/master/png100px/{{ deal.country_code }}.png" title="{{ deal.country_code }}">{% endif %}</td>
+        </tr>
+        <tr>
+          <th>&#128198; Starts</th>
+          <td>
+            <b>{{ deal.date_start | expires_time }}</b>
+            ({{ deal.date_start | datetimeformat('%a, %B %d') }})
+          </td>
+        </tr>
+        <tr>
+          <th>&#128198; Ends</th>
+          <td>
+            <b>{{ deal.date_end | expires_time }}</b>
+            ({{ deal.date_end | datetimeformat('%a, %B %d') }})
+          </td>
+        </tr>
+        <tr>
+          <th>&#128176; Freebie?</th>
+          <td>{{ '&#128077;' | safe if deal.freebie else '&#10060;' | safe }}</td>
+        </tr>
+        <tr>
+          <th>&#128279; Deal Link</th>
+          <td><a href="{{ deal.url }}">{{ deal.title | truncate(40, True) }}</a></td>
+        </tr>
+      </tbody>
+    </table>
 
-<div class="flow-text">
-  {{ deal.description | markdown }}
-</div>
+    <div class="flow-text">
+      {{ deal.description | markdown }}
+    </div>
 
-<div class="row grey-text lighten-2 flow-text lazy" data-loader="votes" data-permlink="{{ permlink }}" data-author="{{ author }}"> <div class="col s6 right-align">
-    <span class="upVote"><i class="fas fa-spinner fa-spin"></i></span>
-    <i onclick="voteup(this)" class="upVoteThumb vote fas fa-thumbs-up"></i>
-  </div>
-  <div class="col s6 left-align">
-    <i onclick="flag(this)" class="dnVoteThumb vote fas fa-thumbs-down"></i>
-    <span class="dnVote"><i class="fas fa-spinner fa-spin"></i></span>
-  </div>
-</div>
+    <div class="row grey-text lighten-2 flow-text lazy" data-loader="votes" data-permlink="{{ permlink }}" data-author="{{ author }}"> <div class="col s6 right-align">
+        <span class="upVote"><i class="fas fa-spinner fa-spin"></i></span>
+        <i onclick="voteup(this)" class="upVoteThumb vote fas fa-thumbs-up"></i>
+      </div>
+      <div class="col s6 left-align">
+        <i onclick="flag(this)" class="dnVoteThumb vote fas fa-thumbs-down"></i>
+        <span class="dnVote"><i class="fas fa-spinner fa-spin"></i></span>
+      </div>
+    </div>
 
-{% if content[author+"/"+permlink].replies|length > 0 %}
-<h4>Comments</h4>
-<ul class="collection">
-  {% set node = author + "/" + permlink %}
-  {%- for comment in content[node].replies recursive %}
-  <li class="collection-item avatar">
-    <img src="https://steemitimages.com/u/{{ content[comment].author }}/avatar" title="{{ content[comment].author }} ({{ content[comment].author_reputation|reputation }})" class="circle">
-    <span class="title">{{ content[comment].title }}</span>
-    {% if content[comment].author_reputation|reputation >= 20 %}
-    {{ content[comment].body | markdown }}
-    {% else %}
-    <i>Likely spam/scam detected. Comment hidden.</i>
+    {% if content[author+"/"+permlink].replies|length > 0 %}
+    <h4>Comments</h4>
+    <ul class="collection">
+      {% set node = author + "/" + permlink %}
+      {%- for comment in content[node].replies recursive %}
+      <li class="collection-item avatar">
+        <img src="https://steemitimages.com/u/{{ content[comment].author }}/avatar" title="{{ content[comment].author }} ({{ content[comment].author_reputation|reputation }})" class="circle">
+        <span class="title">{{ content[comment].title }}</span>
+        {% if content[comment].author_reputation|reputation >= 20 %}
+        {{ content[comment].body | markdown }}
+        {% else %}
+        <i>Likely spam/scam detected. Comment hidden.</i>
+        {% endif %}
+      </li>
+      {%- if content[comment].replies|length > 0 -%}
+      {{ loop(content[comment].replies) }}
+      {%- endif %}
+      {%- endfor %}
+    </ul>
     {% endif %}
-  </li>
-  {%- if content[comment].replies|length > 0 -%}
-    {{ loop(content[comment].replies) }}
-  {%- endif %}
-  {%- endfor %}
-</ul>
-{% endif %}
-<hr>
-<p><a href="https://steemit.com/blockdeals/@{{ author }}/{{ permlink }}">View on steemit</a></p>
+    <hr>
+    <p><a href="https://steemit.com/blockdeals/@{{ author }}/{{ permlink }}">View on steemit</a></p>
+  </div>
+</div>
 {% endblock %}
