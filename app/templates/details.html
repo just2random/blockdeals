@@ -6,6 +6,9 @@
 <h2>
   {{ deal.title }}
 </h2>
+<div class="valign-wrapper">
+  <img src="https://steemitimages.com/u/{{ author }}/avatar" class="circle" width=42 height=42/ style="margin-right:.5em"> <b><a href="https://steemit.com/@{{ author }}">{{ author }}</a></b> ({{ content[ author + "/" + permlink].author_reputation|reputation }}) &bull; {{ content[ author + "/" + permlink].created|datetimeformat('%a, %B %d') }}
+</div>
 <p class="center-align"><a href="{{ deal.url }}"><img style="max-height: 22em" class="responsive-img" src="{{ deal.image_url }}"/></a></p>
 <table class="striped">
   <tbody>
