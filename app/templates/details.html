@@ -41,9 +41,21 @@
     </tr>
   </tbody>
 </table>
+
 <div class="flow-text">
   {{ deal.description | markdown }}
 </div>
+
+<div class="row grey-text lighten-2 flow-text lazy" data-loader="votes" data-permlink="{{ permlink }}" data-author="{{ author }}"> <div class="col s6 right-align">
+    <span class="upVote"><i class="fas fa-spinner fa-spin"></i></span>
+    <i onclick="voteup(this)" class="upVoteThumb vote fas fa-thumbs-up"></i>
+  </div>
+  <div class="col s6 left-align">
+    <i onclick="flag(this)" class="dnVoteThumb vote fas fa-thumbs-down"></i>
+    <span class="dnVote"><i class="fas fa-spinner fa-spin"></i></span>
+  </div>
+</div>
+
 {% if content[author+"/"+permlink].replies|length > 0 %}
 <h4>Comments</h4>
 <ul class="collection">
