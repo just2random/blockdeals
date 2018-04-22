@@ -49,10 +49,21 @@ def _jinja2_filter_reputation(rep):
         calc = -calc
     return int(calc * 9 + 25)
 
+@app.template_filter('expired')
+def _jinja2_filter_expired(date):
+    date = parser.parse(date)
+    native = date.replace(hour=23, minute=59, tzinfo=None)
+    ds = (native-date.today()).total_seconds()
+    app.logger.info("expires: {}".format(ds))
+    if ds < 0:
+        return True
+    else:
+        return False
+
 @app.template_filter('expires_class')
 def _jinja2_filter_expires_class(date, fmt=None):
     date = parser.parse(date)
-    native = date.replace(tzinfo=None)
+    native = date.replace(hour=23, minute=59, tzinfo=None)
     days = (native-date.today()).days
     if days <= 2:
         return "red pulse"
@@ -62,13 +73,14 @@ def _jinja2_filter_expires_class(date, fmt=None):
 @app.template_filter('expires_time')
 def _jinja2_filter_expires_time(date, fmt=None):
     date = parser.parse(date)
-    native = date.replace(tzinfo=None)
+    native = date.replace(hour=23, minute=59, tzinfo=None)
     days = (native-date.today()).days
-    if days < -1:
+    ds = (native-date.today()).total_seconds()
+    if ds < 0:
         return "{} day{} ago".format(abs(days), '' if abs(days) == 1 else 's')
-    elif days < 0:
-        return "today!"
-    elif days <= 2:
+    elif ds < 86400:
+        return "now"
+    elif ds < 172800:
         return "soon"
     else:
         return "in {} day{}".format(days, '' if days == 1 else 's')
