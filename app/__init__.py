@@ -5,7 +5,7 @@ from steem import Steem
 from datetime import date, timedelta, datetime
 from dateutil import parser
 from slugify import slugify
-import sys, traceback, json, textwrap, requests, pprint, time, math
+import sys, traceback, json, textwrap, requests, pprint, time, math, arrow
 
 app = Flask(__name__, static_folder='static', static_url_path='')
 app.config.from_envvar('BLOCKDEALS_SETTINGS')
@@ -35,6 +35,11 @@ def confirm_user():
     else:
         session['logged_in'] = False
     return False
+
+@app.template_filter('humanize')
+def _jinja2_filter_humanize(t):
+    l = arrow.get(parser.parse(t))
+    return l.humanize()
 
 @app.template_filter('reputation')
 def _jinja2_filter_reputation(rep):

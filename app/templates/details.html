@@ -7,7 +7,7 @@
     {% if deal.country_code and not deal.global %}<a href="/country/{{ deal.country_code }}"><span class="new badge grey lighten-3" title="{{ deal.country_code }}" data-badge-caption=""><div class="country-select"><div class="flag {{ deal.country_code }}"></div></div></span></a>{% endif %}
     <h2>{{ deal.title }}</h2>
     <div class="valign-wrapper">
-      <img src="https://steemitimages.com/u/{{ author }}/avatar" class="circle" width=42 height=42/ style="margin-right:.5em"> <b><a href="https://steemit.com/@{{ author }}">{{ author }}</a></b> ({{ content[ author + "/" + permlink].author_reputation|reputation }}) &bull; {{ content[ author + "/" + permlink].created|datetimeformat('%a, %B %d') }}
+      <img src="https://steemitimages.com/u/{{ author }}/avatar" class="circle" width=42 height=42/ style="margin-right:.5em"> <b><a href="https://steemit.com/@{{ author }}">{{ author }}</a></b> ({{ content[ author + "/" + permlink].author_reputation|reputation }}) &bull; {{ content[ author + "/" + permlink].created|humanize }}
     </div>
     <p class="center-align"><a href="{{ deal.url }}"><img style="max-height: 22em" class="responsive-img" src="{{ deal.image_url }}"/></a></p>
     <table class="striped">
@@ -38,12 +38,12 @@
           <th>&#128176; Freebie?</th>
           <td>{{ '&#128077;' | safe if deal.freebie else '&#10060;' | safe }}</td>
         </tr>
-        <tr>
-          <th>&#128279; Deal Link</th>
-          <td><a href="{{ deal.url }}">{{ deal.title | truncate(40, True) }}</a></td>
-        </tr>
       </tbody>
     </table>
+
+    <div class="center-align" style="margin-top:1em;">
+      <a class="waves-effect waves-light orange darken-2 btn btn-large" href="{{ deal.url }}">&#128279; Deal: {{ deal.title | truncate(40, True) }}<i class="material-icons right">send</i></a>
+    </div>
 
     <div class="flow-text">
       {{ deal.description | markdown }}
