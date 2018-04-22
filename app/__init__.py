@@ -385,7 +385,7 @@ def deal():
 
     # TODO: make a pretty template but for now go to the post
     if 'POST_TO_STEEM' in app.config and app.config['POST_TO_STEEM'] == "1":
-        return redirect("https://steemit.com/@{}/{}".format(session['username'], permlink), code=302)
+        return redirect("/blockdeals/@{}/{}".format(session['username'], permlink), code=302)
     else:
         return redirect(url_for("index"))
 
