@@ -64,10 +64,10 @@ def _jinja2_filter_expires_time(date, fmt=None):
     date = parser.parse(date)
     native = date.replace(tzinfo=None)
     days = (native-date.today()).days
-    if days < 0:
-        return "today!"
-    elif days < -1:
+    if days < -1:
         return "{} day{} ago".format(abs(days), '' if abs(days) == 1 else 's')
+    elif days <= 0:
+        return "today!"
     elif days <= 2:
         return "soon"
     else:
