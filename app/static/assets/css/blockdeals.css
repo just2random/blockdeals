@@ -38,3 +38,13 @@ h2 {
 .deal-image {
   max-height: 12em;
 }
+
+.css-404{
+  border: solid black;
+
+}
+
+.responsive {
+    width: 100%;
+    height: auto;
+}
