@@ -152,7 +152,6 @@ def _jinja2_filter_expired(date):
     date = parser.parse(date)
     native = date.replace(hour=23, minute=59, tzinfo=None)
     ds = (native-date.today()).total_seconds()
-    app.logger.info("expires: {}".format(ds))
     if ds < 0:
         return True
     else:

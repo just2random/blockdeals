@@ -13,7 +13,7 @@ function getDiscussions(kind) {
           <div class="col s12 m2">
             <div class="row" style="margin-bottom:3px;">
               <div class="col m12 s6 offset-s3 center-align">
-                <img class="lazy deal-image responsive-img" data-src="https://steemitimages.com/250x250/{{=it.deal.image_url}}" onerror="this.src='/assets/images/logo_round.png';" />
+                <img class="lazy deal-image responsive-img" data-src="https://steemitimages.com/250x250/{{=it.deal.post_image}}" onerror="this.src='/assets/images/logo_round.png';" />
               </div>
             </div>
           </div>
@@ -40,7 +40,7 @@ function getDiscussions(kind) {
         </div>`);
     for (var post=0, len=discussions.length; post < len; post++) {
       var json_metadata = JSON.parse(discussions[post].json_metadata);
-      if (json_metadata.tags.includes("delete")) { continue; }
+      if (json_metadata.tags.includes("delete") || (json_metadata.tags.includes("delist"))) { continue; }
       if (json_metadata.hasOwnProperty("deal")) {
         console.log(json_metadata.deal);
         json_metadata.deal['available'] = moment(json_metadata.deal.date_end).isAfter(moment());
@@ -50,6 +50,7 @@ function getDiscussions(kind) {
         } else {
           json_metadata.deal['date_ends'] = json_metadata.deal['date_ends'] + " ago";
         }
+        json_metadata.deal.post_image = json_metadata.image[0];
         json_metadata.deal.description = jQuery.trim(json_metadata.deal.description).substring(0, 250).trim(this) + "...";
         json_metadata.deal.description = _.escape(json_metadata.deal.description);
         json_metadata.deal.title = _.escape(json_metadata.deal.title);
