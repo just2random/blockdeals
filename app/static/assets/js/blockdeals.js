@@ -43,8 +43,8 @@ function getDiscussions(kind) {
       if (json_metadata.tags.includes("delete") || (json_metadata.tags.includes("delist"))) { continue; }
       if (json_metadata.hasOwnProperty("deal")) {
         console.log(json_metadata.deal);
-        json_metadata.deal['available'] = moment(json_metadata.deal.date_end).isAfter(moment());
-        json_metadata.deal['date_ends'] = moment.duration(moment(json_metadata.deal.date_end).diff(moment())).humanize();
+        json_metadata.deal['available'] = moment(json_metadata.deal.date_end).endOf('day').isAfter(moment());
+        json_metadata.deal['date_ends'] = moment.duration(moment(json_metadata.deal.date_end).endOf('day').diff(moment())).humanize();
         if (json_metadata.deal['available']) {
           json_metadata.deal['date_ends'] = "in " + json_metadata.deal['date_ends'];
         } else {
