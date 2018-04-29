@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, redirect, url_for, session, flash
+from flask import Flask, render_template, request, jsonify, redirect, url_for, session, flash, Response
 from flaskext.markdown import Markdown
 from pymongo import MongoClient
 from steem import Steem
@@ -521,3 +521,22 @@ def submit_page():
     if 'logged_in' in session and session['logged_in'] and 'authorized' in session and session['authorized']:
         return render_template("submit_deals.html")
     return redirect(url_for('index'))
+
+@app.route('/sitemap.xml', methods=['GET'])
+def sitemap():
+    pages=[]
+    ten_days_ago = (date.today() - timedelta(days=10)).isoformat()
+
+    # static pages
+    for rule in app.url_map.iter_rules():
+        if "GET" in rule.methods and len(rule.arguments)==0:
+            pages.append([rule.rule, ten_days_ago])
+
+    # deals
+    deal_cursor = db.deal.find({'hide': { '$ne': True}}).sort([('_id', -1)])
+    for deal in deal_cursor:
+        if 'steem_user' in deal:
+            pages.append(["/blockdeals/@{}/{}".format(deal['steem_user'], deal['permlink']), parser.parse(deal['deal_start']).date().isoformat()])
+
+    sitemap_xml = render_template('sitemap.xml', pages=pages)
+    return Response(sitemap_xml, mimetype='application/xml')

@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /logout
+Disallow: /whoami
+Disallow: /complete/sc/
+Disallow: /submit
+Disallow: /auth
+
+Sitemap: https://blockdeals.org/sitemap.xml
