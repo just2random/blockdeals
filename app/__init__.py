@@ -99,7 +99,7 @@ def post_to_steem(deal, update=False):
     }
 
     if 'country_code' in deal_post_data and not deal_post_data['global']:
-        json_metadata['tags'].append('blockdeals-'+deal_form['country_code'])
+        json_metadata['tags'].append('blockdeals-'+deal['country_code'])
     else:
         json_metadata['tags'].append('blockdeals-global')
 
@@ -111,12 +111,12 @@ def post_to_steem(deal, update=False):
             s = Steem(nodes=['https://rpc.buildteam.io', 'https://api.steemit.com', 'https://steemd.steemitstage.com'],
                       keys=[app.config['POSTING_KEY'], app.config['ACTIVE_KEY']])
             if update:
-                p = s.commit.post(title=deal_form['title'],
+                p = s.commit.post(title=deal['title'],
                                   body=body,
                                   author=session['username'],
                                   json_metadata=json_metadata)
             else:
-                p = s.commit.post(title=deal_form['title'],
+                p = s.commit.post(title=deal['title'],
                                   body=body,
                                   author=session['username'],
                                   json_metadata=json_metadata,
