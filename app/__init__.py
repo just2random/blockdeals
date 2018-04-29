@@ -264,8 +264,9 @@ def update(permlink):
             deal_update['deal_expires'] = deal_update['deal_end']
             deal_update['brand_code'] = slugify(deal_update['brand'])
 
-            p = post_to_steem(deal_update, update=True)
-            app.logger.info("STEEM updated? {}".format(p))
+            # TODO: needs more testing on testnet...
+            # p = post_to_steem(deal_update, update=True)
+            # app.logger.info("STEEM updated? {}".format(p))
 
             app.logger.info("updating {}: {}".format(permlink, deal_update))
             try:
