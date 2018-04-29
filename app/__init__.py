@@ -197,6 +197,18 @@ def index():
         app.logger.info("anonymous user")
     return render_template('index.html', deals=deals, session=session, admins=admins)
 
+@app.route("/trending")
+def trending():
+    return render_template('trending.html')
+
+@app.route("/created")
+def created():
+    return render_template('created.html')
+
+@app.route("/hot")
+def hot():
+    return render_template('hot.html')
+
 @app.route("/countries")
 def countries_json():
     countries = db.deal.find({ 'country_code': { '$ne': '' }}).distinct('country_code')

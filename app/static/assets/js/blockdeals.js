@@ -1,6 +1,71 @@
 const steem = new dsteem.Client('https://api.steemit.com');
 username = "";
 
+function getDiscussions(kind) {
+  var query={
+    tag: 'blockdeals',
+    limit: 25
+  };
+  steem.database.getDiscussions(kind, query).then(function(discussions){
+    console.log(discussions);
+    const deal_template = doT.template(`
+        <div class="row" style="margin-bottom:0">
+          <div class="col s12 m2">
+            <div class="row" style="margin-bottom:3px;">
+              <div class="col m12 s6 offset-s3 center-align">
+                <img class="lazy deal-image responsive-img" data-src="https://steemitimages.com/250x250/{{=it.deal.image_url}}" onerror="this.src='/assets/images/logo_round.png';" />
+              </div>
+            </div>
+          </div>
+          <div class="col s12 m10">
+            {{?it.deal.freebie}}<a href="/freebies"><span class="new badge green" data-badge-caption="FREEBIE"><i class="fa fa-certificate"></i></span></a>{{?}}
+            {{?it.deal.country_code}}<a href="/country/{{=it.deal.country_code}}"><span class="new badge grey lighten-3" title="{{=it.deal.country_code}}" data-badge-caption=""><div class="country-select"><div class="flag {{=it.deal.country_code}}"></div></div></span></a>{{?}}
+            <h2>{{?!it.deal.available}}<span class="red white-text expired"> <i class="fas fa-exclamation-triangle fa-fw"></i><b>EXPIRED</b> </span> {{?}}<span class="{{?!it.deal.available}}unavailable{{?}}"><a href="/blockdeals/@{{=it.post.author}}/{{=it.post.permlink}}">{{=it.deal.title}}</a></span></h2>
+            <p style="margin-bottom:0">{{=it.deal.description}}</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col s8 m6 offset-m2">
+            <p class="grey-text lighten-3">
+              <small>
+                <b>Posted by:</b> <a href="https://steemit.com/@{{=it.post.author }}">@{{=it.post.author}}</a> | <b>Ends:</b> {{=it.deal.date_ends}}
+              </small>
+            </p>
+          </div>
+          <div class="col s4 m4">
+            <p class="right-align">
+              <a class="waves-effect waves-light btn orange darken-2 tooltipped" data-position="top" data-tooltip="<i class='fas fa-thumbs-up'></i> Upvote good deals!    and flag spam <i class='fas fa-thumbs-down'></i>" href="/blockdeals/@{{=it.post.author}}/{{=it.post.permlink}}">More details <i class="material-icons right">send</i></a>
+            </p>
+          </div>
+        </div>`);
+    for (var post=0, len=discussions.length; post < len; post++) {
+      var json_metadata = JSON.parse(discussions[post].json_metadata);
+      if (json_metadata.hasOwnProperty("deal")) {
+        console.log(json_metadata.deal);
+        json_metadata.deal['available'] = moment(json_metadata.deal.date_end).isAfter(moment());
+        json_metadata.deal['date_ends'] = moment.duration(moment(json_metadata.deal.date_end).diff(moment())).humanize();
+        if (json_metadata.deal['available']) {
+          json_metadata.deal['date_ends'] = "in " + json_metadata.deal['date_ends'];
+        } else {
+          json_metadata.deal['date_ends'] = json_metadata.deal['date_ends'] + " ago";
+        }
+        json_metadata.deal.description = jQuery.trim(json_metadata.deal.description).substring(0, 250).trim(this) + "...";
+        json_metadata.deal.description = _.escape(json_metadata.deal.description);
+        json_metadata.deal.title = _.escape(json_metadata.deal.title);
+        json_metadata.deal.image_url = _.escape(json_metadata.deal.image_url);
+        json_metadata.deal.url = _.escape(json_metadata.deal.url);
+        $('.section').append(deal_template({'deal': json_metadata.deal, 'post': discussions[post]}));
+      }
+    }
+    // new lazy objects have been added to the dom
+    $(".lazy").Lazy({
+      votes: function(e) {
+        update_votes(e);
+      }
+    });
+  });
+}
+
 function voteup(e) {
   var parent_el = e.parentNode.parentNode; // for closure
   var a = $(parent_el).data("author");

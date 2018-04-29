@@ -8,7 +8,7 @@
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
-    <link type="text/css" rel="stylesheet" href="/assets/css/blockdeals.css?0012"/>
+    <link type="text/css" rel="stylesheet" href="/assets/css/blockdeals.css?0013"/>
     <link type="text/css" rel="stylesheet" href="/assets/css/countrySelect.min.css"/>
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
 
@@ -21,60 +21,68 @@
 
 	<body>
     <div class="navbar-fixed">
-      <ul id="country_dropdown" class="dropdown-content">
-        <li><a href="/"><i class="fas fa-fw fa-globe"></i> All</a></li>
-      </ul>
-      {% if brands %}
-      <ul id="brand_dropdown" class="dropdown-content">
-        <li><a href="/">All</a></li>
-        {% for brand in brands|sort %}
-        {% if brand != "" %}
-        <li class="{{ 'active' if brand == show_brand else '' }}"><a class="truncate" href="/brand/{{ brand }}">{{ brand }}</a></li>
-        {% endif %}
-        {% endfor %}
-      </ul>
-      {% endif %}
-      <nav class="grey lighten-2" role="navigation">
+      <nav class="nav-extended grey lighten-2" role="navigation">
         <div class="nav-wrapper container">
           <a id="logo-container" href="/" class="brand-logo"><img id="logo" class="responsive-img" src="/assets/images/blockdeals_logo.png" style="vertical-align:middle;"></a>
-          <ul class="right hide-on-med-and-down">
-            <li class="{{ 'active' if request.path == "/freebies" }}"><a href="/freebies" title="Freebies!"><i class="fas fa-fw fa-lg fa-gift"></i></a></li>
-          {% if not country %}
-          <li><a class="dropdown-trigger" href="#!" data-target="country_dropdown"><i class="fas fa-fw fa-lg fa-globe"></i><i class="material-icons right">arrow_drop_down</i></a></li>
-          {% else %}
-          <li><a class="dropdown-trigger" href="#!" data-target="country_dropdown"><div class="country-select"><div class="flag {{ country }}"></div></div><i class="material-icons right">arrow_drop_down</i></a></li>
-          {% endif %}
-          {% if session.logged_in and session.authorized %}
-          <li><a class="waves-effect waves-light btn orange darken-2" href="{{ url_for('submit_page') }}">Submit Deal<i class="material-icons right">add_box</i></a></li>
-          {% else %}
-          {% if not session.logged_in %}
-          <li><a class="waves-effect waves-light btn orange darken-2 loginbtn tooltipped" data-position="bottom" data-tooltip="We use SteemConnect so your Steem<br>account is safe!">Login <i class="material-icons right">person</i></a></li>
-          {% else %}
-          <li><a class="waves-effect waves-light btn orange darken-2 tooltipped" data-position="bottom" data-tooltip="Authorising is required to allow us to post your deals<br>to Steem on your behalf. All done safetly via SteemConnect!" href="https://steemconnect.com/authorize/@blockdeals/?redirect_uri={{ config.SITE_URL }}/auth">Authorize <i class="material-icons right">lock_open</i></a></li>
-          {% endif %}
-          {% endif %}
-          </ul>
-
-          <ul id="nav-mobile" class="sidenav">
-          {% if session.logged_in and session.authorized %}
-          <li><a class="btn" href="{{ url_for('submit_page') }}">Submit Deal</a></li>
-          {% else %}
-          {% if not session.logged_in %}
-          <li><a class="btn loginbtn">Login</a></li>
-          {% else %}
-          <li><a class="btn" href="https://steemconnect.com/authorize/@blockdeals/?redirect_uri={{ config.SITE_URL }}/auth">Authorize</a></li>
-          {% endif %}
-          {% endif %}
-          <li id="mobile_freebies" class="{{ 'active' if request.path == "/freebies" }}"><a class="waves-effect waves-light" href="/freebies" title="Freebies"><img src="/assets/images/freebies.png" height="16" style="vertical-align: text-bottom"> Freebies</a></li>
-          {% if session.logged_in and session.authorized %}
-          <hr>
-          <li><a href="https://steemit.com/@{{ session.username }}"><img class="circle responsive-img" style="max-height:24px;vertical-align:middle;" src="https://steemitimages.com/u/{{ session.username }}/avatar" title="{{ session.username }}"/> {{ session.username }}</a></li>
-          {% endif %}
-          </ul>
           <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+          <ul class="right hide-on-med-and-down">
+            <ul id="country_dropdown" class="dropdown-content">
+              <li><a href="/"><i class="fas fa-fw fa-globe"></i> All</a></li>
+            </ul>
+            {% if brands %}
+            <ul id="brand_dropdown" class="dropdown-content">
+              <li><a href="/">All</a></li>
+              {% for brand in brands|sort %}
+              {% if brand != "" %}
+              <li class="{{ 'active' if brand == show_brand else '' }}"><a class="truncate" href="/brand/{{ brand }}">{{ brand }}</a></li>
+              {% endif %}
+              {% endfor %}
+            </ul>
+            {% endif %}
+            <li class="{{ 'active' if request.path == "/freebies" }}"><a href="/freebies" title="Freebies!"><i class="fas fa-fw fa-lg fa-gift"></i></a></li>
+            {% if not country %}
+            <li><a class="dropdown-trigger" href="#!" data-target="country_dropdown"><i class="fas fa-fw fa-lg fa-globe"></i><i class="material-icons right">arrow_drop_down</i></a></li>
+            {% else %}
+            <li><a class="dropdown-trigger" href="#!" data-target="country_dropdown"><div class="country-select"><div class="flag {{ country }}"></div></div><i class="material-icons right">arrow_drop_down</i></a></li>
+            {% endif %}
+            {% if session.logged_in and session.authorized %}
+            <li><a class="waves-effect waves-light btn orange darken-2" href="{{ url_for('submit_page') }}">Submit Deal<i class="material-icons right">add_box</i></a></li>
+            {% else %}
+            {% if not session.logged_in %}
+            <li><a class="waves-effect waves-light btn orange darken-2 loginbtn tooltipped" data-position="bottom" data-tooltip="We use SteemConnect so your Steem<br>account is safe!">Login <i class="material-icons right">person</i></a></li>
+            {% else %}
+            <li><a class="waves-effect waves-light btn orange darken-2 tooltipped" data-position="bottom" data-tooltip="Authorising is required to allow us to post your deals<br>to Steem on your behalf. All done safetly via SteemConnect!" href="https://steemconnect.com/authorize/@blockdeals/?redirect_uri={{ config.SITE_URL }}/auth">Authorize <i class="material-icons right">lock_open</i></a></li>
+            {% endif %}
+            {% endif %}
+          </ul>
+        </div>
+        <div class="nav-content container">
+          <ul class="tabs tabs-transparent">
+            <li class="tab {{ 'disabled' if request.path == "/" }}"><a class="{{ 'active' if request.path == "/" }} orange-text text-darken-2" href="/">Original</a></li>
+            <li class="tab {{ 'disabled' if request.path == "/trending" }}"><a class="{{ 'active' if request.path == "/trending" }} orange-text text-darken-2" href="/trending">Trending</a></li>
+            <li class="tab {{ 'disabled' if request.path == "/created" }}"><a class="{{ 'active' if request.path == "/created" }} orange-text text-darken-2" href="/created">New</a></li>
+            <li class="tab {{ 'disabled' if request.path == "/hot" }}"><a class="{{ 'active' if request.path == "/hot" }} orange-text text-darken-2" href="/hot">Hot</a></li>
+          </ul>
         </div>
       </nav>
     </div>
+
+    <ul id="nav-mobile" class="sidenav">
+      {% if session.logged_in and session.authorized %}
+      <li><a class="btn" href="{{ url_for('submit_page') }}">Submit Deal</a></li>
+      {% else %}
+      {% if not session.logged_in %}
+      <li><a class="btn loginbtn">Login</a></li>
+      {% else %}
+      <li><a class="btn" href="https://steemconnect.com/authorize/@blockdeals/?redirect_uri={{ config.SITE_URL }}/auth">Authorize</a></li>
+      {% endif %}
+      {% endif %}
+      <li id="mobile_freebies" class="{{ 'active' if request.path == "/freebies" }}"><a class="waves-effect waves-light" href="/freebies" title="Freebies"><img src="/assets/images/freebies.png" height="16" style="vertical-align: text-bottom"> Freebies</a></li>
+      {% if session.logged_in and session.authorized %}
+      <hr>
+      <li><a href="https://steemit.com/@{{ session.username }}"><img class="circle responsive-img" style="max-height:24px;vertical-align:middle;" src="https://steemitimages.com/u/{{ session.username }}/avatar" title="{{ session.username }}"/> {{ session.username }}</a></li>
+      {% endif %}
+    </ul>
 
 		<div class="container">
 			<div class="section">
@@ -182,16 +190,21 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.7/jquery.lazy.min.js"></script>
     <script type="text/javascript"  src="https://unpkg.com/dsteem@^0.8.0/dist/dsteem.js"></script>
+    <script src="/assets/js/doT.min.js"></script>
+    <script src="/assets/js/moment.min.js"></script>
+    <script src="/assets/js/underscore.min.js"></script>
     <script src="/assets/js/sc2.min.js"></script>
     <script src="/assets/js/countrySelect.min.js"></script>
     <script src="/assets/js/countrycode.js"></script>
-    <script src="/assets/js/blockdeals.js?0012"></script>
+    <script src="/assets/js/blockdeals.js?0013"></script>
     <script>
-var api = sc2.init({
-  app: 'blockdeals.app',
-  callbackURL: '{{ config.SITE_URL }}/complete/sc/',
-  scope: ['login']
-});
+      var api = sc2.init({
+        app: 'blockdeals.app',
+        callbackURL: '{{ config.SITE_URL }}/complete/sc/',
+        scope: ['login']
+      });
+      {% block script %}
+      {% endblock %}
     </script>
   </body>
 </html>

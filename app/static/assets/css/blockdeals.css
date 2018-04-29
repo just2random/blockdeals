@@ -38,13 +38,21 @@ h2 {
 .deal-image {
   max-height: 12em;
 }
-
 .css-404{
   border: solid black;
-
 }
-
 .responsive {
-    width: 100%;
-    height: auto;
+  width: 100%;
+  height: auto;
+}
+.navbar-fixed {
+  height: 120px;
+}
+.tab a.active {
+  border-bottom: solid white 4px;
+  font-weight: 700;
+}
+.expired {
+  border-radius: 3px;
+  margin-right: 5px;
 }
