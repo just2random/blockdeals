@@ -40,6 +40,7 @@ function getDiscussions(kind) {
         </div>`);
     for (var post=0, len=discussions.length; post < len; post++) {
       var json_metadata = JSON.parse(discussions[post].json_metadata);
+      if (json_metadata.tags.includes("delete")) { continue; }
       if (json_metadata.hasOwnProperty("deal")) {
         console.log(json_metadata.deal);
         json_metadata.deal['available'] = moment(json_metadata.deal.date_end).isAfter(moment());
