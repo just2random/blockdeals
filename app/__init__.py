@@ -36,6 +36,104 @@ def confirm_user():
         session['logged_in'] = False
     return False
 
+def post_to_steem(deal, update=False):
+    comment_options = {
+        'max_accepted_payout': '1000000.000 SBD',
+        'percent_steem_dollars': 10000,
+        'allow_votes': True,
+        'allow_curation_rewards': True,
+        'extensions': [[0, {
+            'beneficiaries': [
+                {'account': 'blockdeals', 'weight': 1000}
+            ]}
+        ]]
+    }
+
+    permlink = ""
+    deal_post_data = {}
+
+    # populate sanitised deal data
+    deal_post_data['title'] = deal['title'].strip()
+    deal_post_data['url'] = deal['url']
+    deal_post_data['brand_code'] = slugify(deal['brand'])
+    deal_post_data['description'] = deal['description']
+
+    try:
+        deal_post_data['freebie'] = True if deal['freebie'] == 'on' else False
+    except KeyError:
+        deal_post_data['freebie'] = False
+
+    # TODO: validate image?
+    if 'image_url' not in deal or deal['image_url'] == "":
+        deal_post_data['image_url'] = 'https://blockdeals.org/assets/images/logo_round.png'
+    else:
+        deal_post_data['image_url'] = deal['image_url']
+
+    if 'global' in deal and deal['global'] == 'on':
+        deal_post_data['global'] = True
+    else:
+        deal_post_data['global'] = False
+        deal_post_data['country_code'] = deal['country_code']
+
+    if not 'coupon_code' in deal or deal['coupon_code'].strip() == "":
+        deal_post_data['coupon_code'] = False
+    else:
+        deal_post_data['coupon_code'] = deal['coupon_code'].strip()
+
+    try:
+        deal_post_data['date_start'] = parser.parse(deal['deal_start']).isoformat()
+    except ValueError:
+        deal_post_data['date_start'] = date.today().isoformat()
+    try:
+        deal_post_data['date_end'] = parser.parse(deal['deal_end']).isoformat()
+    except ValueError:
+        deal_post_data['date_end'] = (parser.parse(deal_post_data['date_start']) + timedelta(days=45)).isoformat()
+
+    json_metadata = {
+        'community': 'blockdeals',
+        'app': 'blockdeals/1.0.0',
+        'format': 'markdown',
+        'tags': [ 'blockdeals' ],
+        'image': [ "https://steemitimages.com/0x0/" + deal_post_data['image_url'] ],
+        'deal': deal_post_data
+    }
+
+    if 'country_code' in deal_post_data and not deal_post_data['global']:
+        json_metadata['tags'].append('blockdeals-'+deal_form['country_code'])
+    else:
+        json_metadata['tags'].append('blockdeals-global')
+
+    app.logger.info("deal_post_data: {}".format(deal_post_data))
+    body = render_template("deal_post.md", deal=deal_post_data)
+
+    try:
+        if 'POST_TO_STEEM' in app.config and app.config['POST_TO_STEEM'] == "1":
+            s = Steem(nodes=['https://rpc.buildteam.io', 'https://api.steemit.com', 'https://steemd.steemitstage.com'],
+                      keys=[app.config['POSTING_KEY'], app.config['ACTIVE_KEY']])
+            if update:
+                p = s.commit.post(title=deal_form['title'],
+                                  body=body,
+                                  author=session['username'],
+                                  json_metadata=json_metadata)
+            else:
+                p = s.commit.post(title=deal_form['title'],
+                                  body=body,
+                                  author=session['username'],
+                                  json_metadata=json_metadata,
+                                  comment_options=comment_options,
+                                  self_vote=True)
+
+            permlink = p['operations'][0][1]['permlink']
+            app.logger.info("Posted to STEEM with id={}".format(permlink))
+            return True
+        else:
+            app.logger.info("Skipped posting to steem:\n\n{}".format(body))
+            return False
+    except Exception as e:
+        app.logger.info(e)
+        traceback.print_exc(file=sys.stdout)
+        return False
+
 @app.template_filter('humanize')
 def _jinja2_filter_humanize(t):
     l = arrow.get(parser.parse(t))
@@ -165,6 +263,9 @@ def update(permlink):
                 deal_update['deal_end'] = (date.today() + timedelta(days=45)).isoformat()
             deal_update['deal_expires'] = deal_update['deal_end']
             deal_update['brand_code'] = slugify(deal_update['brand'])
+
+            p = post_to_steem(deal_update, update=True)
+            app.logger.info("STEEM updated? {}".format(p))
 
             app.logger.info("updating {}: {}".format(permlink, deal_update))
             try:
