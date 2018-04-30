@@ -7,7 +7,6 @@ function getDiscussions(kind) {
     limit: 25
   };
   steem.database.getDiscussions(kind, query).then(function(discussions){
-    console.log(discussions);
     const deal_template = doT.template(`
         <div class="row" style="margin-bottom:0">
           <div class="col s12 m2">
@@ -16,33 +15,54 @@ function getDiscussions(kind) {
                 <img class="lazy deal-image responsive-img" data-src="https://steemitimages.com/250x250/{{=it.deal.post_image}}" onerror="this.src='/assets/images/logo_round.png';" />
               </div>
             </div>
+
+            <div class="lazy row grey-text lighten-2" data-loader="votes" data-permlink="{{=it.post.permlink}}" data-author="{{=it.post.author}}" style="margin-bottom:3px;">
+              <div class="col s6 right-align">
+                <span class="upVote"><i class="fas fa-spinner fa-spin fa-fw"></i></span>
+                <i onclick="voteup(this)" class="upVoteThumb vote fas fa-thumbs-up fa-fw"></i>
+              </div>
+              <div class="col s6 left-align">
+                <i onclick="flag(this)" class="dnVoteThumb vote fas fa-thumbs-down fa-fw"></i>
+                <span class="dnVote"><i class="fas fa-spinner fa-spin fa-fw"></i></span>
+              </div>
+              <div id="visit" class="col s12 center-align supporter">
+                <a id="dealdirect" href="{{=it.deal.url}}" class="waves-effect waves-light btn-small blue tooltipped" data-tooltip="Thanks for supporting this deal! Here is your direct link &#128571;" style="margin-top: 6px;">go to deal</a>
+              </div>
+            </div>
           </div>
+
           <div class="col s12 m10">
             {{?it.deal.freebie}}<a href="/freebies"><span class="new badge green" data-badge-caption="FREEBIE"><i class="fa fa-certificate"></i></span></a>{{?}}
             {{?it.deal.country_code}}<a href="/country/{{=it.deal.country_code}}"><span class="new badge grey lighten-3" title="{{=it.deal.country_code}}" data-badge-caption=""><div class="country-select"><div class="flag {{=it.deal.country_code}}"></div></div></span></a>{{?}}
             <h2>{{?!it.deal.available}}<span class="red white-text expired"> <i class="fas fa-exclamation-triangle fa-fw"></i><b>EXPIRED</b> </span> {{?}}<span class="{{?!it.deal.available}}unavailable{{?}}"><a href="/blockdeals/@{{=it.post.author}}/{{=it.post.permlink}}">{{=it.deal.title}}</a></span></h2>
             <p style="margin-bottom:0">{{=it.deal.description}}</p>
+            <div class="row">
+              <div class="col s8">
+                <p class="grey-text lighten-3">
+                  <small>
+                    <b>Posted by:</b> <a href="https://steemit.com/@{{=it.post.author }}">@{{=it.post.author}}</a> | <b>Ends:</b> {{=it.deal.date_ends}}
+                  </small>
+                </p>
+              </div>
+              <div class="col s4">
+                <p class="right-align">
+                  <a class="waves-effect waves-light btn orange darken-2 tooltipped" data-position="top" data-tooltip="<i class='fas fa-thumbs-up'></i> Upvote good deals! and flag spam <i class='fas fa-thumbs-down'></i>" href="/blockdeals/@{{=it.post.author}}/{{=it.post.permlink}}">More details <i class="material-icons right">send</i></a>
+                </p>
+              </div>
+            </div>
           </div>
         </div>
+        {{?!it.last}}
         <div class="row">
-          <div class="col s8 m6 offset-m2">
-            <p class="grey-text lighten-3">
-              <small>
-                <b>Posted by:</b> <a href="https://steemit.com/@{{=it.post.author }}">@{{=it.post.author}}</a> | <b>Ends:</b> {{=it.deal.date_ends}}
-              </small>
-            </p>
+          <div class="col s12">
+            <hr/>
           </div>
-          <div class="col s4 m4">
-            <p class="right-align">
-              <a class="waves-effect waves-light btn orange darken-2 tooltipped" data-position="top" data-tooltip="<i class='fas fa-thumbs-up'></i> Upvote good deals!    and flag spam <i class='fas fa-thumbs-down'></i>" href="/blockdeals/@{{=it.post.author}}/{{=it.post.permlink}}">More details <i class="material-icons right">send</i></a>
-            </p>
-          </div>
-        </div>`);
+        </div>
+        {{?}}`);
     for (var post=0, len=discussions.length; post < len; post++) {
       var json_metadata = JSON.parse(discussions[post].json_metadata);
       if (json_metadata.tags.includes("delete") || (json_metadata.tags.includes("delist"))) { continue; }
       if (json_metadata.hasOwnProperty("deal")) {
-        console.log(json_metadata.deal);
         json_metadata.deal['available'] = moment(json_metadata.deal.date_end).endOf('day').isAfter(moment());
         json_metadata.deal['date_ends'] = moment.duration(moment(json_metadata.deal.date_end).endOf('day').diff(moment())).humanize();
         if (json_metadata.deal['available']) {
@@ -51,12 +71,15 @@ function getDiscussions(kind) {
           json_metadata.deal['date_ends'] = json_metadata.deal['date_ends'] + " ago";
         }
         json_metadata.deal.post_image = json_metadata.image[0];
-        json_metadata.deal.description = jQuery.trim(json_metadata.deal.description).substring(0, 250).trim(this) + "...";
+        json_metadata.deal.description = jQuery.trim(json_metadata.deal.description).substring(0, 250).trim(this);
         json_metadata.deal.description = _.escape(json_metadata.deal.description);
+        if (json_metadata.deal.description.length >= 249) {
+          json_metadata.deal.description = json_metadata.deal.description + "&hellip;";
+        }
         json_metadata.deal.title = _.escape(json_metadata.deal.title);
         json_metadata.deal.image_url = _.escape(json_metadata.deal.image_url);
         json_metadata.deal.url = _.escape(json_metadata.deal.url);
-        $('.section').append(deal_template({'deal': json_metadata.deal, 'post': discussions[post]}));
+        $('.section').append(deal_template({'deal': json_metadata.deal, 'post': discussions[post], 'last': post+1 == len}));
       }
     }
     // new lazy objects have been added to the dom
