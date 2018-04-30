@@ -25,6 +25,13 @@ function getDiscussions(kind) {
                 <i onclick="flag(this)" class="dnVoteThumb vote fas fa-thumbs-down fa-fw"></i>
                 <span class="dnVote"><i class="fas fa-spinner fa-spin fa-fw"></i></span>
               </div>
+              <div class="col s6 right-align">
+                <span class="comments"><i class="fas fa-spinner fa-spin fa-fw"></i></span>
+                <i class="fas fa-comments fa-fw"></i>
+              </div>
+              <div class="col s6 left-align">
+                <small><span class="payout"><i class="fas fa-spinner fa-spin fa-fw"></i></span></small>
+              </div>
               <div id="visit" class="col s12 center-align supporter">
                 <a id="dealdirect" href="{{=it.deal.url}}" class="waves-effect waves-light btn-small blue tooltipped" data-tooltip="Thanks for supporting this deal! Here is your direct link &#128571;" style="margin-top: 6px;">go to deal</a>
               </div>
@@ -147,6 +154,9 @@ function update_votes(e) {
         }
         $(e).find(".upVote").text(up);
         $(e).find(".dnVote").text(dn);
+        $(e).find(".comments").text(post.children);
+        var dollhairs = "$"+parseFloat(post.pending_payout_value.split(" ")[0]).toFixed(2);
+        $(e).find(".payout").text(dollhairs);
         if (me > 0) {
           $(e).find(".upVoteThumb").addClass('green-text');
           $(e).find('.supporter').fadeIn();
