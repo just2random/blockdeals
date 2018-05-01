@@ -31,6 +31,7 @@ function getDiscussions(kind) {
           </div>
 
           <div class="col s12 m10">
+            {{?it.deal.soon}}<span class="new badge red pulse" data-badge-caption="{{=it.deal.soon}}"><i class="fa fa-clock"></i> Expires in</span>{{?}}
             {{?it.deal.freebie}}<a href="/freebies"><span class="new badge green" data-badge-caption="FREEBIE"><i class="fa fa-certificate"></i></span></a>{{?}}
             {{?it.deal.country_code}}<a href="/country/{{=it.deal.country_code}}"><span class="new badge grey lighten-3" title="{{=it.deal.country_code}}" data-badge-caption=""><div class="country-select"><div class="flag {{=it.deal.country_code}}"></div></div></span></a>{{?}}
             <h2>{{?!it.deal.available}}<span class="red white-text expired"> <i class="fas fa-exclamation-triangle fa-fw"></i><b>EXPIRED</b> </span> {{?}}<span class="{{?!it.deal.available}}unavailable{{?}}"><a href="/blockdeals/@{{=it.post.author}}/{{=it.post.permlink}}">{{=it.deal.title}}</a></span></h2>
@@ -63,8 +64,12 @@ function getDiscussions(kind) {
       if (json_metadata.tags.includes("delete") || (json_metadata.tags.includes("delist"))) { continue; }
       if (json_metadata.hasOwnProperty("deal")) {
         json_metadata.deal['available'] = moment(json_metadata.deal.date_end).endOf('day').isAfter(moment());
-        json_metadata.deal['date_ends'] = moment.duration(moment(json_metadata.deal.date_end).endOf('day').diff(moment())).humanize();
-        json_metadata.deal['future_end'] = moment.duration(moment(json_metadata.deal.date_end).endOf('day').diff(moment())) > 0;
+        var deal_time_end = moment.duration(moment(json_metadata.deal.date_end).endOf('day').diff(moment()));
+        json_metadata.deal['date_ends'] = deal_time_end.humanize();
+        json_metadata.deal['future_end'] = deal_time_end > 0;
+        if (deal_time_end.asHours() >= 0 && deal_time_end.asHours() < 48) {
+          json_metadata.deal['soon'] = deal_time_end.humanize();
+        }
         if (json_metadata.deal['available']) {
           json_metadata.deal['date_ends'] = "in " + json_metadata.deal['date_ends'];
         } else {
@@ -88,6 +93,7 @@ function getDiscussions(kind) {
         update_votes(e);
       }
     });
+    $('.tooltipped').tooltip();
   });
 }
 
