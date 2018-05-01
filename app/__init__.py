@@ -199,7 +199,8 @@ def read_deal(author, permlink):
             content = all_content['{}/{}'.format(author, permlink)]
             json_metadata = json.loads(content['json_metadata'])
             deal_metadata = json_metadata['deal']
-            return render_template('details.html', author=author, permlink=permlink, json_metadata=json_metadata, deal=deal_metadata, content=all_content)
+            payout = float(content['pending_payout_value'].split(" ")[0])
+            return render_template('details.html', author=author, permlink=permlink, json_metadata=json_metadata, deal=deal_metadata, content=all_content, payout="{0:.2f}".format(payout))
         else:
             return render_template('404.html'), 404
     except Exception as e:

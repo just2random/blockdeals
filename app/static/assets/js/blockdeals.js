@@ -17,20 +17,12 @@ function getDiscussions(kind) {
             </div>
 
             <div class="lazy row grey-text lighten-2" data-loader="votes" data-permlink="{{=it.post.permlink}}" data-author="{{=it.post.author}}" style="margin-bottom:3px;">
-              <div class="col s6 right-align">
+              <div class="col s12 center-align voting truncate">
                 <span class="upVote"><i class="fas fa-spinner fa-spin fa-fw"></i></span>
                 <i onclick="voteup(this)" class="upVoteThumb vote fas fa-thumbs-up fa-fw"></i>
-              </div>
-              <div class="col s6 left-align">
+                &bull;
                 <i onclick="flag(this)" class="dnVoteThumb vote fas fa-thumbs-down fa-fw"></i>
                 <span class="dnVote"><i class="fas fa-spinner fa-spin fa-fw"></i></span>
-              </div>
-              <div class="col s6 right-align">
-                <span class="comments"><i class="fas fa-spinner fa-spin fa-fw"></i></span>
-                <i class="fas fa-comments fa-fw"></i>
-              </div>
-              <div class="col s6 left-align">
-                <small><span class="payout"><i class="fas fa-spinner fa-spin fa-fw"></i></span></small>
               </div>
               <div id="visit" class="col s12 center-align supporter">
                 <a id="dealdirect" href="{{=it.deal.url}}" class="waves-effect waves-light btn-small blue tooltipped" data-tooltip="Thanks for supporting this deal! Here is your direct link &#128571;" style="margin-top: 6px;">go to deal</a>
@@ -43,12 +35,12 @@ function getDiscussions(kind) {
             {{?it.deal.country_code}}<a href="/country/{{=it.deal.country_code}}"><span class="new badge grey lighten-3" title="{{=it.deal.country_code}}" data-badge-caption=""><div class="country-select"><div class="flag {{=it.deal.country_code}}"></div></div></span></a>{{?}}
             <h2>{{?!it.deal.available}}<span class="red white-text expired"> <i class="fas fa-exclamation-triangle fa-fw"></i><b>EXPIRED</b> </span> {{?}}<span class="{{?!it.deal.available}}unavailable{{?}}"><a href="/blockdeals/@{{=it.post.author}}/{{=it.post.permlink}}">{{=it.deal.title}}</a></span></h2>
             <p style="margin-bottom:0">{{=it.deal.description}}</p>
-            <div class="row">
+            <div class="lazy row" data-loader="votes" data-permlink="{{=it.post.permlink}}" data-author="{{=it.post.author}}" style="margin-bottom:3px;">
               <div class="col s8">
                 <p class="grey-text lighten-3">
-                  <small>
-                    <b>Posted by:</b> <a href="https://steemit.com/@{{=it.post.author }}">@{{=it.post.author}}</a> | <b>Ends:</b> {{=it.deal.date_ends}}
-                  </small>
+                  <b>Posted by:</b> <a href="https://steemit.com/@{{=it.post.author }}">@{{=it.post.author}}</a>
+                  | <span class="comments"><i class="fas fa-spinner fa-spin fa-fw"></i></span> <i class="fas fa-comments fa-fw"></i>
+                  | <b>End{{?it.deal.future_end}}s{{??}}ed{{?}}:</b> {{=it.deal.date_ends}}
                 </p>
               </div>
               <div class="col s4">
@@ -72,6 +64,7 @@ function getDiscussions(kind) {
       if (json_metadata.hasOwnProperty("deal")) {
         json_metadata.deal['available'] = moment(json_metadata.deal.date_end).endOf('day').isAfter(moment());
         json_metadata.deal['date_ends'] = moment.duration(moment(json_metadata.deal.date_end).endOf('day').diff(moment())).humanize();
+        json_metadata.deal['future_end'] = moment.duration(moment(json_metadata.deal.date_end).endOf('day').diff(moment())) > 0;
         if (json_metadata.deal['available']) {
           json_metadata.deal['date_ends'] = "in " + json_metadata.deal['date_ends'];
         } else {
