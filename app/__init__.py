@@ -429,6 +429,7 @@ def post_comment(parent_author, parent_permlink):
             s = Steem(nodes=['https://rpc.buildteam.io', 'https://api.steemit.com', 'https://steemd.steemitstage.com'],
                       keys=[app.config['POSTING_KEY'], app.config['ACTIVE_KEY']])
             p = s.commit.post(body=comment_form['body'],
+                              title="",
                               author=session['username'],
                               json_metadata=json_metadata,
                               reply_identifier="@{}/{}".format(parent_author, parent_permlink),
