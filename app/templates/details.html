@@ -66,17 +66,29 @@
     <ul class="collection">
       {% set node = author + "/" + permlink %}
       {%- for comment in content[node].replies recursive %}
-      <li class="collection-item avatar">
+      <li class="collection-item avatar lazy" data-loader="votes" data-author="{{ content[comment].author }}" data-permlink="{{ content[comment].permlink }}">
         <img src="https://steemitimages.com/u/{{ content[comment].author }}/avatar" title="{{ content[comment].author }} ({{ content[comment].author_reputation|reputation }})" class="circle">
-        <span class="title">{{ content[comment].title }}</span>
+        <span class="title">{{ content[comment].title + ' &bull; ' if content[comment].title }}<b><a href="https://steemit.com/@{{ content[comment].author }}">{{ content[comment].author }}</a></b> ({{ content[comment].author_reputation|reputation }}) &bull; {{ content[comment].last_update|humanize }}</span>
         {% if content[comment].author_reputation|reputation >= 20 %}
         {{ content[comment].body | markdown }}
+        <p class="right-align comment-votes">
+          <span class="upVote"><i class="fas fa-spinner fa-spin"></i></span>
+          <i onclick="voteup(this)" class="upVoteThumb vote fas fa-thumbs-up"></i>
+          &bull;
+          <i onclick="flag(this)" class="dnVoteThumb vote fas fa-thumbs-down"></i>
+          <span class="dnVote"><i class="fas fa-spinner fa-spin"></i></span>
+          &bull;
+          <a href="#" class="tooltipped" data-position="top" data-tooltip="Coming Soon!">reply</a>
+        </p>
         {% else %}
         <i>Likely spam/scam detected. Comment hidden.</i>
         {% endif %}
       </li>
       {%- if content[comment].replies|length > 0 -%}
       {{ loop(content[comment].replies) }}
+      {%- else %}
+    </ul>
+    <ul class="collection">
       {%- endif %}
       {%- endfor %}
     </ul>

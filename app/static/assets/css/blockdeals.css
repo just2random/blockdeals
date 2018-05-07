@@ -59,3 +59,6 @@ h2 {
 .voting {
   font-size: 12pt;
 }
+.comment-votes {
+  color: rgba(0, 0, 0, .5);
+}
