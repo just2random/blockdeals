@@ -178,6 +178,14 @@ function update_votes(e) {
   });
 }
 
+function show_comment_form(e) {
+  var author = $(e).data("author");
+  var permlink = $(e).data("permlink");
+  console.log(author, permlink);
+  $('#commentform').attr("action", "/comment/" + author + "/" + permlink);
+  M.Modal.getInstance(document.getElementById('commentmodal')).open();
+}
+
 $(document).ready(function() {
   $('.loginbtn').click(function() {
     window.location.replace(sc2.getLoginURL());
@@ -223,4 +231,8 @@ $(document).ready(function() {
   });
 
   $('.fixed-action-btn').floatingActionButton();
+
+  $(document).ready(function(){
+    $('.modal').modal();
+  });
 });

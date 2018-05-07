@@ -399,6 +399,58 @@ def complete_sc():
         session['logged_in'] = False
         return render_template('login_failed.html'), 401
 
+@app.route('/comment/<parent_author>/<parent_permlink>', methods=['POST'])
+def post_comment(parent_author, parent_permlink):
+    if not confirm_user():
+        return render_template('login_failed.html'), 401
+
+    comment_form=request.form.to_dict()
+
+    comment_options = {
+        'max_accepted_payout': '1000000.000 SBD',
+        'percent_steem_dollars': 10000,
+        'allow_votes': True,
+        'allow_curation_rewards': True,
+        'extensions': [[0, {
+            'beneficiaries': [
+                {'account': 'blockdeals', 'weight': 1000}
+            ]}
+        ]]
+    }
+
+    json_metadata = {
+        'community': 'blockdeals',
+        'app': 'blockdeals/1.0.0',
+        'format': 'markdown'
+    }
+
+    try:
+        if 'POST_TO_STEEM' in app.config and app.config['POST_TO_STEEM'] == "1":
+            s = Steem(nodes=['https://rpc.buildteam.io', 'https://api.steemit.com', 'https://steemd.steemitstage.com'],
+                      keys=[app.config['POSTING_KEY'], app.config['ACTIVE_KEY']])
+            p = s.commit.post(body=comment_form['body'],
+                              author=session['username'],
+                              json_metadata=json_metadata,
+                              reply_identifier="@{}/{}".format(parent_author, parent_permlink),
+                              comment_options=comment_options)
+
+            permlink = p['operations'][0][1]['permlink']
+            app.logger.info("Posted to STEEM with id={}".format(permlink))
+        else:
+            app.logger.info("Skipped posting to steem:\n\n{}".format(comment_form['body']))
+            permlink = "testing-{}".format(int(time.time()))
+    except Exception as e:
+        app.logger.info(e)
+        traceback.print_exc(file=sys.stdout)
+        flash(u'Sorry but there was an error trying to post your comment: ' + textwrap.shorten(str(e), width=80, placeholder="..."), 'error')
+        return redirect(url_for("index"))
+
+    # TODO: make a pretty template but for now go to the post
+    if 'POST_TO_STEEM' in app.config and app.config['POST_TO_STEEM'] == "1":
+        return redirect("/blockdeals/@{}/{}".format(parent_author, parent_permlink), code=302)
+    else:
+        return redirect(url_for("index"))
+
 @app.route('/deal', methods=['POST'])
 def deal():
     if not confirm_user():

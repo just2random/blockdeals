@@ -51,13 +51,15 @@
       {{ deal.description | markdown }}
     </div>
 
-    <div class="row grey-text lighten-2 flow-text lazy" data-loader="votes" data-permlink="{{ permlink }}" data-author="{{ author }}"> <div class="col s6 right-align">
+    <div class="row grey-text lighten-2 flow-text lazy" data-loader="votes" data-permlink="{{ permlink }}" data-author="{{ author }}">
+      <div class="col s12 right-align">
         <span class="upVote"><i class="fas fa-spinner fa-spin"></i></span>
         <i onclick="voteup(this)" class="upVoteThumb vote fas fa-thumbs-up"></i>
-      </div>
-      <div class="col s6 left-align">
+        &bull;
         <i onclick="flag(this)" class="dnVoteThumb vote fas fa-thumbs-down"></i>
         <span class="dnVote"><i class="fas fa-spinner fa-spin"></i></span>
+        &bull;
+        <button class="btn orange darken-2" data-author="{{ author }}" data-permlink="{{ permlink }}" onclick="show_comment_form(this);">reply</button>
       </div>
     </div>
 
@@ -78,7 +80,7 @@
           <i onclick="flag(this)" class="dnVoteThumb vote fas fa-thumbs-down"></i>
           <span class="dnVote"><i class="fas fa-spinner fa-spin"></i></span>
           &bull;
-          <a href="#" class="tooltipped" data-position="top" data-tooltip="Coming Soon!">reply</a>
+          <button class="btn-small orange darken-2" data-author="{{ content[comment].author }}" data-permlink="{{ content[comment].permlink }}" onclick="show_comment_form(this);">reply</button>
         </p>
         {% else %}
         &bull; <strong><i>Likely spam/scam detected. Comment hidden.</i></strong>
@@ -96,5 +98,17 @@
     <hr>
     <p><a href="https://steemit.com/blockdeals/@{{ author }}/{{ permlink }}">View on steemit</a></p>
   </div>
+</div>
+<div id="commentmodal" class="modal">
+  <form id="commentform" method="post">
+  <div class="modal-content">
+    <h4>Post your reply</h4>
+    <textarea id="body" class="materialize-textarea" name="body"></textarea>
+    <label for="body">Enter you comment here then click post</label>
+  </div>
+  <div class="modal-footer">
+    <button class="btn waves-effect waves-light" type="submit">Post<i class="material-icons right">send</i></button>
+  </div>
+    </form>
 </div>
 {% endblock %}
