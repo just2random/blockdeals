@@ -446,11 +446,10 @@ def post_comment(parent_author, parent_permlink):
         flash(u'Sorry but there was an error trying to post your comment: ' + textwrap.shorten(str(e), width=80, placeholder="..."), 'error')
         return redirect(url_for("index"))
 
-    # TODO: make a pretty template but for now go to the post
-    if 'POST_TO_STEEM' in app.config and app.config['POST_TO_STEEM'] == "1":
-        return redirect("/blockdeals/@{}/{}".format(parent_author, parent_permlink), code=302)
+    if 'return_to' in comment_form:
+        return redirect(comment_form['return_to'], code=302)
     else:
-        return redirect(url_for("index"))
+        return redirect(url_for("index"), code=302)
 
 @app.route('/deal', methods=['POST'])
 def deal():
