@@ -237,6 +237,7 @@ $(document).ready(function() {
   if (location.hash) {
     if (location.hash === "#country_tip") {
       $('#tips').collapsible('open', 4);
+      $('#country_tip').addClass("green lighten-4");
     }
   }
 });

@@ -65,3 +65,8 @@ h2 {
 li.tiny a {
   font-size: 8pt;
 }
+#country_tip {
+  transition-delay:1.5s;
+  transition-timing-function: ease-in;
+  transition:.5s;
+}
