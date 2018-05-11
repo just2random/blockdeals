@@ -70,3 +70,6 @@ li.tiny a {
   transition-timing-function: ease-in;
   transition:.5s;
 }
+ul#country_dropdown {
+  min-width:256px;
+}
