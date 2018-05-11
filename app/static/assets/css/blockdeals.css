@@ -62,3 +62,6 @@ h2 {
 .comment-votes {
   color: rgba(0, 0, 0, .5);
 }
+li.tiny a {
+  font-size: 8pt;
+}

@@ -205,7 +205,7 @@ $(document).ready(function() {
 
   $.get("/countries", function(data) {
     $.each(data, function(index, country_code) {
-      $('#country_dropdown').append('<li><a class="truncate" href="/country/' + country_code + '"><div class="country-select"><div class="flag ' + country_code + '"></div></div> ' + countries[country_code] + '</a></li>');
+      $('#country_top').after('<li><a class="truncate" href="/country/' + country_code + '"><div class="country-select"><div class="flag ' + country_code + '"></div></div> ' + countries[country_code] + '</a></li>');
       $('#mobile_freebies').after('<li><a class="truncate" href="/country/' + country_code + '"><div class="country-select"><div class="flag ' + country_code + '"></div></div> ' + countries[country_code] + '</a></li>');
     });
   });
@@ -232,7 +232,11 @@ $(document).ready(function() {
 
   $('.fixed-action-btn').floatingActionButton();
 
-  $(document).ready(function(){
-    $('.modal').modal();
-  });
+  $('.modal').modal();
+
+  if (location.hash) {
+    if (location.hash === "#country_tip") {
+      $('#tips').collapsible('open', 4);
+    }
+  }
 });
