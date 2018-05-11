@@ -314,7 +314,7 @@ def hot():
 @app.route("/countries")
 def countries_json():
     countries = db.deal.find({ 'country_code': { '$ne': '' }}).distinct('country_code')
-    return jsonify(countries)
+    return jsonify(sorted(countries, reverse=True))
 
 @app.route("/country/<country>")
 def countries(country):
