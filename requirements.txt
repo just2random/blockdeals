@@ -2,8 +2,7 @@ arrow
 Flask
 flask-markdown
 gevent
-gunicorn
-gunicorn[gevent]
+uwsgi
 pymongo
 requests
 python-dateutil
