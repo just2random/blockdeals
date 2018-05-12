@@ -106,6 +106,8 @@ function voteup(e) {
     if (data['status']) { M.toast({html: 'Vote accepted'}) }
     else { M.toast({html: 'Vote failed: ' + data['msg']}) }
     update_votes(parent_el);
+    // could take 3 seconds for block to be accepted
+    setTimeout(update_votes, 3000, parent_el);
     $(parent_el).find(".upVoteThumb").removeClass("fa-spin");
   }).fail(function() {
     M.toast({html: 'Vote failed'});
@@ -123,6 +125,8 @@ function flag(e) {
     if (data['status']) { M.toast({html: 'Flagged'}) }
     else { M.toast({html: 'Flag failed: ' + data['msg']}) }
     update_votes(parent_el);
+    // could take 3 seconds for block to be accepted
+    setTimeout(update_votes, 3000, parent_el);
     $(parent_el).find(".dnVoteThumb").removeClass("fa-spin");
   }).fail(function() {
     M.toast({html: 'Vote failed'});
