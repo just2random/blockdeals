@@ -34,7 +34,7 @@ function getDiscussions(kind) {
             {{?it.deal.soon}}<span class="new badge red pulse" data-badge-caption="{{=it.deal.soon}}"><i class="fa fa-clock"></i> Expires in</span>{{?}}
             {{?it.deal.freebie}}<a href="/freebies"><span class="new badge green" data-badge-caption="FREEBIE"><i class="fa fa-certificate"></i></span></a>{{?}}
             {{?it.deal.country_code}}<a href="/country/{{=it.deal.country_code}}"><span class="new badge grey lighten-3" title="{{=it.deal.country_code}}" data-badge-caption=""><div class="country-select"><div class="flag {{=it.deal.country_code}}"></div></div></span></a>{{?}}
-            <h2>{{?!it.deal.available}}<span class="red white-text expired"> <i class="fas fa-exclamation-triangle fa-fw"></i><b>EXPIRED</b> </span> {{?}}<span class="{{?!it.deal.available}}unavailable{{?}}"><a href="/blockdeals/@{{=it.post.author}}/{{=it.post.permlink}}">{{=it.deal.title}}</a></span></h2>
+            <h2>{{?!it.deal.available}}<span class="red white-text expired">&nbsp;<i class="fas fa-exclamation-triangle fa-fw"></i> <b>EXPIRED</b> </span> {{?}}{{?it.deal.coming_soon}}<span class="blue white-text expired">&nbsp;<i class="fas fa-clock fa-fw"></i> <b>in {{=it.deal.date_begins}}</b> </span> {{?}}<span class="{{?!it.deal.available}}unavailable{{?}}"><a href="/blockdeals/@{{=it.post.author}}/{{=it.post.permlink}}">{{=it.deal.title}}</a></span></h2>
             <p style="margin-bottom:0">{{=it.deal.description}}</p>
             <div class="lazy row" data-loader="votes" data-permlink="{{=it.post.permlink}}" data-author="{{=it.post.author}}" style="margin-bottom:3px;">
               <div class="col s8">
@@ -64,8 +64,11 @@ function getDiscussions(kind) {
       if (json_metadata.tags.includes("delete") || (json_metadata.tags.includes("delist"))) { continue; }
       if (json_metadata.hasOwnProperty("deal")) {
         json_metadata.deal['available'] = moment(json_metadata.deal.date_end).endOf('day').isAfter(moment());
+        json_metadata.deal['coming_soon'] = moment(json_metadata.deal.date_start).startOf('day').isAfter(moment());
         var deal_time_end = moment.duration(moment(json_metadata.deal.date_end).endOf('day').diff(moment()));
+        var deal_time_start = moment.duration(moment(json_metadata.deal.date_start).startOf('day').diff(moment()));
         json_metadata.deal['date_ends'] = deal_time_end.humanize();
+        json_metadata.deal['date_begins'] = deal_time_start.humanize();
         json_metadata.deal['future_end'] = deal_time_end > 0;
         if (deal_time_end.asHours() >= 0 && deal_time_end.asHours() < 48) {
           json_metadata.deal['soon'] = deal_time_end.humanize();
