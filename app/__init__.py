@@ -476,7 +476,8 @@ def deal():
     # populate sanitised deal data
     deal_post_data['title'] = deal_form['title'].strip()
     deal_post_data['url'] = deal_form['url']
-    deal_post_data['brand_code'] = slugify(deal_form['brand'])
+    if deal_form['brand'].strip() != "":
+        deal_post_data['brand_code'] = slugify(deal_form['brand'].strip())
     deal_post_data['description'] = deal_form['description']
 
     try:
@@ -522,6 +523,9 @@ def deal():
         json_metadata['tags'].append('blockdeals-'+deal_form['country_code'])
     else:
         json_metadata['tags'].append('blockdeals-global')
+
+    if 'brand_code' in deal_post_data and deal_post_data['brand_code'] != "":
+        json_metadata['tags'].append(deal_post_data['brand_code'])
 
     app.logger.info("deal_post_data: {}".format(deal_post_data))
     body = render_template("deal_post.md", deal=deal_post_data)
