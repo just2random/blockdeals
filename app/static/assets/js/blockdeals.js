@@ -1,11 +1,19 @@
 const steem = new dsteem.Client('https://api.steemit.com');
 username = "";
 
-function getDiscussions(kind) {
+function getDiscussions(kind, start_author=false, start_permlink=false) {
   var query={
     tag: 'blockdeals',
     limit: 25
   };
+  var start_from = 0;
+  if (start_author !== false && start_permlink !== false) {
+    query['start_author'] = start_author;
+    query['start_permlink'] = start_permlink;
+    start_from = 1;
+    console.log('pagination', query);
+    $('more_button').remove();
+  }
   steem.database.getDiscussions(kind, query).then(function(discussions){
     const deal_template = doT.template(`
         <div class="row" style="margin-bottom:0">
@@ -52,14 +60,13 @@ function getDiscussions(kind) {
             </div>
           </div>
         </div>
-        {{?!it.last}}
         <div class="row">
           <div class="col s12">
             <hr/>
           </div>
-        </div>
-        {{?}}`);
-    for (var post=0, len=discussions.length; post < len; post++) {
+        </div>`);
+    for (var post=start_from, len=discussions.length; post < len; post++) {
+      console.log("post", post, discussions[post].permlink);
       var json_metadata = JSON.parse(discussions[post].json_metadata);
       if (json_metadata.tags.includes("delete") || (json_metadata.tags.includes("delist"))) { continue; }
       if (json_metadata.hasOwnProperty("deal")) {
@@ -88,6 +95,15 @@ function getDiscussions(kind) {
         json_metadata.deal.image_url = _.escape(json_metadata.deal.image_url);
         json_metadata.deal.url = _.escape(json_metadata.deal.url);
         $('.section').append(deal_template({'deal': json_metadata.deal, 'post': discussions[post], 'last': post+1 == len}));
+      }
+      if (post == len-1) {
+        const more_template = doT.template(`
+          <div id="more_button" class="row">
+            <div class="col s12 center-align">
+              <a id="more_deals" onclick="getDiscussions('{{=it.kind}}','{{=it.author}}','{{=it.permlink}}')" class="waves-effect waves-light btn-small orange darken-2">More Deals</a>
+            </div>
+          </div>`);
+        $('.section').append(more_template({'kind': kind, 'author': discussions[post].author, 'permlink': discussions[post].permlink}));
       }
     }
     // new lazy objects have been added to the dom
