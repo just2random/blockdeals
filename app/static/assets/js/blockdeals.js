@@ -3,7 +3,7 @@ username = "";
 
 function getDiscussions(kind, start_author=false, start_permlink=false) {
   var query={
-    tag: 'blockdeals',
+    tag: 'fomodeals',
     limit: 25
   };
   var start_from = 0;
@@ -155,7 +155,7 @@ function flag(e) {
 }
 
 function update_votes(e) {
-  steem.database.getState("/blockdeals/@" + $(e).data("author") + "/" + $(e).data("permlink")).then(function(d) {
+  steem.database.getState("/fomodeals/@" + $(e).data("author") + "/" + $(e).data("permlink")).then(function(d) {
     try {
       post = d['content'][$(e).data("author") + "/" + $(e).data("permlink")];
       if (post.author == $(e).data("author") && post.permlink == $(e).data("permlink")) {
