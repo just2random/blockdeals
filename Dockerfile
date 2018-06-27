@@ -1,6 +1,6 @@
 FROM python:alpine3.6
 
-ENV BLOCKDEALS_SETTINGS="/blockdeals/blockdeals.cfg"
+ENV FOMODEALS_SETTINGS="/fomodeals/fomodeals.cfg"
 EXPOSE 8000
 
 RUN set -x \
@@ -8,8 +8,8 @@ RUN set -x \
   && addgroup uwsgi \
   && adduser -D -G uwsgi uwsgi
 
-ADD . /blockdeals
-WORKDIR /blockdeals
+ADD . /fomodeals
+WORKDIR /fomodeals
 
 RUN set -x \
   && pip install -r requirements.txt
