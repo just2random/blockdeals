@@ -1,5 +1,5 @@
 import logging
-from blockdeals import app
+from fomodeals import app
 from steem import Steem
 
 gunicorn_logger = logging.getLogger("gunicorn.error")
