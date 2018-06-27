@@ -8,12 +8,12 @@ from slugify import slugify
 import sys, traceback, json, textwrap, requests, pprint, time, math, arrow
 
 app = Flask(__name__, static_folder='static', static_url_path='')
-app.config.from_envvar('BLOCKDEALS_SETTINGS')
+app.config.from_envvar('FOMODEALS_SETTINGS')
 app.secret_key=app.config['SESSION_SECRET']
 admins = app.config['ADMINS'].split(',')
 Markdown(app)
 
-db = MongoClient("mongodb://mongodb:27017").blockdeals
+db = MongoClient("mongodb://mongodb:27017").fomodeals
 
 def confirm_user():
     if not 'token' in session or not 'username' in session:
@@ -24,11 +24,11 @@ def confirm_user():
         session['authorized'] = False
         if r.json()['_id'] != session['username']:
             return False
-        if session['username'] == "blockdeals":
+        if session['username'] == "fomodeals":
             session['authorized'] = True
         elif 'account_auths' in r.json()['account']['posting']:
             for auth_account in r.json()['account']['posting']['account_auths']:
-                if auth_account[0] == "blockdeals":
+                if auth_account[0] == "fomodeals":
                     session['authorized'] = True
                     app.logger.info('Confirmed token and auth of {} successful'.format(session['username']))
                     return True
@@ -44,7 +44,7 @@ def post_to_steem(deal, update=False):
         'allow_curation_rewards': True,
         'extensions': [[0, {
             'beneficiaries': [
-                {'account': 'blockdeals', 'weight': 1000}
+                {'account': 'fomodeals', 'weight': 1000}
             ]}
         ]]
     }
@@ -65,7 +65,7 @@ def post_to_steem(deal, update=False):
 
     # TODO: validate image?
     if 'image_url' not in deal or deal['image_url'] == "":
-        deal_post_data['image_url'] = 'https://blockdeals.org/assets/images/logo_round.png'
+        deal_post_data['image_url'] = 'https://fomodeals.org/assets/images/logo_round.png'
     else:
         deal_post_data['image_url'] = deal['image_url']
 
@@ -90,18 +90,18 @@ def post_to_steem(deal, update=False):
         deal_post_data['date_end'] = (parser.parse(deal_post_data['date_start']) + timedelta(days=45)).isoformat()
 
     json_metadata = {
-        'community': 'blockdeals',
-        'app': 'blockdeals/1.0.0',
+        'community': 'fomodeals',
+        'app': 'fomodeals/1.0.0',
         'format': 'markdown',
-        'tags': [ 'blockdeals' ],
+        'tags': [ 'fomodeals' ],
         'image': [ "https://steemitimages.com/0x0/" + deal_post_data['image_url'] ],
         'deal': deal_post_data
     }
 
     if 'country_code' in deal_post_data and not deal_post_data['global']:
-        json_metadata['tags'].append('blockdeals-'+deal['country_code'])
+        json_metadata['tags'].append('fomodeals-'+deal['country_code'])
     else:
-        json_metadata['tags'].append('blockdeals-global')
+        json_metadata['tags'].append('fomodeals-global')
 
     app.logger.info("deal_post_data: {}".format(deal_post_data))
     body = render_template("deal_post.md", deal=deal_post_data)
@@ -189,11 +189,11 @@ def _jinja2_filter_datetime(date, fmt=None):
     format='%b %d, %Y'
     return native.strftime(format)
 
-@app.route("/blockdeals/@<author>/<permlink>")
+@app.route("/fomodeals/@<author>/<permlink>")
 def read_deal(author, permlink):
     try:
         r = requests.get(
-            'https://api.steemjs.com/getState?path=/blockdeals/@{}/{}'.format(author, permlink))
+            'https://api.steemjs.com/getState?path=/fomodeals/@{}/{}'.format(author, permlink))
         if r.status_code == 200:
             all_content = r.json()['content']
             content = all_content['{}/{}'.format(author, permlink)]
@@ -205,7 +205,7 @@ def read_deal(author, permlink):
             return render_template('404.html'), 404
     except Exception as e:
         app.logger.info(e)
-        return redirect('https://steemit.com/blockdeals/@{}/{}'.format(author, permlink))
+        return redirect('https://steemit.com/fomodeals/@{}/{}'.format(author, permlink))
 
 @app.route("/vote/<author>/<permlink>/<kind>")
 def vote(author, permlink, kind):
@@ -364,11 +364,11 @@ def authorized():
         if r.json()['_id'] != session['username']:
             session['logged_in'] = False
             return render_template('login_failed.html'), 401
-        if session['username'] == "blockdeals":
+        if session['username'] == "fomodeals":
             session['authorized'] = True
         if 'account_auths' in r.json()['account']['posting']:
             for auth_account in r.json()['account']['posting']['account_auths']:
-                if auth_account[0] == "blockdeals":
+                if auth_account[0] == "fomodeals":
                     session['authorized'] = True
         return redirect(url_for('index'))
     else:
@@ -386,11 +386,11 @@ def complete_sc():
         app.logger.info('Login of {} successful'.format(username))
         session['authorized'] = False
         session['logged_in'] = username == r.json()['_id']
-        if username == "blockdeals":
+        if username == "fomodeals":
             session['authorized'] = True
         elif 'account_auths' in r.json()['account']['posting']:
             for auth_account in r.json()['account']['posting']['account_auths']:
-                if auth_account[0] == "blockdeals":
+                if auth_account[0] == "fomodeals":
                     session['authorized'] = True
         session['username'] = username
         session['token'] = token
@@ -413,14 +413,14 @@ def post_comment(parent_author, parent_permlink):
         'allow_curation_rewards': True,
         'extensions': [[0, {
             'beneficiaries': [
-                {'account': 'blockdeals', 'weight': 1000}
+                {'account': 'fomodeals', 'weight': 1000}
             ]}
         ]]
     }
 
     json_metadata = {
-        'community': 'blockdeals',
-        'app': 'blockdeals/1.0.0',
+        'community': 'fomodeals',
+        'app': 'fomodeals/1.0.0',
         'format': 'markdown'
     }
 
@@ -465,7 +465,7 @@ def deal():
         'allow_curation_rewards': True,
         'extensions': [[0, {
             'beneficiaries': [
-                {'account': 'blockdeals', 'weight': 1000}
+                {'account': 'fomodeals', 'weight': 1000}
             ]}
         ]]
     }
@@ -486,7 +486,7 @@ def deal():
         deal_post_data['freebie'] = False
 
     if 'image_url' not in deal_form or deal_form['image_url'] == "":
-        deal_post_data['image_url'] = 'https://blockdeals.org/assets/images/logo_round.png'
+        deal_post_data['image_url'] = 'https://fomodeals.org/assets/images/logo_round.png'
     else:
         deal_post_data['image_url'] = deal_form['image_url']
 
@@ -511,18 +511,18 @@ def deal():
         deal_post_data['date_end'] = (parser.parse(deal_post_data['date_start']) + timedelta(days=45)).isoformat()
 
     json_metadata = {
-        'community': 'blockdeals',
-        'app': 'blockdeals/1.0.0',
+        'community': 'fomodeals',
+        'app': 'fomodeals/1.0.0',
         'format': 'markdown',
-        'tags': [ 'blockdeals' ],
+        'tags': [ 'fomodeals' ],
         'image': [ "https://steemitimages.com/0x0/" + deal_post_data['image_url'] ],
         'deal': deal_post_data
     }
 
     if 'country_code' in deal_post_data and not deal_post_data['global']:
-        json_metadata['tags'].append('blockdeals-'+deal_form['country_code'])
+        json_metadata['tags'].append('fomodeals-'+deal_form['country_code'])
     else:
-        json_metadata['tags'].append('blockdeals-global')
+        json_metadata['tags'].append('fomodeals-global')
 
     if 'brand_code' in deal_post_data and deal_post_data['brand_code'] != "":
         json_metadata['tags'].append(deal_post_data['brand_code'])
@@ -569,7 +569,7 @@ def deal():
 
     # TODO: make a pretty template but for now go to the post
     if 'POST_TO_STEEM' in app.config and app.config['POST_TO_STEEM'] == "1":
-        return redirect("/blockdeals/@{}/{}".format(session['username'], permlink), code=302)
+        return redirect("/fomodeals/@{}/{}".format(session['username'], permlink), code=302)
     else:
         return redirect(url_for("index"))
 
@@ -593,7 +593,7 @@ def sitemap():
     deal_cursor = db.deal.find({'hide': { '$ne': True}}).sort([('_id', -1)])
     for deal in deal_cursor:
         if 'steem_user' in deal:
-            pages.append(["/blockdeals/@{}/{}".format(deal['steem_user'], deal['permlink']), parser.parse(deal['deal_start']).date().isoformat()])
+            pages.append(["/fomodeals/@{}/{}".format(deal['steem_user'], deal['permlink']), parser.parse(deal['deal_start']).date().isoformat()])
 
     sitemap_xml = render_template('sitemap.xml', pages=pages)
     return Response(sitemap_xml, mimetype='application/xml')
