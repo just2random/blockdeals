@@ -4,5 +4,5 @@ addons:
     packages:
       - sshpass
 before_script:
-  - echo -e "Host blockdeals.org\n\tStrictHostKeyChecking no\n\tUser blockdeals\n" >> ~/.ssh/config
-script: sshpass -e ssh blockdeals.org blockdeals/deploy.sh
+  - echo -e "Host fomodeals.org\n\tStrictHostKeyChecking no\n\tUser fomodeals\n" >> ~/.ssh/config
+script: sshpass -e ssh fomodeals.org fomodeals/deploy.sh
