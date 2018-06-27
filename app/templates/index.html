@@ -27,7 +27,7 @@
     {% if deal['freebie'] %}<a href="/freebies"><span class="new badge green" data-badge-caption="FREEBIE"><i class="fa fa-certificate"></i></span></a>{% endif %}
     {% if deal['country_code'] and not deal['global'] %}<a href="/country/{{ deal['country_code'] }}"><span class="new badge grey lighten-3" title="{{ deal['country'] }}" data-badge-caption=""><div class="country-select"><div class="flag {{ deal['country_code'] }}"></div></div></span></a>{% endif %}
     <h2 class="{{ 'unavailable' if deal['available'] == false else '' }}">
-      <a href="/blockdeals/@{{ deal['steem_user'] }}/{{ deal['permlink'] }}">{{ deal['title'] }}</a>
+      <a href="/fomodeals/@{{ deal['steem_user'] }}/{{ deal['permlink'] }}">{{ deal['title'] }}</a>
     </h2>
     {% if deal['warning'] %}
     <span class="btn red">{{ deal['warning'] }}</span>
@@ -47,7 +47,7 @@
       </div>
       <div class="col s4">
         <p class="right-align">
-          <a class="waves-effect waves-light btn orange darken-2 tooltipped" data-position="top" data-tooltip="<i class='fas fa-thumbs-up'></i> Upvote good deals! and flag spam <i class='fas fa-thumbs-down'></i>" href="/blockdeals/@{{ deal['steem_user'] }}/{{ deal['permlink'] }}">More details <i class="material-icons right">send</i></a>
+          <a class="waves-effect waves-light btn orange darken-2 tooltipped" data-position="top" data-tooltip="<i class='fas fa-thumbs-up'></i> Upvote good deals! and flag spam <i class='fas fa-thumbs-down'></i>" href="/fomodeals/@{{ deal['steem_user'] }}/{{ deal['permlink'] }}">More details <i class="material-icons right">send</i></a>
         </p>
       </div>
     </div>
