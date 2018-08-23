@@ -13,7 +13,7 @@ app.secret_key=app.config['SESSION_SECRET']
 admins = app.config['ADMINS'].split(',')
 Markdown(app)
 
-db = MongoClient("mongodb://mongodb:27017").blockdeals
+db = MongoClient("mongodb://mongodb:27017").fomodeals
 
 def confirm_user():
     if not 'token' in session or not 'username' in session:
